@@ -1,8 +1,6 @@
 package net.azzy.pulseflux;
 
-import net.azzy.pulseflux.registry.ContainerRegistry;
-import net.azzy.pulseflux.registry.FluidRegistry;
-import net.azzy.pulseflux.registry.ItemRegistry;
+import net.azzy.pulseflux.registry.*;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -30,6 +28,8 @@ public class PulseFlux implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ItemRegistry.init();
+		BlockRegistry.init();
+		BlockEntityRegistry.init();
 		ContainerRegistry.init();
 		FluidRegistry.init();
 		HeatTransferHelper.init();

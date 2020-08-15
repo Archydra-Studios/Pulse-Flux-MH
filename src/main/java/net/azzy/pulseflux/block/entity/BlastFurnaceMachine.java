@@ -1,7 +1,7 @@
 package net.azzy.pulseflux.block.entity;
 
-import azzy.fabric.pulseflux.block.BaseMachine;
-import azzy.fabric.pulseflux.staticentities.blockentity.production.BlastFurnaceMachineEntity;
+import net.azzy.pulseflux.block.BaseMachine;
+import net.azzy.pulseflux.blockentity.production.BlastFurnaceMachineEntity;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -21,7 +21,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import static azzy.fabric.pulseflux.PulseFlux.MOD_ID;
+import static net.azzy.pulseflux.PulseFlux.MOD_ID;
 
 
 public class BlastFurnaceMachine extends BaseMachine {

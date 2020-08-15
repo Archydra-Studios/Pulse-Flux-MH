@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.registry;
 
 import net.azzy.pulseflux.PulseFlux;
+import net.azzy.pulseflux.block.entity.BlastFurnaceMachine;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -22,6 +23,8 @@ import static net.azzy.pulseflux.PulseFlux.MOD_ID;
 
 public class BlockRegistry {
 
+    public static void init(){}
+
     public static final VoxelShape DEFAULT_SHAPE = VoxelShapes.fullCube();
 
     private static final Item.Settings MATERIAL = new Item.Settings().group(PulseFlux.MACHINE_MATERIALS);
@@ -42,8 +45,7 @@ public class BlockRegistry {
 
     //Machines
     public static final Block BLAST_FURNACE_MACHINE = register("blast_furnace", new BlastFurnaceMachine(FabricBlockSettings.of(Material.STONE, MaterialColor.RED).requiresTool().strength(3f, 4f).sounds(BlockSoundGroup.STONE).breakByTool(FabricToolTags.PICKAXES, 2).lightLevel(e -> e.get(BlastFurnaceMachine.LIT) ? 15 : 0), DEFAULT_SHAPE), MACHINES);
-    public static final Block TEST_BLOCK = register("testblock", new TestBlock(FabricBlockSettings.copyOf(Blocks.STONE)), MACHINES);
-
+   
     //Fluid
 
     @Environment(EnvType.CLIENT)
