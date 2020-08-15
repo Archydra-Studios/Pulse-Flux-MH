@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "up": "minecraft:block/bricks",
+    "down": "pulseflux:block/hsla_steel",
+    "north": "pulseflux:block/blast_furnace_front_off",
+    "south": "pulseflux:block/blast_furnace_side",
+    "west": "pulseflux:block/blast_furnace_side",
+    "east": "pulseflux:block/blast_furnace_side",
+    "particle": "minecraft:block/bricks"
+  }
+}

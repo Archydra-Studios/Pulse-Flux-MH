@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "pulseflux:block/tungsten_block"
+    }
+  }
+}
