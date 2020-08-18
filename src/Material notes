@@ -1,0 +1,71 @@
+
+    Notes
+
+Hz is, unsurprisingly, Hertz.
+Fi is Discrete Flux inductance, a measure of the usable energy within a pulse.
+CFm is Constant Flux motive, the average amount of energy moved through a point over a second.
+
+            CFm = Fi * Hz
+
+These notes were originally compiled for Circumstable.
+
+Granite: 2750 kg/m3, TS: 9.5 MPa, SS: 5.7 Mpa, CS: 130 MPa, TC: 1.73 W/m-K, Melting point: 1215C
+
+HSLA Steel: 7800 kg/m3, TS: 400 MPa, SS: 232 MPa, CS: 515 MPa, 89 W/m-K, Melting point: 1370C
+
+<<Ceramic (Alumina): Density: 3200 Kg/m3, TS: 310 MPa, SS: 186 MPa, CS: 2.1 GPa, TC: 41 W/m-K, Melting point: 2072C>>
+
+Aluminum Alloy: Density: 2700 Kg/m3, TS: 178 MPa, SS: 106.8 MPa, CS: 206.8 MPa, TC: 202 W/m-K, Melting point: 652C
+
+Diamond: Density: 3500 Kg/m3, TS: 700 MPa, SS: 2.9 GPa, CS: 68 GPa, 2000 W/m-K, Melting point: 700C
+
+Cobalt: Shit I gotta research this
+
+Tungsten: Density: 19300 Kg/m3, TS: 750 MPa, SS: 450 MPa, CS: 9 GPa, 164 W/m-K,  Melting point: 3422C
+
+Titanium Grade 5: Density: 4430 Kg/m3, TS: 1.1 GPa, SS: 660, CS: 1 GPa TC:  6.7 W/m-K, Melting point: 1660C
+
+Kalseki Composite/Tungsteel/Plasteel: Density: ???, TS: ???, SS: ???, CS: ???, 1600 W/m-K, Melting point: 4170C
+
+
+    Failure points
+
+HSLA Steel: 1260Fi, 2500Hz
+
+Ceramic (Alumina): 2500Fi, 5700Hz
+
+Copper:
+
+Aluminum Alloy: N/A
+
+Diamond: N/A
+
+Cobalt:
+
+Tungsten: 54075Nm, 315507 rad/s
+
+Titanium: 42588Nm, 1450797 rad/s
+
+Kalseki Composite/Tungsteel/Plasteel: Infinity Webers, Infinity Hertz
+
+
+
+    Other properties
+
+HSLA Steel: Magnetic
+
+Ceramic: Non-metal, High Melting point
+
+Aluminum Alloy: N/A
+
+Diamond: Wait shit this is an electrical insulator
+
+Copper: Hard to set up, cheap once set up
+
+Cobalt: What the fuck is this processing chain, Very conductive
+
+Tungsten: Dense, Very High Melting Point
+
+Titanium: w i d e, Lightweight
+
+Kalseki Composite/Tungsteel/Plasteel: holy shit

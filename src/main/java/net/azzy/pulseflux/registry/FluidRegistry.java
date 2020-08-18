@@ -15,7 +15,7 @@ import static net.azzy.pulseflux.PulseFlux.MOD_ID;
 
 public class FluidRegistry {
 
-    public static final List<FluidPair> JUICE_RENDER = new ArrayList<>();
+    public static final List<FluidPair> FLUID_PAIRS = new ArrayList<>();
     @Environment(EnvType.CLIENT)
     public static final List<Fluid> FLUID_TRANS = new ArrayList<>();
 

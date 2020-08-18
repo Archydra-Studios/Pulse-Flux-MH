@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import net.azzy.pulseflux.util.interaction.HeatHolder;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.interaction.InventoryWrapper;
+import net.azzy.pulseflux.util.interaction.PulseNode;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -38,6 +39,10 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     protected short progress;
     protected boolean heatInit;
     protected double heat;
+    protected long amplitude;
+    protected PulseNode.Polarity polarity = PulseNode.Polarity.NEUTRAL;
+    protected double maxDistance;
+    protected double frequency;
 
     public MachineEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, Supplier<DefaultedList<ItemStack>> invSupplier) {
         super(type);
@@ -134,6 +139,11 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         tag.putShort("progress", progress);
         tag.putBoolean("heatinit", heatInit);
 
+        tag.putLong("amplitude", amplitude);
+        tag.putString("polarity", polarity.name());
+        tag.putDouble("maxdistance", maxDistance);
+        tag.putDouble("frequency", frequency);
+
         return super.toTag(tag);
     }
 
@@ -146,20 +156,36 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         heat = tag.getDouble("heat");
         progress = tag.getShort("progress");
         heatInit = tag.getBoolean("heatinit");
+
+        amplitude = tag.getLong("amplitude");
+        polarity = PulseNode.Polarity.valueOf(tag.getString("polarity"));
+        maxDistance = tag.getDouble("maxdistance");
+        frequency = tag.getDouble("frequency");
     }
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
-        compoundTag.putDouble("heat", heat);
-        compoundTag.putShort("progress", progress);
-        compoundTag.putBoolean("heatinit", heatInit);
+        heat = compoundTag.getDouble("heat");
+        progress = compoundTag.getShort("progress");
+        heatInit = compoundTag.getBoolean("heatinit");
+
+        amplitude = compoundTag.getLong("amplitude");
+        polarity = PulseNode.Polarity.valueOf(compoundTag.getString("polarity"));
+        maxDistance = compoundTag.getDouble("maxdistance");
+        frequency = compoundTag.getDouble("frequency");
     }
 
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
-        heat = compoundTag.getDouble("heat");
-        progress = compoundTag.getShort("progress");
-        heatInit = compoundTag.getBoolean("heatinit");
+        compoundTag.putDouble("heat", heat);
+        compoundTag.putShort("progress", progress);
+        compoundTag.putBoolean("heatinit", heatInit);
+
+        compoundTag.putLong("amplitude", amplitude);
+
+        compoundTag.putString("polarity", polarity.name());
+        compoundTag.putDouble("maxdistance", maxDistance);
+        compoundTag.putDouble("frequency", frequency);
         return compoundTag;
     }
 

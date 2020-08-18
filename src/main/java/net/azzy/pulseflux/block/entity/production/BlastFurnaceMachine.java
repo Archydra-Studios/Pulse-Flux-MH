@@ -1,4 +1,4 @@
-package net.azzy.pulseflux.block.entity;
+package net.azzy.pulseflux.block.entity.production;
 
 import net.azzy.pulseflux.block.BaseMachine;
 import net.azzy.pulseflux.blockentity.production.BlastFurnaceMachineEntity;

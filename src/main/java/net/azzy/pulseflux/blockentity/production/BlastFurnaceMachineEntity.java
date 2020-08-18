@@ -9,7 +9,7 @@ import net.minecraft.tag.ItemTags;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
-import static net.azzy.pulseflux.block.entity.BlastFurnaceMachine.LIT;
+import static net.azzy.pulseflux.block.entity.production.BlastFurnaceMachine.LIT;
 import static net.azzy.pulseflux.registry.BlockEntityRegistry.BLAST_FURNACE_ENTITY;
 
 public class BlastFurnaceMachineEntity extends MachineEntity {

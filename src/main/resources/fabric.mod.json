@@ -21,6 +21,9 @@
   "entrypoints": {
     "main": [
       "net.azzy.pulseflux.PulseFlux"
+    ],
+    "client": [
+      "net.azzy.pulseflux.ClientInit"
     ]
   },
   "mixins": [

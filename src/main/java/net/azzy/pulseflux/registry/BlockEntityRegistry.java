@@ -1,5 +1,7 @@
 package net.azzy.pulseflux.registry;
 
+import net.azzy.pulseflux.blockentity.logistic.DiodeEntity;
+import net.azzy.pulseflux.blockentity.logistic.diodes.SteelDiodeEntity;
 import net.azzy.pulseflux.blockentity.production.BlastFurnaceMachineEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,6 +18,7 @@ import static net.azzy.pulseflux.registry.BlockRegistry.*;
 public class BlockEntityRegistry {
 
     public static final BlockEntityType<BlastFurnaceMachineEntity> BLAST_FURNACE_ENTITY = register("blast_furnace_machine_entity", BlastFurnaceMachineEntity::new, BLAST_FURNACE_MACHINE);
+    public static final BlockEntityType<DiodeEntity> STEEL_DIODE_ENTITY = register("steel_diode_entity", SteelDiodeEntity::new, STEEL_DIODE);
 
     private static <T extends BlockEntity> BlockEntityType<T>  register(String name, Supplier<T> item, Block block){
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, name), BlockEntityType.Builder.create(item, block).build(null));

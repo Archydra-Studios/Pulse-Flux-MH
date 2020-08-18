@@ -1,0 +1,62 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_basic"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "pulseflux:block/logistic/pulse_diode_lens_basic",
+        "x": 90
+      }
+    }
+  ]
+}
