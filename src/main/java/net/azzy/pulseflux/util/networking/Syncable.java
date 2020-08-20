@@ -2,15 +2,13 @@ package net.azzy.pulseflux.util.networking;
 
 import net.minecraft.block.entity.BlockEntity;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public interface Syncable {
 
     void syncrhonize(SyncPacket packet);
 
-    static <T extends BlockEntity & Syncable> void requestSync(Syncable entity, SyncPacket packet){
+    static void requestSync(Syncable entity, SyncPacket packet){
         entity.syncrhonize(packet);
     }
 
@@ -20,8 +18,7 @@ public interface Syncable {
         };
 
         public SyncPacket(Object... contents){
-            for(Object content : contents)
-                this.contents.add(content);
+            Collections.addAll(this.contents, contents);
         }
 
         public Object unpack(){
