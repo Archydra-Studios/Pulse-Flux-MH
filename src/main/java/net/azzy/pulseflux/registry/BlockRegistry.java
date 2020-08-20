@@ -3,6 +3,7 @@ package net.azzy.pulseflux.registry;
 import net.azzy.pulseflux.PulseFlux;
 import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
 import net.azzy.pulseflux.block.entity.production.BlastFurnaceMachine;
+import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity;
 import net.azzy.pulseflux.blockentity.logistic.diodes.SteelDiodeEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -46,7 +47,7 @@ public class BlockRegistry {
     //Logistics
     public static final Block STEEL_DIODE = register("steel_diode", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.GRANITE), SteelDiodeEntity::new), LOGISTICS);
 
-    public static final Block CREATIVE_PULSE_SOURCE = register("primeval_motive_core", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), ), LOGISTICS);
+    public static final Block CREATIVE_PULSE_SOURCE = register("creative_pulse_source", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), CreativePulseSourceEntity::new), LOGISTICS);
 
     //Machines
     public static final Block BLAST_FURNACE_MACHINE = register("blast_furnace", new BlastFurnaceMachine(FabricBlockSettings.of(Material.STONE, MaterialColor.RED).requiresTool().strength(3f, 4f).sounds(BlockSoundGroup.STONE).breakByTool(FabricToolTags.PICKAXES, 2).lightLevel(e -> e.get(BlastFurnaceMachine.LIT) ? 15 : 0), DEFAULT_SHAPE), MACHINES);

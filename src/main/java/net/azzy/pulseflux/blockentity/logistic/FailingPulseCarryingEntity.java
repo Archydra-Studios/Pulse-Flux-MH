@@ -1,12 +1,11 @@
 package net.azzy.pulseflux.blockentity.logistic;
 
 import net.azzy.pulseflux.blockentity.MachineEntity;
+import net.azzy.pulseflux.blockentity.PulseEntity;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.interaction.PulseNode;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -15,7 +14,7 @@ import net.minecraft.util.collection.DefaultedList;
 
 import java.util.function.Supplier;
 
-public abstract class FailingPulseCarryingEntity extends MachineEntity implements PulseNode {
+public abstract class FailingPulseCarryingEntity extends PulseEntity implements PulseNode {
 
     protected final long maxAmplitude;
     protected final double maxFrequency;
@@ -28,7 +27,7 @@ public abstract class FailingPulseCarryingEntity extends MachineEntity implement
 
     @Override
     public void tick() {
-        if((amplitude > maxAmplitude && maxAmplitude >= 0))
+        if((inductance > maxAmplitude && maxAmplitude >= 0))
             fail(FailureType.AMPLITUDE);
         else if((frequency > maxFrequency && maxFrequency >= 0))
             fail(FailureType.FREQUENCY);
@@ -48,6 +47,14 @@ public abstract class FailingPulseCarryingEntity extends MachineEntity implement
             }
         }
         world.breakBlock(pos, false);
+    }
+
+    public long getMaxAmplitude() {
+        return maxAmplitude;
+    }
+
+    public double getMaxFrequency() {
+        return maxFrequency;
     }
 
     enum FailureType{

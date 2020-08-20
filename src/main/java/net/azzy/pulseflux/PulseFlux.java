@@ -2,6 +2,7 @@ package net.azzy.pulseflux;
 
 import net.azzy.pulseflux.registry.*;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
+import net.azzy.pulseflux.util.networking.ClientPacketRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.item.ItemGroup;
@@ -33,5 +34,6 @@ public class PulseFlux implements ModInitializer {
 		ContainerRegistry.init();
 		FluidRegistry.init();
 		HeatTransferHelper.init();
+		ClientPacketRegistry.init();
 	}
 }

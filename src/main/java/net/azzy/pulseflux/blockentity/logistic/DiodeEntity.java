@@ -1,8 +1,10 @@
 package net.azzy.pulseflux.blockentity.logistic;
 
+import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
@@ -19,7 +21,7 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity {
     protected Direction lastInput;
 
     public DiodeEntity(BlockEntityType<?> type, long maxAmplitude, double maxFrequency) {
-        super(type, HeatTransferHelper.HeatMaterial.STEEL, () -> DefaultedList.ofSize(0, ItemStack.EMPTY), maxAmplitude, maxFrequency);
+        super(type, HeatTransferHelper.HeatMaterial.STEEL, () -> DefaultedList.ofSize(1, ItemStack.EMPTY), maxAmplitude, maxFrequency);
     }
 
     @Override
@@ -33,17 +35,31 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity {
     }
 
     @Override
-    public void accept(long amplitude, Direction direction, Polarity polarity, BlockPos sender) {
+    public void tick() {
+        super.tick();
+        if(io.isEmpty())
+            recalcIO();
+    }
+
+    @Override
+    public void accept(long inductance, double frequency, Polarity polarity, ItemStack medium, Direction direction, BlockPos sender) {
         if(io.contains(direction.getOpposite())){
-            this.amplitude = amplitude;
+            this.inductance = inductance;
+            this.frequency = frequency;
             this.polarity = polarity;
+            inventory.set(0, medium);
             this.lastInput = direction.getOpposite();
         }
     }
 
+    public void recalcIO(){
+        io.clear();
+        io.addAll(LinearDiodeBlock.getIOFacing(getCachedState()));
+    }
+
     @Override
     public long getAmplitude() {
-        return amplitude;
+        return inductance;
     }
 
     @Override
@@ -54,6 +70,11 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity {
     @Override
     public double getFrequency() {
         return frequency;
+    }
+
+    @Override
+    public Item getMedium() {
+        return inventory.get(0).getItem();
     }
 
     public Direction getLastInput(){

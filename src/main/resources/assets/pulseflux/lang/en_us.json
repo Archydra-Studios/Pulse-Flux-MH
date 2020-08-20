@@ -8,7 +8,8 @@
   "block.pulseflux.tungsten_block": "Sintered Tungsten Block",
   "block.pulseflux.blast_furnace": "Blast Furnace",
   "block.pulseflux.blackstone_panel": "Blackstone Panel",
-  "block.pulseflux.bedrock_shaft": "Bedrock Alloy Shaft",
+  "block.pulseflux.steel_diode": "Steel Diode",
+  "block.pulseflux.creative_pulse_source": "Primeval Motive Core",
   "item.pulseflux.hsla_steel_ingot": "HSLA Steel Ingot",
   "item.pulseflux.titanium_ingot": "Titanium Ingot",
   "item.pulseflux.blackstone_panel": "Blackstone Panel"

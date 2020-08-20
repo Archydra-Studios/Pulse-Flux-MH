@@ -24,14 +24,6 @@ repositories {
 		name = "Modmenu"
 		url = "https://maven.fabricmc.net/io/github/prospector/modmenu/"
 	}
-	//maven {
-	//	name = "grondag"
-	//	url = "https://grondag-repo.appspot.com"
-	//	credentials {
-	//		username "guest"
-	//		password ""
-	//	}
-	//}
 }
 
 dependencies {

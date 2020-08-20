@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.gui.widget.WBar;
 import io.github.cottonmc.cotton.gui.widget.WDynamicLabel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import net.azzy.pulseflux.blockentity.production.BlastFurnaceMachineEntity;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -14,6 +15,7 @@ import net.minecraft.util.Identifier;
 import java.util.function.Predicate;
 
 import static net.azzy.pulseflux.PulseFlux.MOD_ID;
+import static net.azzy.pulseflux.registry.BlockRegistry.BLAST_FURNACE_MACHINE;
 
 
 public class BlastFurnaceController extends BaseController {
@@ -28,7 +30,7 @@ public class BlastFurnaceController extends BaseController {
     @Override
     protected void assembleGridSize() {
         super.assembleGridSize();
-        name = "Blast Furnace";
+        name = I18n.translate(BLAST_FURNACE_MACHINE.getTranslationKey());
     }
 
     @Override

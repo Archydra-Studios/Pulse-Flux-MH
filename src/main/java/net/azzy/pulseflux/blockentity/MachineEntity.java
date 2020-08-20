@@ -39,10 +39,7 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     protected short progress;
     protected boolean heatInit;
     protected double heat;
-    protected long amplitude;
-    protected PulseNode.Polarity polarity = PulseNode.Polarity.NEUTRAL;
-    protected double maxDistance;
-    protected double frequency;
+    protected BlockEntity self = this;
 
     public MachineEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, Supplier<DefaultedList<ItemStack>> invSupplier) {
         super(type);
@@ -138,12 +135,6 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         tag.putDouble("heat", heat);
         tag.putShort("progress", progress);
         tag.putBoolean("heatinit", heatInit);
-
-        tag.putLong("amplitude", amplitude);
-        tag.putString("polarity", polarity.name());
-        tag.putDouble("maxdistance", maxDistance);
-        tag.putDouble("frequency", frequency);
-
         return super.toTag(tag);
     }
 
@@ -156,11 +147,6 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         heat = tag.getDouble("heat");
         progress = tag.getShort("progress");
         heatInit = tag.getBoolean("heatinit");
-
-        amplitude = tag.getLong("amplitude");
-        polarity = PulseNode.Polarity.valueOf(tag.getString("polarity"));
-        maxDistance = tag.getDouble("maxdistance");
-        frequency = tag.getDouble("frequency");
     }
 
     @Override
@@ -168,11 +154,6 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         heat = compoundTag.getDouble("heat");
         progress = compoundTag.getShort("progress");
         heatInit = compoundTag.getBoolean("heatinit");
-
-        amplitude = compoundTag.getLong("amplitude");
-        polarity = PulseNode.Polarity.valueOf(compoundTag.getString("polarity"));
-        maxDistance = compoundTag.getDouble("maxdistance");
-        frequency = compoundTag.getDouble("frequency");
     }
 
     @Override
@@ -180,12 +161,6 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         compoundTag.putDouble("heat", heat);
         compoundTag.putShort("progress", progress);
         compoundTag.putBoolean("heatinit", heatInit);
-
-        compoundTag.putLong("amplitude", amplitude);
-
-        compoundTag.putString("polarity", polarity.name());
-        compoundTag.putDouble("maxdistance", maxDistance);
-        compoundTag.putDouble("frequency", frequency);
         return compoundTag;
     }
 

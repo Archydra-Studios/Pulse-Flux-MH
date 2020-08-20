@@ -1,7 +1,8 @@
 package net.azzy.pulseflux.util.interaction;
 
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.Pair;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -11,21 +12,12 @@ import java.util.List;
 
 public interface PulseNode {
 
-    void accept(long amplitude, Direction direction, Polarity polarity, BlockPos sender);
+    void accept(long amplitude, double frequency, Polarity polarity, ItemStack medium, Direction direction, BlockPos sender);
 
-    default boolean offer(World world, BlockEntity sender, long amplitude, Direction direction, BlockPos receiver, Polarity polarity, double max){
+    default boolean offer(World world, BlockEntity sender, long inductance, double frequency, Polarity polarity, ItemStack medium, Direction direction, BlockPos receiver, double max){
         BlockEntity entity = world.getBlockEntity(receiver);
         if( entity instanceof PulseNode && (receiver.isWithinDistance(sender.getPos(), max) || max < 0)){
-            ((PulseNode) entity).accept(amplitude, direction, polarity, receiver);
-            return true;
-        }
-        return false;
-    }
-
-    default boolean offer(World world, BlockEntity sender, long amplitude, DirectionPos receiver, Polarity polarity, double max){
-        BlockEntity entity = world.getBlockEntity(receiver.pos);
-        if( entity instanceof PulseNode && (receiver.pos.isWithinDistance(sender.getPos(), max) || max < 0)){
-            ((PulseNode) entity).accept(amplitude, receiver.direction, polarity, receiver.pos);
+            ((PulseNode) entity).accept(inductance, frequency, polarity, medium, direction, sender.getPos());
             return true;
         }
         return false;
@@ -66,6 +58,8 @@ public interface PulseNode {
     Polarity getPolarity();
 
     double getFrequency();
+
+    Item getMedium();
 
     enum Polarity{
         POSITIVE,

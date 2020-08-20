@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
@@ -51,5 +52,10 @@ public class BaseController extends SyncedGuiDescription {
     protected void build() {
         root.add(this.createPlayerInventoryPanel(), 1, sizeY + 12);
         root.validate(this);
+    }
+
+    @Override
+    public void close(PlayerEntity player) {
+        super.close(player);
     }
 }
