@@ -13,6 +13,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.util.Random;
+import java.util.SplittableRandom;
+
 import static net.azzy.pulseflux.registry.BlockRegistry.BLAST_FURNACE_MACHINE;
 import static net.azzy.pulseflux.registry.ItemRegistry.STEEL_INGOT;
 
@@ -20,6 +23,7 @@ public class PulseFlux implements ModInitializer {
 	public static final String MOD_ID = "pulseflux";
 
 	public static final Logger PFLog = LogManager.getLogger(MOD_ID);
+	public static final SplittableRandom PFRandom = new SplittableRandom();
 
 	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "material")).icon(() -> new ItemStack(STEEL_INGOT)).build();
 	public static final ItemGroup MACHINES = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "machine")).icon(() -> new ItemStack(BLAST_FURNACE_MACHINE.asItem())).build();

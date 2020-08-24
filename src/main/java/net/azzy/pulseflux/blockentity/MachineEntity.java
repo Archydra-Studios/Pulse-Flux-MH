@@ -4,7 +4,6 @@ import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import net.azzy.pulseflux.util.interaction.HeatHolder;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.interaction.InventoryWrapper;
-import net.azzy.pulseflux.util.interaction.PulseNode;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

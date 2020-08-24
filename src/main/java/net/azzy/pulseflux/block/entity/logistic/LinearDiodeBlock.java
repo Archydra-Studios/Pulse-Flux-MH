@@ -1,12 +1,15 @@
 package net.azzy.pulseflux.block.entity.logistic;
 
 import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity;
+import net.azzy.pulseflux.blockentity.logistic.DiodeEntity;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -38,14 +41,6 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
         return super.getPlacementState(ctx).with(FACING.get(facing.getOpposite()), true);
     }
 
-    public static List<Direction> getIOFacing(BlockState state){
-        List<Direction> io = new ArrayList<>();
-        for(Direction direction : Direction.values())
-            if(state.get(FACING.get(direction)))
-                io.add(direction);
-            return io;
-    }
-
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!player.isInSneakingPose() && !world.isClient() && world.getBlockEntity(pos) instanceof CreativePulseSourceEntity) {
@@ -53,6 +48,19 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
             return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        BlockEntity entity = world.getBlockEntity(pos);
+            for(Direction direction : Direction.values()){
+                if(state.get(FACING.get(direction))) {
+                    if(entity instanceof DiodeEntity)
+                        ((DiodeEntity) entity).recalcIO(direction, state, true);
+                    else
+                        ((CreativePulseSourceEntity) entity).recalcIO(direction);
+                }
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
-package net.azzy.pulseflux.util.interaction;
+package net.azzy.pulseflux.util.energy;
 
+import net.azzy.pulseflux.blockentity.logistic.FailingPulseCarryingEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,15 +13,18 @@ import java.util.List;
 
 public interface PulseNode {
 
-    void accept(long amplitude, double frequency, Polarity polarity, ItemStack medium, Direction direction, BlockPos sender);
+    void accept(Direction direction, BlockPos pos);
 
-    default boolean offer(World world, BlockEntity sender, long inductance, double frequency, Polarity polarity, ItemStack medium, Direction direction, BlockPos receiver, double max){
-        BlockEntity entity = world.getBlockEntity(receiver);
-        if( entity instanceof PulseNode && (receiver.isWithinDistance(sender.getPos(), max) || max < 0)){
-            ((PulseNode) entity).accept(inductance, frequency, polarity, medium, direction, sender.getPos());
-            return true;
+    default boolean simulate(World world, BlockEntity sender, Item medium, boolean noFailure, PulseNode receiver, double max){
+        if(noFailure) {
+            if(sender instanceof PulseNode) {
+                PulseNode node = (PulseNode) sender;
+                return (((node.getMaxInductance() >= node.getInductance() && node.getMaxFrequency() >= node.getFrequency()) || !node.canFail()) && receiver.canUseMedium(medium));
+            }
         }
-        return false;
+        if(sender instanceof FailingPulseCarryingEntity)
+            return receiver.canUseMedium(medium) && receiver.getMaxFrequency() >= ((FailingPulseCarryingEntity) sender).getFrequency();
+        return (sender instanceof PulseNode && receiver.canUseMedium(medium));
     }
 
     default DirectionPos scanIOExclusive(World world, BlockPos pos, Direction[] exemptions, int max){
@@ -53,13 +57,23 @@ public interface PulseNode {
         return null;
     }
 
-    long getAmplitude();
+    long getInductance();
+
+    long getMaxInductance();
 
     Polarity getPolarity();
 
     double getFrequency();
 
+    double getMaxFrequency();
+
     Item getMedium();
+
+    boolean canFail();
+
+    default boolean canUseMedium(Item item){
+        return true;
+    }
 
     enum Polarity{
         POSITIVE,

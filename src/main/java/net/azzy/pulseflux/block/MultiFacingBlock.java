@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.block;
 
 import net.azzy.pulseflux.block.BaseMachine;
+import net.azzy.pulseflux.util.energy.BlockNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -11,8 +12,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-public abstract class MultiFacingBlock extends Block {
+public abstract class MultiFacingBlock extends Block implements BlockNode {
 
     protected static final HashMap<Direction, BooleanProperty> FACING = new HashMap<>();
 
@@ -37,5 +40,15 @@ public abstract class MultiFacingBlock extends Block {
         for(Direction direction : Direction.values()){
             FACING.put(direction, BooleanProperty.of(direction.getName()));
         }
+    }
+
+    @Override
+    public List<Direction> getInputs(BlockState state) {
+        return new LinkedList<>();
+    }
+
+    @Override
+    public List<Direction> getOutputs(BlockState state) {
+        return new LinkedList<>();
     }
 }
