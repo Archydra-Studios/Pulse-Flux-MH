@@ -10,4 +10,6 @@ public interface IORenderingEntity {
     Collection<Direction> getOutputs();
 
     int getRenderTickTime();
+
+    void requestDisplay();
 }

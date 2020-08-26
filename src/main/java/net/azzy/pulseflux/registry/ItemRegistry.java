@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.registry;
 
 import net.azzy.pulseflux.PulseFlux;
+import net.azzy.pulseflux.item.OscillatorItem;
 import net.azzy.pulseflux.item.ProbeItem;
 import net.azzy.pulseflux.item.SensorItem;
 import net.azzy.pulseflux.item.ThermometerItem;
@@ -19,7 +20,7 @@ public class ItemRegistry extends Item {
         super(settings);
     }
     private static final Settings MATERIAL = new Settings().group(MACHINE_MATERIALS);
-    private static final Settings TOOL = new Settings().group(PulseFlux.TOOLS);
+    private static final Settings TOOL = new Settings().group(PulseFlux.TOOLS).maxCount(1);
 
     //Crafting
     public final static Item STEEL_INGOT = register("hsla_steel_ingot", new Item(MATERIAL));
@@ -29,6 +30,7 @@ public class ItemRegistry extends Item {
     public final static Item THERMOMETER = register("thermometer", new ThermometerItem(TOOL));
     public final static Item SENSOR = register("sensor", new SensorItem(TOOL));
     public final static Item PROBE = register("probe", new ProbeItem(TOOL));
+    public static final Item OSCILLATOR = register("oscillator", new OscillatorItem(TOOL));
 
     public static void init(){}
 

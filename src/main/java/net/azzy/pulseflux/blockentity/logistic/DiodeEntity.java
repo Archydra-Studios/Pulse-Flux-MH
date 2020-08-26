@@ -22,6 +22,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import static net.azzy.pulseflux.PulseFlux.PFRandom;
 
 public abstract class DiodeEntity extends FailingPulseCarryingEntity implements IORenderingEntity {
@@ -29,11 +33,11 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     protected Direction input, output;
     protected BlockPos cachedInput;
     protected BlockState cachedInputState;
-    protected int delay;
+    protected int delay = PFRandom.nextInt(19), renderTickTime;
+    private boolean renderInit = true;
 
     public DiodeEntity(BlockEntityType<?> type, long maxAmplitude, double maxFrequency) {
         super(type, HeatTransferHelper.HeatMaterial.STEEL, () -> DefaultedList.ofSize(1, ItemStack.EMPTY), maxAmplitude, maxFrequency);
-        delay = PFRandom.nextInt(19);
     }
 
     @Override
@@ -49,6 +53,19 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     @Override
     public void tick() {
         super.tick();
+        if(renderInit){
+            renderTickTime += 5;
+        }
+        else if(renderTickTime > 0) {
+            renderTickTime -= 2;
+        }
+
+        if(renderTickTime >= 120){
+            renderInit = false;
+        }
+        else if(renderTickTime < 0){
+            renderTickTime = 0;
+        }
         if(output != null && cachedInput == null) {
             cachedInput = IOScans.seekInputNode(pos, input, world);
             if(cachedInput != null)
@@ -66,13 +83,13 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
                 cachedInput = null;
                 clearPower();
             }
-            if (!world.isClient() && cachedInput != null && simulate(world, world.getBlockEntity(cachedInput), getMedium(), false, this, 16)) {
+            if (!world.isClient() && cachedInput != null && simulate(world, world.getBlockEntity(cachedInput), getMedium(), false, this, 16) && checkIO(input, cachedInput)) {
                 if(world.getTime() % 20 == 0) {
-                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.1f, 0.25f);
+                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.125f, 0.25f);
                     accept(input, cachedInput);
                 }
                 else if(world.getTime() % 10 == 0) {
-                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.075f, 0.55f);
+                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.065f, 0.55f);
                     accept(input, cachedInput);
                 }
                 if(world.getTime() % 5 == 0)
@@ -84,8 +101,7 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     @Override
     public void accept(Direction direction, BlockPos sender) {
         PulseNode node = (PulseNode) world.getBlockEntity(sender);
-        BlockState state = world.getBlockState(sender);
-        if(state.getBlock() instanceof BlockNode && ((BlockNode) state.getBlock()).getIO(state).contains(direction.getOpposite())){
+        if(checkIO(direction, sender)){
             inductance = node.getInductance();
             frequency = node.getFrequency();
             polarity = node.getPolarity();
@@ -93,6 +109,11 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
         }
         else
             clearPower();
+    }
+
+    public boolean checkIO(Direction direction, BlockPos sender){
+        BlockState state = world.getBlockState(sender);
+        return state.getBlock() instanceof BlockNode && ((BlockNode) state.getBlock()).getIO(state).contains(direction.getOpposite());
     }
 
     public void recalcIO(Direction direction, BlockState state, boolean io){
@@ -118,6 +139,26 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     }
 
     @Override
+    public Collection<Direction> getInputs() {
+        return Collections.singleton(input);
+    }
+
+    @Override
+    public int getRenderTickTime() {
+        return renderTickTime;
+    }
+
+    @Override
+    public void requestDisplay() {
+        renderInit = true;
+    }
+
+    @Override
+    public Collection<Direction> getOutputs() {
+        return Collections.singleton(output);
+    }
+
+    @Override
     protected void clearPower() {
         if(!world.isClient()) {
             super.clearPower();
@@ -133,7 +174,9 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
         tag.putString("input", input.getName());
-        tag.putLong("cachedin", cachedInput.asLong());
+        if(cachedInput != null)
+            tag.putLong("cachedin", cachedInput.asLong());
+        tag.putBoolean("rendertick", renderInit);
         return super.toTag(tag);
     }
 
@@ -141,22 +184,22 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity implements 
     public void fromTag(BlockState state, CompoundTag tag) {
         input = Direction.byName(tag.getString("input"));
         cachedInput = BlockPos.fromLong(tag.getLong("cachedin"));
+        renderInit = tag.getBoolean("rendertick");
         recalcIO(null, state, false);
         super.fromTag(state, tag);
     }
 
-    //@Override
-    //public void fromClientTag(CompoundTag compoundTag) {
-    //    cachedInput = BlockPos.fromLong(compoundTag.getLong("cachedin"));
-    //    super.fromClientTag(compoundTag);
-    //}
-//
-    //@Override
-    //public CompoundTag toClientTag(CompoundTag compoundTag) {
-    //    if(cachedInput != null)
-    //        compoundTag.putLong("cachedin", cachedInput.asLong());
-    //    return super.toClientTag(compoundTag);
-    //}
+    @Override
+    public void fromClientTag(CompoundTag compoundTag) {
+        renderInit = compoundTag.getBoolean("rendertick");
+        super.fromClientTag(compoundTag);
+    }
+
+    @Override
+    public CompoundTag toClientTag(CompoundTag compoundTag) {
+        compoundTag.putBoolean("rendertick", renderInit);
+        return super.toClientTag(compoundTag);
+    }
 
     @Override
     public int[] getAvailableSlots(Direction side) {

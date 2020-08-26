@@ -43,8 +43,9 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!player.isInSneakingPose() && !world.isClient() && world.getBlockEntity(pos) instanceof CreativePulseSourceEntity) {
-            ContainerProviderRegistry.INSTANCE.openContainer(CREATIVE_GID, player, (packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+        if (!player.isInSneakingPose() && world.getBlockEntity(pos) instanceof CreativePulseSourceEntity) {
+            if(!world.isClient())
+                ContainerProviderRegistry.INSTANCE.openContainer(CREATIVE_GID, player, (packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
             return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
