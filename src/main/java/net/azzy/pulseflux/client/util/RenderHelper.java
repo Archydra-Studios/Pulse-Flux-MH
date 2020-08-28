@@ -272,9 +272,77 @@ public class RenderHelper {
             matrices.translate(sizeX/2, sizeY/2, sizeZ/2);
     }
 
+    public static void renderScaledOverlayCuboid(MatrixStack matrices, VertexConsumerProvider consumers, int r, int g, int b, int a, float sizeX, float sizeY, float sizeZ, boolean centered){
+
+        //0x00F000F0
+        Matrix4f model = matrices.peek().getModel();
+        VertexConsumer consumer = consumers.getBuffer(FFRenderLayers.OVERLAY);
+        sizeX /= 16;
+        sizeY /= 16;
+        sizeZ /= 16;
+
+        if(centered)
+            matrices.translate(-sizeX/2, -sizeY/2, -sizeZ/2);
+
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, 0).color(r, g, b, a).next();
+
+        matrices.translate(sizeX, 0, 0);
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, sizeZ).color(r, g, b, a).next();
+        consumer.vertex(model, 0, 0, sizeZ).color(r, g, b, a).next();
+
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180));
+        matrices.translate(0, 0, -sizeZ);
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, 0).color(r, g, b, a).next();
+
+        matrices.translate(sizeX, 0, 0);
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, sizeY, sizeZ).color(r, g, b, a).next();
+        consumer.vertex(model, 0, 0, sizeZ).color(r, g, b, a).next();
+
+        matrices.translate(-sizeX, 0, 0);
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, sizeZ).color(r, g, b, a).next();
+        consumer.vertex(model, 0, 0, sizeZ).color(r, g, b, a).next();
+
+        matrices.translate(0, sizeY, 0);
+        consumer.vertex(model, 0, 0, sizeZ).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, sizeZ).color(r, g, b, a).next();
+        consumer.vertex(model, sizeX, 0, 0).color(r, g, b, a).next();
+        consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
+
+        matrices.translate(0, -sizeY, 0);
+        matrices.translate(sizeX, 0, 0);
+        matrices.translate(-sizeX, 0, 0);
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-180));
+        matrices.translate(0, 0, sizeZ);
+        matrices.translate(-sizeX, 0, 0);
+        matrices.translate(0, 0, -sizeZ * 2);
+
+        if(centered)
+            matrices.translate(sizeX/2, sizeY/2, sizeZ/2);
+    }
+
     public enum Scaling{
         MIN,
         MAX,
         CENTER
+    }
+
+    public static void applyPermutations(MatrixStack matrices, Direction direction){
+        switch (direction){
+            case EAST: matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(90)); break;
+            case SOUTH: matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180)); break;
+            case WEST: matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(270)); break;
+        }
     }
 }

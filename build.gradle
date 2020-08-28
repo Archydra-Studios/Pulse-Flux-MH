@@ -24,6 +24,23 @@ repositories {
 		name = "Modmenu"
 		url = "https://maven.fabricmc.net/io/github/prospector/modmenu/"
 	}
+	maven {
+		name = "dblsaiko"
+		url = "https://maven.dblsaiko.net/"
+	}
+	maven {
+		name = "Cotton"
+		url = "http://server.bbkr.space:8081/artifactory/libs-release/"
+	}
+	maven {
+		name = "JitPack"
+		url = "https://jitpack.io"
+	}
+
+	maven {
+		name = "AperLambda"
+		url = 'https://aperlambda.github.io/maven'
+	}
 }
 
 dependencies {
@@ -38,6 +55,11 @@ dependencies {
 
 	//Testing only, do not JiJ
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
+	//modCompile "grondag:canvas-mc116:1.0.+"
+}
+
+minecraft {
+	accessWidener "src/main/resources/pulseflux.accesswidener"
 }
 
 processResources {

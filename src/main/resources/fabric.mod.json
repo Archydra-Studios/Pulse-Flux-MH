@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "pulseflux",
   "version": "${version}",
+  "accessWidener" : "pulseflux.accesswidener",
 
   "name": "Pulse Flux",
   "description": "Listen, oh listen to the machines' heartbeat",

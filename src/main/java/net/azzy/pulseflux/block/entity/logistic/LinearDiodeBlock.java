@@ -48,6 +48,9 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
                 ContainerProviderRegistry.INSTANCE.openContainer(CREATIVE_GID, player, (packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
             return ActionResult.SUCCESS;
         }
+        else if(player.isInSneakingPose() && world.getBlockEntity(pos) instanceof CreativePulseSourceEntity && player.getStackInHand(hand).isEmpty())
+            if(!world.isClient())
+                ((CreativePulseSourceEntity) world.getBlockEntity(pos)).cyclePolarity();
         return ActionResult.PASS;
     }
 

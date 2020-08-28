@@ -71,6 +71,14 @@ public interface PulseNode {
 
     boolean canFail();
 
+    default Direction getInput(){
+        return null;
+    }
+
+    default Direction getOutput(){
+        return null;
+    }
+
     default boolean canUseMedium(Item item){
         return true;
     }

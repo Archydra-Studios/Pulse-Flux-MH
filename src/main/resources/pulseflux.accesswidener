@@ -1,0 +1,6 @@
+accessWidener	v1	named
+#Oh boy
+
+accessible  class   net/minecraft/client/sound/SoundEngine$SourceSetImpl
+accessible  class   net/minecraft/client/sound/SoundEngine$SourceSet
+

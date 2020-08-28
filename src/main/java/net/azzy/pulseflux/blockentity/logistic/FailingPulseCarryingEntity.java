@@ -1,13 +1,16 @@
 package net.azzy.pulseflux.blockentity.logistic;
 
+import net.azzy.pulseflux.blockentity.IORenderingEntityImpl;
 import net.azzy.pulseflux.blockentity.PulseEntity;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
@@ -15,11 +18,14 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 import java.util.function.Supplier;
 
-public abstract class FailingPulseCarryingEntity extends PulseEntity implements PulseNode {
+public abstract class FailingPulseCarryingEntity extends IORenderingEntityImpl implements PulseNode {
 
+    protected Direction input, output;
     protected final long maxAmplitude;
     protected final double maxFrequency;
 
@@ -33,7 +39,7 @@ public abstract class FailingPulseCarryingEntity extends PulseEntity implements 
     public void tick() {
         if((inductance > maxAmplitude && maxAmplitude >= 0))
             fail(FailureType.AMPLITUDE);
-        else if((frequency > maxFrequency && maxFrequency >= 0))
+        else if((frequency >= maxFrequency && maxFrequency >= 0))
             fail(FailureType.FREQUENCY);
         super.tick();
     }
@@ -50,10 +56,38 @@ public abstract class FailingPulseCarryingEntity extends PulseEntity implements 
         else if(failureType == FailureType.FREQUENCY && world.getTime() % 5 == 0){
             if(!world.isClient()) {
                 if(world.getTime() % 10 == 0)
-                    world.playSound(null, pos, SoundEvents.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.BLOCKS, 0.9f, 0.5f);
-                ((ServerWorld) world).spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 19, 0, 0, 0, 0.062);
+                    world.playSound(null, pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE, SoundCategory.BLOCKS, 0.125f, 0.5f);
+                ((ServerWorld) world).spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0, 0, 0, 0.062);
             }
         }
+    }
+
+    @Override
+    public CompoundTag toTag(CompoundTag tag) {
+        tag.putString("input", input.getName());
+        tag.putString("output", output.getName());
+        return super.toTag(tag);
+    }
+
+    @Override
+    public void fromTag(BlockState state, CompoundTag tag) {
+        input = Direction.byName(tag.getString("input"));
+        output = Direction.byName(tag.getString("output"));
+        super.fromTag(state, tag);
+    }
+
+    @Override
+    public CompoundTag toClientTag(CompoundTag compoundTag) {
+        compoundTag.putString("input", input.getName());
+        compoundTag.putString("output", output.getName());
+        return super.toClientTag(compoundTag);
+    }
+
+    @Override
+    public void fromClientTag(CompoundTag compoundTag) {
+        input = Direction.byName(compoundTag.getString("input"));
+        output = Direction.byName(compoundTag.getString("output"));
+        super.fromClientTag(compoundTag);
     }
 
     @Override
@@ -87,6 +121,16 @@ public abstract class FailingPulseCarryingEntity extends PulseEntity implements 
 
     public double getMaxFrequency() {
         return maxFrequency;
+    }
+
+    @Override
+    public Direction getInput() {
+        return input;
+    }
+
+    @Override
+    public Direction getOutput() {
+        return output;
     }
 
     enum FailureType{

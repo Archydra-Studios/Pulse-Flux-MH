@@ -35,4 +35,21 @@ public class IOScans {
         return null;
     }
 
+    public static Direction seekInputDir(BlockPos pos, World world, Direction output, int max){
+        if(world.isClient())
+            return null;
+        for(Direction dir : Direction.values()){
+            if(dir == output)
+                continue;
+            for(int i = 1; i <= max; i++){
+                BlockPos scanPos = pos.offset(dir, i);
+                BlockEntity node = world.getBlockEntity(scanPos);
+                if(node instanceof PulseNode && ((PulseNode) node).getOutput() == dir.getOpposite())
+                    return dir;
+                else if(world.getBlockState(scanPos).isOpaque())
+                    break;
+            }
+        }
+        return null;
+    }
 }

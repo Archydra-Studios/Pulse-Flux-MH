@@ -89,6 +89,8 @@ public abstract class PulseEntity extends MachineEntity{
     }
 
     protected void clearPower(){
+        if(world.isClient())
+            return;
         inductance = 0;
         frequency = 0;
         polarity = PulseNode.Polarity.NEUTRAL;

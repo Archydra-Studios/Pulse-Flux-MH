@@ -24,7 +24,6 @@ import static net.azzy.pulseflux.registry.BlockEntityRegistry.CREATIVE_PULSE_SOU
 
 public class CreativePulseSourceEntity extends PulseEntity implements PulseNode, Syncable, IORenderingEntity {
 
-    private BlockPos cachedOutput;
     private Direction output;
     private int renderTickTime;
     private boolean renderInit = true;
@@ -57,9 +56,13 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
                 if(getCachedState().get(LinearDiodeBlock.getFACING().get(direction)))
                     output = direction;
         }
-        else if (cachedOutput != null){
-            BlockEntity entity = world.getBlockEntity(cachedOutput);
-        }
+    }
+
+    public void cyclePolarity(){
+        int ordinal = polarity.ordinal() + 1;
+        if(ordinal > 2)
+            ordinal = 0;
+        polarity = Polarity.values()[ordinal];
     }
 
     public void recalcIO(Direction direction){
@@ -212,5 +215,10 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     @Override
     public void requestDisplay() {
         renderInit = true;
+    }
+
+    @Override
+    public Direction getOutput() {
+        return output;
     }
 }
