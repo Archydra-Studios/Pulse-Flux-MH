@@ -1,10 +1,7 @@
 package net.azzy.pulseflux.registry;
 
 import net.azzy.pulseflux.PulseFlux;
-import net.azzy.pulseflux.item.OscillatorItem;
-import net.azzy.pulseflux.item.ProbeItem;
-import net.azzy.pulseflux.item.SensorItem;
-import net.azzy.pulseflux.item.ThermometerItem;
+import net.azzy.pulseflux.item.*;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -31,6 +28,7 @@ public class ItemRegistry extends Item {
     public final static Item SENSOR = register("sensor", new SensorItem(TOOL));
     public final static Item PROBE = register("probe", new ProbeItem(TOOL));
     public static final Item OSCILLATOR = register("oscillator", new OscillatorItem(TOOL));
+    public static final Item SCREWDRIVER = register("scredriver", new ScrewdriverItem(TOOL));
 
     public static void init(){}
 

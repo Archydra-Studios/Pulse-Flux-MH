@@ -4,7 +4,10 @@ import net.azzy.pulseflux.block.MultiFacingBlock;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 import java.util.LinkedList;
@@ -42,5 +45,15 @@ public class PulseCarryingBlock <T extends BlockEntity> extends MultiFacingBlock
     @Override
     public List<Direction> getOutputs(BlockState state) {
         return getIO(state);
+    }
+
+    @Override
+    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
+        return VoxelShapes.empty();
+    }
+
+    @Override
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
+        return true;
     }
 }

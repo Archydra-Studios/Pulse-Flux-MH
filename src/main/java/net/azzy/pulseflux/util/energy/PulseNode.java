@@ -22,39 +22,9 @@ public interface PulseNode {
                 return (((node.getMaxInductance() >= node.getInductance() && node.getMaxFrequency() >= node.getFrequency()) || !node.canFail()));
             }
         }
-        if(sender instanceof FailingPulseCarryingEntity)
+        if(sender instanceof FailingPulseCarryingEntity && receiver.canFail())
             return receiver.getMaxFrequency() >= ((FailingPulseCarryingEntity) sender).getFrequency();
         return (sender instanceof PulseNode);
-    }
-
-    default DirectionPos scanIOExclusive(World world, BlockPos pos, Direction[] exemptions, int max){
-        List<Direction> exempt = Arrays.asList(exemptions);
-
-        for(Direction direction : Direction.values()) {
-            BlockPos scannedPos = pos;
-            if (exempt.contains(direction))
-                continue;
-            for (int i = 0; i < max; i++) {
-                scannedPos.offset(direction);
-                BlockEntity entity = world.getBlockEntity(scannedPos);
-                if(entity instanceof PulseNode)
-                    return new DirectionPos(scannedPos, direction);
-            }
-        }
-        return null;
-    }
-
-    default DirectionPos scanIOInclusive(World world, BlockPos pos, Direction[] directions, int max){
-        for(Direction direction : directions) {
-            BlockPos scannedPos = pos;
-            for (int i = 0; i < max; i++) {
-                scannedPos.offset(direction);
-                BlockEntity entity = world.getBlockEntity(scannedPos);
-                if(entity instanceof PulseNode)
-                    return new DirectionPos(scannedPos, direction);
-            }
-        }
-        return null;
     }
 
     long getInductance();
@@ -67,7 +37,13 @@ public interface PulseNode {
 
     double getMaxFrequency();
 
+    default double getPulseMultiplier(){
+        return 1;
+    }
+
     boolean canFail();
+
+    boolean isOverloaded();
 
     default Direction getInput(){
         return null;
@@ -81,23 +57,5 @@ public interface PulseNode {
         POSITIVE,
         NEGATIVE,
         NEUTRAL
-    }
-
-    class DirectionPos{
-        private final BlockPos pos;
-        private final Direction direction;
-
-        private DirectionPos(BlockPos pos, Direction direction){
-            this.pos = pos;
-            this.direction = direction;
-        }
-
-        public BlockPos getPos() {
-            return pos;
-        }
-
-        public Direction getDirection() {
-            return direction;
-        }
     }
 }

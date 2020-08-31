@@ -114,6 +114,11 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     }
 
     @Override
+    public boolean isOverloaded() {
+        return false;
+    }
+
+    @Override
     public int[] getAvailableSlots(Direction side) {
         return new int[0];
     }

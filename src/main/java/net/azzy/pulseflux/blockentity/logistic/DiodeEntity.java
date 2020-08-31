@@ -24,7 +24,7 @@ import java.util.Collections;
 public abstract class DiodeEntity extends FailingPulseCarryingEntity {
 
     public DiodeEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, long maxAmplitude, double maxFrequency) {
-        super(type, material, (short) 9, () -> DefaultedList.ofSize(0, ItemStack.EMPTY), maxAmplitude, maxFrequency);
+        super(type, material, (short) 9, () -> DefaultedList.ofSize(0, ItemStack.EMPTY), maxAmplitude, maxFrequency, false);
     }
 
     @Override
@@ -35,19 +35,6 @@ public abstract class DiodeEntity extends FailingPulseCarryingEntity {
     @Override
     public double getArea() {
         return 0.5;
-    }
-
-    @Override
-    public void playTransferSound(){
-        if(world.getTime() % 20 == 0) {
-            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.125f, 0.25f);
-
-        }
-        else if(world.getTime() % 10 == 0) {
-            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.065f, 0.55f);
-        }
-        if(world.getTime() % 5 == 0)
-            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 0.2f, 2f);
     }
 
     @Override

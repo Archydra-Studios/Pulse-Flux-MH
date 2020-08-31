@@ -28,7 +28,7 @@ public class SensorItem extends Item {
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Block: " + I18n.translate(world.getBlockState(pos).getBlock().getTranslationKey())), null);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Flux Inductance: " + holder.getInductance() + "Fi"), null);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Frequency: " + holder.getFrequency() + "Hz"), null);
-            if(world.getBlockEntity(pos) instanceof FailingPulseCarryingEntity){
+            if(world.getBlockEntity(pos) instanceof FailingPulseCarryingEntity && !((FailingPulseCarryingEntity) world.getBlockEntity(pos)).isUncapped()){
                 MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Failure Inductance " + ((FailingPulseCarryingEntity) world.getBlockEntity(pos)).getMaxInductance() + "Fi"), null);
                 MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Decoherence Point " + ((FailingPulseCarryingEntity) world.getBlockEntity(pos)).getMaxFrequency() + "Hz"), null);
             }

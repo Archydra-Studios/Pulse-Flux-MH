@@ -1,15 +1,20 @@
 package net.azzy.pulseflux.blockentity;
 
+import net.azzy.pulseflux.block.MultiFacingBlock;
 import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
+import net.azzy.pulseflux.block.entity.logistic.PulseCarryingDirectionalBlock;
 import net.azzy.pulseflux.client.util.PulseRenderingEntity;
 import net.azzy.pulseflux.util.energy.BlockNode;
 import net.azzy.pulseflux.util.energy.IOScans;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FacingBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -84,7 +89,17 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
         }
     }
 
-    protected abstract void playTransferSound();
+    protected void playTransferSound(){
+        if(world.getTime() % 20 == 0) {
+            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.125f, 0.25f);
+
+        }
+        else if(world.getTime() % 10 == 0) {
+            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 0.065f, 0.55f);
+        }
+        if(world.getTime() % 5 == 0)
+            world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 0.2f, 2f);
+    }
 
     public boolean checkIO(Direction direction, BlockPos sender){
         BlockState state = world.getBlockState(sender);
@@ -97,7 +112,35 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
             input = IOScans.seekInputDir(pos, world, output, range);
             if(input == null)
                 input = direction.getOpposite();
-            world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(direction.getOpposite()), true));
+            if(state.getBlock() instanceof MultiFacingBlock)
+                world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(direction.getOpposite()), true));
+            else if(state.getBlock() instanceof FacingBlock)
+                world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
+        }
+        else if(input == null && output != null){
+            for(Direction facing : Direction.values())
+                if(output != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
+                    input = facing;
+                    break;
+                }
+        }
+        else if(output == null && input != null){
+            for(Direction facing : Direction.values())
+                if(input != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
+                    output = facing;
+                    break;
+                }
+        }
+    }
+
+    public void recalcIO(Direction direction, BlockState state, boolean io, boolean straight){
+        if(io){
+            output = direction;
+            input = direction.getOpposite();
+            if(state.getBlock() instanceof MultiFacingBlock)
+                world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(direction.getOpposite()), true));
+            else if(state.getBlock() instanceof FacingBlock)
+                world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
         }
         else if(input == null && output != null){
             for(Direction facing : Direction.values())

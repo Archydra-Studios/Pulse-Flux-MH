@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "pulseflux:block/logistic/modulator_2x"
+    },
+    "facing=east": {
+      "model": "pulseflux:block/logistic/modulator_2x",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "pulseflux:block/logistic/modulator_2x",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "pulseflux:block/logistic/modulator_2x",
+      "y": 270
+    }
+  }
+}

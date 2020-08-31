@@ -28,24 +28,29 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
 
     protected final long maxAmplitude;
     protected final double maxFrequency;
+    protected final boolean uncapped;
+    protected boolean isOverloaded = false;
 
-    public FailingPulseCarryingEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, short range, Supplier<DefaultedList<ItemStack>> invSupplier, long maxAmplitude, double maxFrequency) {
+    public FailingPulseCarryingEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, short range, Supplier<DefaultedList<ItemStack>> invSupplier, long maxAmplitude, double maxFrequency, boolean uncapped) {
         super(type, material, range, invSupplier);
         this.maxAmplitude = maxAmplitude;
         this.maxFrequency = maxFrequency;
+        this.uncapped = uncapped;
     }
 
     @Override
     public void tick() {
-        if((inductance > maxAmplitude && maxAmplitude >= 0))
+        if((inductance > maxAmplitude && !uncapped))
             fail(FailureType.AMPLITUDE);
-        else if((frequency >= maxFrequency && maxFrequency >= 0))
+        else if((frequency >= maxFrequency && !uncapped))
             fail(FailureType.FREQUENCY);
+        else
+            isOverloaded = false;
         super.tick();
     }
 
     public void fail(FailureType failureType){
-        //world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.BLOCKS, 4f, 0.75f, true);
+        isOverloaded = true;
         if(failureType == FailureType.AMPLITUDE){
             world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 2.5f, 0.5f, true);
             if(!world.isClient()) {
@@ -65,16 +70,26 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
     @Override
     public void accept(Direction direction, BlockPos sender) {
         PulseNode node = (PulseNode) world.getBlockEntity(sender);
-        if(checkIO(direction, sender)){
+        if(checkIO(direction, sender) && (!node.isOverloaded() || !node.canFail())){
             long flux = node.getInductance();
-            inductance = flux > maxAmplitude ? world.getRandom().nextInt((int) Math.max((flux - maxAmplitude) / 100, 10)) == 0 ? flux : maxAmplitude : flux;
-            frequency = Math.min(node.getFrequency(), maxFrequency);
-            polarity = node.getPolarity();;
+            if(!uncapped){
+                inductance = flux * node.getPulseMultiplier() > maxAmplitude ? (long) (world.getRandom().nextInt((int) Math.max(((flux * node.getPulseMultiplier()) - maxAmplitude) / 100, 10)) == 0 ? flux * getPulseMultiplier() : maxAmplitude) : (long) (flux * node.getPulseMultiplier());
+                frequency = Math.min(node.getFrequency() * node.getPulseMultiplier(), maxFrequency);
+            }
+            else {
+                inductance = (long) (node.getInductance() * node.getPulseMultiplier());
+                frequency = node.getFrequency() * node.getPulseMultiplier();
+            }
+            polarity = node.getPolarity();
             if(inductance != 0 && frequency != 0)
                 pulseTickTime = 100;
         }
         else
             clearPower();
+    }
+
+    public boolean isUncapped() {
+        return uncapped;
     }
 
     @Override
@@ -122,7 +137,12 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
 
     @Override
     public boolean canFail() {
-        return true;
+        return !uncapped;
+    }
+
+    @Override
+    public boolean isOverloaded() {
+        return isOverloaded;
     }
 
     public long getMaxInductance() {

@@ -37,8 +37,7 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        Direction facing = ctx.getPlayerLookDirection();
-        return super.getPlacementState(ctx).with(FACING.get(facing.getOpposite()), true);
+        return super.getPlacementState(ctx).with(FACING.get(ctx.getPlayerLookDirection().getOpposite()), true);
     }
 
     @Override
@@ -67,13 +66,4 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
         }
     }
 
-    @Override
-    public VoxelShape getCullingShape(BlockState state, BlockView world, BlockPos pos) {
-        return VoxelShapes.empty();
-    }
-
-    @Override
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-        return true;
-    }
 }
