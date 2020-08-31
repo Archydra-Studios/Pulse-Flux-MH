@@ -26,7 +26,6 @@ public class ProbeItem extends Item {
             PulseNode holder = (PulseNode) world.getBlockEntity(pos);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText(""), null);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Block: " + I18n.translate(world.getBlockState(pos).getBlock().getTranslationKey())), null);
-            MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Medium: " + (holder.getMedium() != Items.AIR ? holder.getMedium() : "None")), null);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText("Polarity: " + holder.getPolarity().name()), null);
             MinecraftClient.getInstance().player.sendSystemMessage(new LiteralText(""), null);
 

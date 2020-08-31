@@ -1,0 +1,27 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "pulseflux:dyncontext",
+  "fragment": "pulseflux:pulse",
+  "attributes": ["Position"],
+  "samplers": [{
+    "name": "DiffuseSampler"
+  }],
+  "uniforms": [
+    {
+     "name": "tickTime",
+     "type": "float",
+     "count": 1,
+     "values": [1.0]
+    },
+    {
+      "name": "fragAlpha",
+      "type": "float",
+      "count": 1,
+      "values": [1.0]
+    }
+  ]
+}

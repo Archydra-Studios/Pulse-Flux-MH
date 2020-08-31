@@ -29,7 +29,7 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     private boolean renderInit = true;
 
     public CreativePulseSourceEntity() {
-        super(CREATIVE_PULSE_SOURCE, HeatTransferHelper.HeatMaterial.AIR, () -> DefaultedList.ofSize(1, ItemStack.EMPTY));
+        super(CREATIVE_PULSE_SOURCE, HeatTransferHelper.HeatMaterial.AIR, () -> DefaultedList.ofSize(0, ItemStack.EMPTY));
         inductance = 1000;
         frequency = 2000;
         polarity = Polarity.NEUTRAL;
@@ -106,11 +106,6 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     @Override
     public double getMaxFrequency() {
         return 0;
-    }
-
-    @Override
-    public Item getMedium() {
-        return inventory.get(0).getItem();
     }
 
     @Override

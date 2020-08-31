@@ -29,8 +29,8 @@ public class IOScans {
             if(entity instanceof PulseNode){
                 return scanPos;
             }
-            if(!world.getBlockState(pos).isTranslucent(world, scanPos))
-                break;
+            if(world.getBlockState(scanPos).isOpaque())
+                return null;
         }
         return null;
     }

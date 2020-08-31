@@ -2,6 +2,7 @@ package net.azzy.pulseflux.blockentity.logistic;
 
 import net.azzy.pulseflux.blockentity.IORenderingEntityImpl;
 import net.azzy.pulseflux.blockentity.PulseEntity;
+import net.azzy.pulseflux.blockentity.PulseRenderingEntityImpl;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.minecraft.block.BlockState;
@@ -23,14 +24,13 @@ import net.minecraft.util.math.Direction;
 
 import java.util.function.Supplier;
 
-public abstract class FailingPulseCarryingEntity extends IORenderingEntityImpl implements PulseNode {
+public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImpl {
 
-    protected Direction input, output;
     protected final long maxAmplitude;
     protected final double maxFrequency;
 
-    public FailingPulseCarryingEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, Supplier<DefaultedList<ItemStack>> invSupplier, long maxAmplitude, double maxFrequency) {
-        super(type, material, invSupplier);
+    public FailingPulseCarryingEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, short range, Supplier<DefaultedList<ItemStack>> invSupplier, long maxAmplitude, double maxFrequency) {
+        super(type, material, range, invSupplier);
         this.maxAmplitude = maxAmplitude;
         this.maxFrequency = maxFrequency;
     }
@@ -60,6 +60,21 @@ public abstract class FailingPulseCarryingEntity extends IORenderingEntityImpl i
                 ((ServerWorld) world).spawnParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, 0, 0, 0, 0.062);
             }
         }
+    }
+
+    @Override
+    public void accept(Direction direction, BlockPos sender) {
+        PulseNode node = (PulseNode) world.getBlockEntity(sender);
+        if(checkIO(direction, sender)){
+            long flux = node.getInductance();
+            inductance = flux > maxAmplitude ? world.getRandom().nextInt((int) Math.max((flux - maxAmplitude) / 100, 10)) == 0 ? flux : maxAmplitude : flux;
+            frequency = Math.min(node.getFrequency(), maxFrequency);
+            polarity = node.getPolarity();;
+            if(inductance != 0 && frequency != 0)
+                pulseTickTime = 100;
+        }
+        else
+            clearPower();
     }
 
     @Override
@@ -107,11 +122,6 @@ public abstract class FailingPulseCarryingEntity extends IORenderingEntityImpl i
 
     @Override
     public boolean canFail() {
-        return true;
-    }
-
-    @Override
-    public boolean canUseMedium(Item item) {
         return true;
     }
 

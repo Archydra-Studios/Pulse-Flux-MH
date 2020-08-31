@@ -39,8 +39,6 @@ public class CreativeDiodeController extends BaseController {
 
     @Override
     protected void assembleInventory(int slots, int gapX, int gapY) {
-        Predicate<ItemStack> filter = e -> e.getItem() == Items.REDSTONE;
-        root.add(WItemSlot.of(blockInventory, 0).setFilter(filter), 72, 39);
         extendedDelegate = (ExtendedPropertyDelegate) propertyDelegate;
 
         inductanceField = new WTextField();

@@ -9,7 +9,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
-def libgui = project.libgui_version
 
 repositories {
 	//maven {
@@ -41,6 +40,8 @@ repositories {
 		name = "AperLambda"
 		url = 'https://aperlambda.github.io/maven'
 	}
+
+	jcenter()
 }
 
 dependencies {
@@ -51,7 +52,11 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation(include("io.github.cottonmc:LibGui:${libgui}"))
+	modImplementation(include("io.github.cottonmc:LibGui:${project.libgui_version}"))
+	modImplementation(include("io.github.ladysnake:Satin:${project.satin_version}"))
+	modApi(include("me.shedaniel.cloth:config-2:${project.clothconfig_version}")){
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 
 	//Testing only, do not JiJ
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"

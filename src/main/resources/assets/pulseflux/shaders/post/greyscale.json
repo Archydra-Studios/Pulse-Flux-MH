@@ -1,0 +1,20 @@
+{
+  "targets": [
+    "swap"
+  ],
+  "passes": [
+    {
+      "name": "pulseflux:blit",
+      "intarget": "minecraft:main",
+      "outtarget": "swap",
+      "uniforms": [
+        { "name": "ColorModulate", "values": [ 1.0, 1.0, 1.0, 1.0 ]}
+      ]
+    },
+    {
+      "name": "pulseflux:blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}

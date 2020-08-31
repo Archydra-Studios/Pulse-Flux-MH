@@ -15,16 +15,16 @@ public interface PulseNode {
 
     void accept(Direction direction, BlockPos pos);
 
-    default boolean simulate(World world, BlockEntity sender, Item medium, boolean noFailure, PulseNode receiver, double max){
+    default boolean simulate(World world, BlockEntity sender, boolean noFailure, PulseNode receiver, double max){
         if(noFailure) {
             if(sender instanceof PulseNode) {
                 PulseNode node = (PulseNode) sender;
-                return (((node.getMaxInductance() >= node.getInductance() && node.getMaxFrequency() >= node.getFrequency()) || !node.canFail()) && receiver.canUseMedium(medium));
+                return (((node.getMaxInductance() >= node.getInductance() && node.getMaxFrequency() >= node.getFrequency()) || !node.canFail()));
             }
         }
         if(sender instanceof FailingPulseCarryingEntity)
-            return receiver.canUseMedium(medium) && receiver.getMaxFrequency() >= ((FailingPulseCarryingEntity) sender).getFrequency();
-        return (sender instanceof PulseNode && receiver.canUseMedium(medium));
+            return receiver.getMaxFrequency() >= ((FailingPulseCarryingEntity) sender).getFrequency();
+        return (sender instanceof PulseNode);
     }
 
     default DirectionPos scanIOExclusive(World world, BlockPos pos, Direction[] exemptions, int max){
@@ -67,8 +67,6 @@ public interface PulseNode {
 
     double getMaxFrequency();
 
-    Item getMedium();
-
     boolean canFail();
 
     default Direction getInput(){
@@ -77,10 +75,6 @@ public interface PulseNode {
 
     default Direction getOutput(){
         return null;
-    }
-
-    default boolean canUseMedium(Item item){
-        return true;
     }
 
     enum Polarity{

@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.client.util;
 
+import net.azzy.pulseflux.client.shaders.ShaderManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
@@ -20,5 +21,9 @@ public abstract class FFRenderLayers extends RenderLayer {
 
     public FFRenderLayers(String name, VertexFormat vertexFormat, int drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
         super(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, startAction, endAction);
+    }
+
+    public static RenderLayer getOverlayBloomLayer(){
+        return ShaderManager.PULSE__BLOOM.getRenderLayer(OVERLAY);
     }
 }
