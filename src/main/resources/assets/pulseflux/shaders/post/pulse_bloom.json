@@ -7,9 +7,14 @@
   ],
   "passes": [
     {
+      "name": "blit",
+      "intarget": "minecraft:main",
+      "outtarget": "swap"
+    },
+    {
       "name": "blur",
       "intarget": "in",
-      "outtarget": "swap",
+      "outtarget": "swap2",
       "uniforms": [
         {
           "name": "BlurDir",
@@ -17,13 +22,13 @@
         },
         {
           "name": "Radius",
-          "values": [ 20.0 ]
+          "values": [ 15.0 ]
         }
       ]
     },
     {
       "name": "blur",
-      "intarget": "swap",
+      "intarget": "swap2",
       "outtarget": "combine",
       "uniforms": [
         {
@@ -32,18 +37,24 @@
         },
         {
           "name": "Radius",
-          "values": [ 20.0 ]
+          "values": [ 15.0 ]
         }
       ]
     },
     {
-      "name": "blit",
-      "intarget": "minecraft:main",
-      "outtarget": "swap2"
-    },        {
-      "name": "blit",
-      "intarget": "swap2",
-      "outtarget": "minecraft:main"
+      "name": "pulseflux:pulse",
+      "intarget": "swap",
+      "outtarget": "minecraft:main",
+      "auxtargets": [
+        {
+          "name": "BeamSampler",
+          "id": "in"
+        },
+        {
+          "name": "OverlaySampler",
+          "id": "combine"
+        }
+      ]
     }
   ]
 }
