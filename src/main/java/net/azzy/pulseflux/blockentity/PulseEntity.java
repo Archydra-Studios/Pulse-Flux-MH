@@ -28,11 +28,6 @@ public abstract class PulseEntity extends MachineEntity{
         outputs = new ArrayList<>();
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-    }
-
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {

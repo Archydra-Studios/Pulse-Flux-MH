@@ -28,7 +28,7 @@ public class ItemRegistry extends Item {
     public final static Item SENSOR = register("sensor", new SensorItem(TOOL));
     public final static Item PROBE = register("probe", new ProbeItem(TOOL));
     public static final Item OSCILLATOR = register("oscillator", new OscillatorItem(TOOL));
-    public static final Item SCREWDRIVER = register("scredriver", new ScrewdriverItem(TOOL));
+    public static final Item SCREWDRIVER = register("screwdriver", new ScrewdriverItem(TOOL));
 
     public static void init(){}
 

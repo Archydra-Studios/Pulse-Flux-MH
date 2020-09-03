@@ -2,6 +2,7 @@ package net.azzy.pulseflux.blockentity;
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
 import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
+import net.azzy.pulseflux.block.entity.logistic.PulseCarryingBlock;
 import net.azzy.pulseflux.block.entity.logistic.PulseCarryingDirectionalBlock;
 import net.azzy.pulseflux.client.util.PulseRenderingEntity;
 import net.azzy.pulseflux.util.energy.BlockNode;
@@ -10,6 +11,7 @@ import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +23,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -29,7 +32,7 @@ import static net.azzy.pulseflux.PulseFlux.PFRandom;
 public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl implements PulseRenderingEntity, PulseNode {
 
     protected Direction input, output;
-    final short range;
+    protected final short range;
     protected int pulseTickTime;
     protected int delay = PFRandom.nextInt(19);
     protected BlockPos cachedInput;
@@ -78,7 +81,7 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
                 clearPower();
             }
         }
-        if (!world.isClient() && cachedInput != null && simulate(world, world.getBlockEntity(cachedInput), false, this, 16) && checkIO(input, cachedInput)) {
+        if (!world.isClient() && cachedInput != null) {
             if(world.getTime() % 10 == 0)
                 accept(input, cachedInput);
             if(inductance > 0 && frequency > 0)
@@ -102,8 +105,8 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
     }
 
     public boolean checkIO(Direction direction, BlockPos sender){
-        BlockState state = world.getBlockState(sender);
-        return state.getBlock() instanceof BlockNode && ((BlockNode) state.getBlock()).getIO(state).contains(direction.getOpposite());
+        BlockEntity node = world.getBlockEntity(sender);
+        return node instanceof PulseNode && ((PulseNode) node).getOutputs().contains(direction.getOpposite());
     }
 
     public void recalcIO(Direction direction, BlockState state, boolean io){
@@ -112,49 +115,46 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
             input = IOScans.seekInputDir(pos, world, output, range);
             if(input == null)
                 input = direction.getOpposite();
-            if(state.getBlock() instanceof MultiFacingBlock)
-                world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(direction.getOpposite()), true));
+            if(state.getBlock() instanceof PulseCarryingBlock)
+                world.setBlockState(pos, state.with(PulseCarryingBlock.getFACING().get(input), true).with(PulseCarryingBlock.getFACING().get(output), true));
             else if(state.getBlock() instanceof FacingBlock)
                 world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
-        }
-        else if(input == null && output != null){
-            for(Direction facing : Direction.values())
-                if(output != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
-                    input = facing;
-                    break;
-                }
-        }
-        else if(output == null && input != null){
-            for(Direction facing : Direction.values())
-                if(input != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
-                    output = facing;
-                    break;
-                }
         }
     }
 
-    public void recalcIO(Direction direction, BlockState state, boolean io, boolean straight){
-        if(io){
-            output = direction;
-            input = direction.getOpposite();
-            if(state.getBlock() instanceof MultiFacingBlock)
-                world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(direction.getOpposite()), true));
-            else if(state.getBlock() instanceof FacingBlock)
-                world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
+    public void recalcIO(boolean straight, Direction direction, BlockState state){
+        output = direction;
+        input = direction.getOpposite();
+        if(state.getBlock() instanceof MultiFacingBlock)
+            world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(input), true));
+        else if(state.getBlock() instanceof FacingBlock)
+            world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
+    }
+
+    public void setIO(Direction direction, BlockState state, BlockPos pos, boolean in){
+        if(in){
+            if(direction == input || direction == output){
+                Direction temp = input;
+                input = output;
+                output = temp;
+            }
+            else {
+                input = direction;
+                MultiFacingBlock.clearFacing(world, pos);
+                world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(input), true).with(MultiFacingBlock.getFACING().get(output), true));
+            }
         }
-        else if(input == null && output != null){
-            for(Direction facing : Direction.values())
-                if(output != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
-                    input = facing;
-                    break;
-                }
-        }
-        else if(output == null && input != null){
-            for(Direction facing : Direction.values())
-                if(input != facing && state.get(LinearDiodeBlock.getFACING().get(facing))){
-                    output = facing;
-                    break;
-                }
+        else {
+            if(direction == input || direction == output){
+                Direction temp = input;
+                input = output;
+                output = temp;
+            }
+            else {
+                output = direction;
+                MultiFacingBlock.clearFacing(world, pos);
+                world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(input), true).with(MultiFacingBlock.getFACING().get(output), true));
+            }
         }
     }
 
@@ -184,7 +184,7 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
     }
 
     @Override
-    public double getPulseDistance() {
+    public double getPulseDistance(Direction direction) {
         if(cachedInput != null)
             return pos.getManhattanDistance(cachedInput);
         else
@@ -193,7 +193,9 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
 
     @Override
     public Set<Direction> getPulseDirections() {
-        return Collections.singleton(input);
+        Set<Direction> directions = new HashSet<>();
+        directions.addAll(getInputs());
+        return directions;
     }
 
     @Override
@@ -214,5 +216,15 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
     @Override
     public Collection<Direction> getOutputs() {
         return Collections.singleton(output);
+    }
+
+    @Override
+    public Collection<Direction> getRenderInputs() {
+        return getInputs();
+    }
+
+    @Override
+    public Collection<Direction> getRenderOutputs() {
+        return getOutputs();
     }
 }

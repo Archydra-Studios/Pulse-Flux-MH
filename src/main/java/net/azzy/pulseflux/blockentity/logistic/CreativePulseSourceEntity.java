@@ -8,8 +8,6 @@ import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.networking.Syncable;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
@@ -30,8 +28,8 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
 
     public CreativePulseSourceEntity() {
         super(CREATIVE_PULSE_SOURCE, HeatTransferHelper.HeatMaterial.AIR, () -> DefaultedList.ofSize(0, ItemStack.EMPTY));
-        inductance = 1000;
-        frequency = 2000;
+        inductance = 50;
+        frequency = 200;
         polarity = Polarity.NEUTRAL;
     }
 
@@ -182,12 +180,14 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
         renderInit = compoundTag.getBoolean("rendertick");
+        renderTickTime = compoundTag.getInt("renderticktime");
         super.fromClientTag(compoundTag);
     }
 
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
         compoundTag.putBoolean("rendertick", renderInit);
+        compoundTag.putInt("renderticktime", renderTickTime);
         return super.toClientTag(compoundTag);
     }
 
@@ -215,10 +215,5 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     @Override
     public void requestDisplay() {
         renderInit = true;
-    }
-
-    @Override
-    public Direction getOutput() {
-        return output;
     }
 }

@@ -1,19 +1,13 @@
 package net.azzy.pulseflux.blockentity.logistic;
 
-import net.azzy.pulseflux.blockentity.IORenderingEntityImpl;
-import net.azzy.pulseflux.blockentity.PulseEntity;
 import net.azzy.pulseflux.blockentity.PulseRenderingEntityImpl;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -74,11 +68,11 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
             long flux = node.getInductance();
             if(!uncapped){
                 inductance = flux * node.getPulseMultiplier() > maxAmplitude ? (long) (world.getRandom().nextInt((int) Math.max(((flux * node.getPulseMultiplier()) - maxAmplitude) / 100, 10)) == 0 ? flux * getPulseMultiplier() : maxAmplitude) : (long) (flux * node.getPulseMultiplier());
-                frequency = Math.min(node.getFrequency() * node.getPulseMultiplier(), maxFrequency);
+                frequency = Math.min(node.getFrequency(), maxFrequency);
             }
             else {
                 inductance = (long) (node.getInductance() * node.getPulseMultiplier());
-                frequency = node.getFrequency() * node.getPulseMultiplier();
+                frequency = node.getFrequency();
             }
             polarity = node.getPolarity();
             if(inductance != 0 && frequency != 0)
@@ -94,8 +88,10 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
-        tag.putString("input", input.getName());
-        tag.putString("output", output.getName());
+        if(input != null && output != null) {
+            tag.putString("input", input.getName());
+            tag.putString("output", output.getName());
+        }
         return super.toTag(tag);
     }
 
@@ -108,8 +104,10 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
 
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
-        compoundTag.putString("input", input.getName());
-        compoundTag.putString("output", output.getName());
+        if(input != null && output != null) {
+            compoundTag.putString("input", input.getName());
+            compoundTag.putString("output", output.getName());
+        }
         return super.toClientTag(compoundTag);
     }
 
@@ -151,16 +149,6 @@ public abstract class FailingPulseCarryingEntity extends PulseRenderingEntityImp
 
     public double getMaxFrequency() {
         return maxFrequency;
-    }
-
-    @Override
-    public Direction getInput() {
-        return input;
-    }
-
-    @Override
-    public Direction getOutput() {
-        return output;
     }
 
     enum FailureType{

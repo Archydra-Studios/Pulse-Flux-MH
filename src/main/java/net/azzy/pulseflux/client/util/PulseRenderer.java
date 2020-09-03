@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.client.util;
 
 import net.azzy.pulseflux.ClientInit;
+import net.azzy.pulseflux.client.shaders.ShaderManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
@@ -12,10 +13,7 @@ public interface PulseRenderer<T extends PulseRenderingEntity> {
 
     default void renderPulse(MatrixStack matrices, VertexConsumerProvider consumers, T entity, float tickDelta){
 
-        float ae = (float) entity.getPulseDistance();
-        float pulseLength = (float) (entity.getPulseDistance() * 16) - 16;
-
-        if(pulseLength <= 0 || entity.getPulseAlpha() <= 0.01f)
+        if(entity.getPulseAlpha() <= 0.01f)
             return;
 
         RenderMathHelper.RGBAWrapper color;
@@ -23,6 +21,9 @@ public interface PulseRenderer<T extends PulseRenderingEntity> {
         Set<Direction> directions = entity.getPulseDirections();
 
         for(Direction direction : directions){
+            float pulseLength = (float) (entity.getPulseDistance(direction) * 16) - 16;
+            if(pulseLength <= 0)
+                continue;
             switch (entity.getPulsePolarity(direction)){
                 case NEGATIVE:
                     color = ClientInit.NEGATIVE_COLOR;

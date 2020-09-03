@@ -6,8 +6,10 @@ import net.azzy.pulseflux.util.energy.BlockNode;
 import net.azzy.pulseflux.util.energy.IOScans;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
+import net.azzy.pulseflux.util.interaction.MultiFacingRotatableBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import java.util.Collection;
 import java.util.Collections;

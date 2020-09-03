@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface PulseRenderingEntity {
 
-    double getPulseDistance();
+    double getPulseDistance(Direction direction);
 
     float getPulseAlpha();
 

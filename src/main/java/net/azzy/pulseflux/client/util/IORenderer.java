@@ -4,9 +4,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static net.azzy.pulseflux.PulseFlux.PFRandom;
 
 public interface IORenderer<T extends IORenderingEntity> {
 
@@ -15,8 +16,8 @@ public interface IORenderer<T extends IORenderingEntity> {
         if(entity.getRenderTickTime() <= 0)
             return;
 
-        List<Direction> in = new LinkedList<>(entity.getInputs());
-        List<Direction> out = new LinkedList<>(entity.getOutputs());
+        List<Direction> in = new LinkedList<>(entity.getRenderInputs());
+        List<Direction> out = new LinkedList<>(entity.getRenderOutputs());
 
         int alpha = (Math.min(entity.getRenderTickTime(), 100));
 
@@ -27,6 +28,7 @@ public interface IORenderer<T extends IORenderingEntity> {
                 out.remove(direction);
 
                 RenderHelper.renderOverlayCuboid(matrices, consumers, 252, 222, 116, alpha, 1, 1 ,1, true);
+                matrices.pop();
                 continue;
             }
             RenderHelper.renderOverlayCuboid(matrices, consumers, 105, 255, 147, alpha, 1, 1 ,1, true);

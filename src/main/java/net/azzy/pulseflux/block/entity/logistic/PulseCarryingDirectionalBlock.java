@@ -2,12 +2,14 @@ package net.azzy.pulseflux.block.entity.logistic;
 
 import net.azzy.pulseflux.blockentity.PulseRenderingEntityImpl;
 import net.azzy.pulseflux.util.energy.BlockNode;
+import net.azzy.pulseflux.util.interaction.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
@@ -23,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends FacingBlock implements BlockEntityProvider, BlockNode {
+public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends FacingBlock implements BlockEntityProvider, BlockNode, RotatableBlock {
 
     protected final Supplier<T> blockEntitySupplier;
     private final boolean horizontal;
@@ -44,12 +46,22 @@ public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends Facin
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         BlockEntity entity = world.getBlockEntity(pos);
         if(entity instanceof PulseRenderingEntityImpl)
-            ((PulseRenderingEntityImpl) entity).recalcIO(state.get(FACING), state, true, true);
+            ((PulseRenderingEntityImpl) entity).recalcIO(true, state.get(FACING), state);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+    }
+
+    @Override
+    public void rotate(World world, BlockPos pos, PlayerEntity playerEntity) {
+        BlockState state = world.getBlockState(pos);
+        BlockEntity entity = world.getBlockEntity(pos);
+        if(entity instanceof PulseRenderingEntityImpl) {
+            ((PulseRenderingEntityImpl) entity).recalcIO(true, horizontal ? playerEntity.getHorizontalFacing().getOpposite() : Direction.getEntityFacingOrder(playerEntity)[0].getOpposite(), state);
+            ((PulseRenderingEntityImpl) entity).requestDisplay();
+        }
     }
 
     @Override

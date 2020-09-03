@@ -3,10 +3,15 @@ package net.azzy.pulseflux.registry;
 import net.azzy.pulseflux.PulseFlux;
 import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
 import net.azzy.pulseflux.block.entity.logistic.ModulatorBlock;
+import net.azzy.pulseflux.block.entity.logistic.SolenoidBlock;
 import net.azzy.pulseflux.block.entity.production.BlastFurnaceMachine;
 import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity;
 import net.azzy.pulseflux.blockentity.logistic.diodes.SteelDiodeEntity;
+import net.azzy.pulseflux.blockentity.logistic.misc.SolenoidMergingEntity;
+import net.azzy.pulseflux.blockentity.logistic.misc.SolenoidSplittingEntity;
 import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator2Entity;
+import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator4Entity;
+import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator8Entity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -36,9 +41,12 @@ public class BlockRegistry {
     private static final Item.Settings MACHINES = new Item.Settings().group(PulseFlux.MACHINES);
     private static final Item.Settings LOGISTICS = new Item.Settings().group(PulseFlux.LOGISTICS);
 
+    private static final FabricBlockSettings OBSIDIAN_MELD = FabricBlockSettings.of(Material.GLASS, MaterialColor.BLACK).strength(6.5f, 400).sounds(BlockSoundGroup.GLASS).breakByTool(FabricToolTags.PICKAXES, 3).requiresTool();
+
 
     //Other
     public static final Block BLACKSTONE_PANEL = register("blackstone_panel", new Block(FabricBlockSettings.of(Material.STONE, MaterialColor.BLACK).requiresTool().strength(1.5F, 6.0F).sounds(BlockSoundGroup.GILDED_BLACKSTONE).breakByTool(FabricToolTags.PICKAXES, 1)), MATERIAL);
+    public static final Block OBSIDIAN_PANEL = register("obsidian_panel", new Block(OBSIDIAN_MELD), MATERIAL);
 
     //misc blocks
     public static final Block STEEL_BLOCK = register("hsla_steel_block", new Block(FabricBlockSettings.of(Material.METAL).requiresTool().strength(6f, 8f).sounds(BlockSoundGroup.METAL).materialColor(MaterialColor.IRON).breakByTool(FabricToolTags.PICKAXES, 2)), MATERIAL);
@@ -52,6 +60,11 @@ public class BlockRegistry {
     public static final Block CREATIVE_PULSE_SOURCE = register("creative_pulse_source", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), CreativePulseSourceEntity::new), LOGISTICS);
 
     public static final Block MODULATOR_2 = register("modulator_2x", new ModulatorBlock<>(FabricBlockSettings.copyOf(Blocks.GRANITE), () -> new Modulator2Entity(1260, 2500)), LOGISTICS);
+    public static final Block MODULATOR_4 = register("modulator_4x", new ModulatorBlock<>(FabricBlockSettings.copyOf(MODULATOR_2), () -> new Modulator4Entity(1260, 2500)), LOGISTICS);
+    public static final Block MODULATOR_8 = register("modulator_8x", new ModulatorBlock<>(FabricBlockSettings.copyOf(MODULATOR_2), () -> new Modulator8Entity(1260, 2500)), LOGISTICS);
+
+    public static final Block SOLENOID_SPLIT = register("solenoid_splitting", new SolenoidBlock<>(OBSIDIAN_MELD, SolenoidSplittingEntity::new), LOGISTICS);
+    public static final Block SOLENOID_MERGE = register("solenoid_merging", new SolenoidBlock<>(OBSIDIAN_MELD, SolenoidMergingEntity::new), LOGISTICS);
 
     //Machines
     public static final Block BLAST_FURNACE_MACHINE = register("blast_furnace", new BlastFurnaceMachine(FabricBlockSettings.of(Material.STONE, MaterialColor.RED).requiresTool().strength(3f, 4f).sounds(BlockSoundGroup.STONE).breakByTool(FabricToolTags.PICKAXES, 2).lightLevel(e -> e.get(BlastFurnaceMachine.LIT) ? 15 : 0), DEFAULT_SHAPE), MACHINES);
@@ -86,5 +99,9 @@ public class BlockRegistry {
         REGISTRY_PARTIAL.add(STEEL_DIODE);
         REGISTRY_PARTIAL.add(CREATIVE_PULSE_SOURCE);
         REGISTRY_PARTIAL.add(MODULATOR_2);
+        REGISTRY_PARTIAL.add(MODULATOR_4);
+        REGISTRY_PARTIAL.add(MODULATOR_8);
+        REGISTRY_PARTIAL.add(SOLENOID_SPLIT);
+        REGISTRY_PARTIAL.add(SOLENOID_MERGE);
     }
 }

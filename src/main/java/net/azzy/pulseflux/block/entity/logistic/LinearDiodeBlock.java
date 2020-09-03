@@ -32,12 +32,7 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
     public static final Identifier CREATIVE_GID = new Identifier(MOD_ID, "creative_diode_gui");
 
     public LinearDiodeBlock(Settings settings, Supplier<T> blockEntitySupplier) {
-        super(settings, blockEntitySupplier);
-    }
-
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx).with(FACING.get(ctx.getPlayerLookDirection().getOpposite()), true);
+        super(settings, blockEntitySupplier, false);
     }
 
     @Override
@@ -51,19 +46,6 @@ public class LinearDiodeBlock <T extends BlockEntity> extends PulseCarryingBlock
             if(!world.isClient())
                 ((CreativePulseSourceEntity) world.getBlockEntity(pos)).cyclePolarity();
         return ActionResult.PASS;
-    }
-
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        BlockEntity entity = world.getBlockEntity(pos);
-            for(Direction direction : Direction.values()){
-                if(state.get(FACING.get(direction))) {
-                    if(entity instanceof DiodeEntity)
-                        ((DiodeEntity) entity).recalcIO(direction, state, true);
-                    else
-                        ((CreativePulseSourceEntity) entity).recalcIO(direction);
-                }
-        }
     }
 
 }

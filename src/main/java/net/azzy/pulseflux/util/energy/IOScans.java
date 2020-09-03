@@ -5,6 +5,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Set;
+
 public class IOScans {
 
     public static BlockPos seekInputNode(BlockPos pos, Direction input, World world){
@@ -44,7 +46,25 @@ public class IOScans {
             for(int i = 1; i <= max; i++){
                 BlockPos scanPos = pos.offset(dir, i);
                 BlockEntity node = world.getBlockEntity(scanPos);
-                if(node instanceof PulseNode && ((PulseNode) node).getOutput() == dir.getOpposite())
+                if(node instanceof PulseNode && ((PulseNode) node).getOutputs().contains(dir.getOpposite()))
+                    return dir;
+                else if(world.getBlockState(scanPos).isOpaque())
+                    break;
+            }
+        }
+        return null;
+    }
+
+    public static Direction seekInputDir(BlockPos pos, World world, Set<Direction> output, int max){
+        if(world.isClient())
+            return null;
+        for(Direction dir : Direction.values()){
+            if(output.contains(dir))
+                continue;
+            for(int i = 1; i <= max; i++){
+                BlockPos scanPos = pos.offset(dir, i);
+                BlockEntity node = world.getBlockEntity(scanPos);
+                if(node instanceof PulseNode && ((PulseNode) node).getOutputs().contains(dir.getOpposite()))
                     return dir;
                 else if(world.getBlockState(scanPos).isOpaque())
                     break;

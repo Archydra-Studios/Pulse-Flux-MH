@@ -276,7 +276,7 @@ public class RenderHelper {
 
         //0x00F000F0
         Matrix4f model = matrices.peek().getModel();
-        VertexConsumer consumer = consumers.getBuffer(FFRenderLayers.OVERLAY);
+        VertexConsumer consumer = consumers.getBuffer(FFRenderLayers.getOverlayBloomLayer());
         sizeX /= 16;
         sizeY /= 16;
         sizeZ /= 16;

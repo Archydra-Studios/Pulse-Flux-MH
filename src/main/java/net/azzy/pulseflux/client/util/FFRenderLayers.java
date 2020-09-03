@@ -24,6 +24,6 @@ public abstract class FFRenderLayers extends RenderLayer {
     }
 
     public static RenderLayer getOverlayBloomLayer(){
-        return ShaderManager.PULSE__BLOOM.getRenderLayer(OVERLAY);
+        return ShaderManager.BLOOM_BUFFER.getRenderLayer(OVERLAY);
     }
 }

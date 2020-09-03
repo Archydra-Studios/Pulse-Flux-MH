@@ -4,6 +4,7 @@
 Hz is, unsurprisingly, Hertz.
 Fi is Discrete Flux inductance, a measure of the usable energy within a pulse.
 CFm is Constant Flux motive, the average amount of energy moved through a point over a second.
+Mu is Motive mutability, a unit used to notate the exchange ratio of modulators and similar devices.
 
             CFm = Fi * Hz
 

@@ -8,8 +8,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,6 +36,13 @@ public abstract class MultiFacingBlock extends Block implements BlockNode {
 
     public static HashMap<Direction, BooleanProperty> getFACING() {
         return FACING;
+    }
+
+    public static void clearFacing(World world, BlockPos pos){
+        for(Direction direction : Direction.values()){
+            BlockState state = world.getBlockState(pos);
+            world.setBlockState(pos, state.with(FACING.get(direction), false));
+        }
     }
 
     static {
