@@ -43,10 +43,7 @@ public class ShaderManager {
         ClientTickCallback.EVENT.register(minecraftClient -> {
         });
         ShaderEffectRenderCallback.EVENT.register(e -> {
-            PULSE__BLOOM.render(e);
             BLOOM_BUFFER.clear();
-            // TODO find the actual OpenGL setting that fixes the hotbar
-            TexturedRenderLayers.getEntityTranslucentCull().endDrawing();
         });
         //EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformTicktime.set((ticks + tickDelta) * 0.05f));
         //uniformFragAlpha.set(0.5f);

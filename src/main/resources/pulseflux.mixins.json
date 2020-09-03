@@ -4,6 +4,7 @@
   "package": "net.azzy.pulseflux.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ShaderRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
