@@ -44,6 +44,7 @@ public class ShaderManager {
         });
         ShaderEffectRenderCallback.EVENT.register(e -> {
             BLOOM_BUFFER.clear();
+            TexturedRenderLayers.getEntityTranslucentCull().endDrawing();
         });
         //EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformTicktime.set((ticks + tickDelta) * 0.05f));
         //uniformFragAlpha.set(0.5f);

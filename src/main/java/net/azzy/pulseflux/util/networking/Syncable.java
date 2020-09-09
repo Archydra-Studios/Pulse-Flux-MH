@@ -1,15 +1,13 @@
 package net.azzy.pulseflux.util.networking;
 
-import net.minecraft.block.entity.BlockEntity;
-
 import java.util.*;
 
 public interface Syncable {
 
-    void syncrhonize(SyncPacket packet);
+    void synchronize(SyncPacket packet);
 
     static void requestSync(Syncable entity, SyncPacket packet){
-        entity.syncrhonize(packet);
+        entity.synchronize(packet);
     }
 
     class SyncPacket{

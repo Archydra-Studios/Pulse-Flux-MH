@@ -1,7 +1,9 @@
-package net.azzy.pulseflux.block.entity.logistic;
+package net.azzy.pulseflux.block.entity;
 
+import net.azzy.pulseflux.blockentity.PulseGeneratingEntity;
 import net.azzy.pulseflux.blockentity.PulseRenderingEntityImpl;
 import net.azzy.pulseflux.util.energy.BlockNode;
+import net.azzy.pulseflux.util.interaction.MachineBlock;
 import net.azzy.pulseflux.util.interaction.RotatableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -25,13 +27,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends FacingBlock implements BlockEntityProvider, BlockNode, RotatableBlock {
+public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends FacingBlock implements BlockEntityProvider, BlockNode, RotatableBlock, MachineBlock {
 
     protected final Supplier<T> blockEntitySupplier;
     private final boolean horizontal;
 
     protected PulseCarryingDirectionalBlock(Settings settings, Supplier<T> blockEntitySupplier, boolean horizontal) {
-        super(settings);
+        super(settings.nonOpaque());
         this.blockEntitySupplier = blockEntitySupplier;
         this.horizontal = horizontal;
         this.setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
@@ -47,6 +49,8 @@ public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends Facin
         BlockEntity entity = world.getBlockEntity(pos);
         if(entity instanceof PulseRenderingEntityImpl)
             ((PulseRenderingEntityImpl) entity).recalcIO(true, state.get(FACING), state);
+        else if(entity instanceof PulseGeneratingEntity)
+            ((PulseGeneratingEntity) entity).setOutput(horizontal ? placer.getHorizontalFacing().getOpposite() : Direction.getEntityFacingOrder(placer)[0].getOpposite());
     }
 
     @Override
@@ -61,6 +65,10 @@ public class PulseCarryingDirectionalBlock <T extends BlockEntity> extends Facin
         if(entity instanceof PulseRenderingEntityImpl) {
             ((PulseRenderingEntityImpl) entity).recalcIO(true, horizontal ? playerEntity.getHorizontalFacing().getOpposite() : Direction.getEntityFacingOrder(playerEntity)[0].getOpposite(), state);
             ((PulseRenderingEntityImpl) entity).requestDisplay();
+        }
+        else if(entity instanceof PulseGeneratingEntity){
+            ((PulseGeneratingEntity) entity).setOutput(horizontal ? playerEntity.getHorizontalFacing().getOpposite() : Direction.getEntityFacingOrder(playerEntity)[0].getOpposite());
+            ((PulseGeneratingEntity) entity).requestDisplay();
         }
     }
 

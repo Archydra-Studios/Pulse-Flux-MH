@@ -1,9 +1,9 @@
 package net.azzy.pulseflux.registry;
 
 import net.azzy.pulseflux.PulseFlux;
-import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
-import net.azzy.pulseflux.block.entity.logistic.ModulatorBlock;
-import net.azzy.pulseflux.block.entity.logistic.SolenoidBlock;
+import net.azzy.pulseflux.block.entity.logistic.*;
+import net.azzy.pulseflux.block.entity.power.SolarPanelBlock;
+import net.azzy.pulseflux.block.entity.power.ThermalDynamoBlock;
 import net.azzy.pulseflux.block.entity.production.BlastFurnaceMachine;
 import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity;
 import net.azzy.pulseflux.blockentity.logistic.diodes.SteelDiodeEntity;
@@ -12,6 +12,9 @@ import net.azzy.pulseflux.blockentity.logistic.misc.SolenoidSplittingEntity;
 import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator2Entity;
 import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator4Entity;
 import net.azzy.pulseflux.blockentity.logistic.modulators.Modulator8Entity;
+import net.azzy.pulseflux.blockentity.logistic.transport.BasicLiquidPipeEntity;
+import net.azzy.pulseflux.blockentity.power.SolarPanelEntity;
+import net.azzy.pulseflux.blockentity.power.ThermalDynamoEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -55,9 +58,9 @@ public class BlockRegistry {
 
 
     //Logistics
-    public static final Block STEEL_DIODE = register("steel_diode", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.GRANITE), SteelDiodeEntity::new), LOGISTICS);
+    public static final Block STEEL_DIODE = register("steel_diode", new DiodeBlock<>(FabricBlockSettings.copyOf(Blocks.GRANITE), SteelDiodeEntity::new), LOGISTICS);
 
-    public static final Block CREATIVE_PULSE_SOURCE = register("creative_pulse_source", new LinearDiodeBlock<>(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), CreativePulseSourceEntity::new), LOGISTICS);
+    public static final Block CREATIVE_PULSE_SOURCE = register("creative_pulse_source", new DiodeBlock<>(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), CreativePulseSourceEntity::new), LOGISTICS);
 
     public static final Block MODULATOR_2 = register("modulator_2x", new ModulatorBlock<>(FabricBlockSettings.copyOf(Blocks.GRANITE), () -> new Modulator2Entity(1260, 2500)), LOGISTICS);
     public static final Block MODULATOR_4 = register("modulator_4x", new ModulatorBlock<>(FabricBlockSettings.copyOf(MODULATOR_2), () -> new Modulator4Entity(1260, 2500)), LOGISTICS);
@@ -69,7 +72,13 @@ public class BlockRegistry {
     //Machines
     public static final Block BLAST_FURNACE_MACHINE = register("blast_furnace", new BlastFurnaceMachine(FabricBlockSettings.of(Material.STONE, MaterialColor.RED).requiresTool().strength(3f, 4f).sounds(BlockSoundGroup.STONE).breakByTool(FabricToolTags.PICKAXES, 2).lightLevel(e -> e.get(BlastFurnaceMachine.LIT) ? 15 : 0), DEFAULT_SHAPE), MACHINES);
 
+    //Power
+    public static final Block SOLAR_PANEL = register("solar_panel", new SolarPanelBlock(FabricBlockSettings.copyOf(Blocks.GRANITE), SolarPanelEntity::new), MACHINES);
+    public static final Block THERMAL_DYNAMO = register("thermal_dynamo", new ThermalDynamoBlock(FabricBlockSettings.copyOf(Blocks.GRANITE), ThermalDynamoEntity::new), MACHINES);
+
     //Fluid
+    public static final Block BASIC_LIQUID_PIPE = register("liquid_pipe", new FluidPipeBlock(FabricBlockSettings.copyOf(STEEL_BLOCK).sounds(BlockSoundGroup.GLASS), BasicLiquidPipeEntity::new), LOGISTICS);
+    public static final Block EVERFULL_URN = register("everfull_urn", new EverfullUrnBlock(OBSIDIAN_MELD.lightLevel(7)), LOGISTICS);
 
     @Environment(EnvType.CLIENT)
     public static final List<Block> REGISTRY_TRANS = new ArrayList<>();
@@ -78,6 +87,11 @@ public class BlockRegistry {
 
     private static Block register(String name, Block block, Item.Settings settings) {
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), new BlockItem(block, settings));
+        return Registry.register(Registry.BLOCK, new Identifier(MOD_ID, name), block);
+    }
+
+    private static Block registerMachine(String name, Block block) {
+        REGISTRY_PARTIAL.add(block);
         return Registry.register(Registry.BLOCK, new Identifier(MOD_ID, name), block);
     }
 
@@ -92,6 +106,7 @@ public class BlockRegistry {
 
     @Environment(EnvType.CLIENT)
     public static void initTransparency() {
+        REGISTRY_TRANS.add(BASIC_LIQUID_PIPE);
     }
 
     @Environment(EnvType.CLIENT)
@@ -103,5 +118,9 @@ public class BlockRegistry {
         REGISTRY_PARTIAL.add(MODULATOR_8);
         REGISTRY_PARTIAL.add(SOLENOID_SPLIT);
         REGISTRY_PARTIAL.add(SOLENOID_MERGE);
+        REGISTRY_PARTIAL.add(SOLAR_PANEL);
+        REGISTRY_PARTIAL.add(BASIC_LIQUID_PIPE);
+        REGISTRY_PARTIAL.add(EVERFULL_URN);
+        REGISTRY_PARTIAL.add(THERMAL_DYNAMO);
     }
 }

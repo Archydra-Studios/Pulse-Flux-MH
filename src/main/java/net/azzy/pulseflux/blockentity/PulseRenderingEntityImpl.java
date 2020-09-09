@@ -1,11 +1,11 @@
 package net.azzy.pulseflux.blockentity;
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
-import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
-import net.azzy.pulseflux.block.entity.logistic.PulseCarryingBlock;
-import net.azzy.pulseflux.block.entity.logistic.PulseCarryingDirectionalBlock;
+import net.azzy.pulseflux.block.entity.logistic.DiodeBlock;
+import net.azzy.pulseflux.block.entity.PulseCarryingBlock;
+import net.azzy.pulseflux.block.entity.PulseCarryingDirectionalBlock;
+import net.azzy.pulseflux.client.util.PulseOffsetEntity;
 import net.azzy.pulseflux.client.util.PulseRenderingEntity;
-import net.azzy.pulseflux.util.energy.BlockNode;
 import net.azzy.pulseflux.util.energy.IOScans;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 
 import static net.azzy.pulseflux.PulseFlux.PFRandom;
 
-public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl implements PulseRenderingEntity, PulseNode {
+public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl implements PulseRenderingEntity, PulseNode, PulseOffsetEntity {
 
     protected Direction input, output;
     protected final short range;
@@ -126,7 +126,7 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
         output = direction;
         input = direction.getOpposite();
         if(state.getBlock() instanceof MultiFacingBlock)
-            world.setBlockState(pos, state.with(LinearDiodeBlock.getFACING().get(input), true));
+            world.setBlockState(pos, state.with(DiodeBlock.getFACING().get(input), true));
         else if(state.getBlock() instanceof FacingBlock)
             world.setBlockState(pos, state.with(PulseCarryingDirectionalBlock.FACING, direction.getOpposite()), 3);
     }
@@ -181,6 +181,16 @@ public abstract class PulseRenderingEntityImpl extends IORenderingEntityImpl imp
     public void fromClientTag(CompoundTag compoundTag) {
         pulseTickTime = compoundTag.getInt("alpha");
         super.fromClientTag(compoundTag);
+    }
+
+    @Override
+    public PulseNode getSender(Direction direction) {
+        return cachedInput != null ? (PulseNode) world.getBlockEntity(cachedInput) : null;
+    }
+
+    @Override
+    public int getPixelOffset() {
+        return 0;
     }
 
     @Override

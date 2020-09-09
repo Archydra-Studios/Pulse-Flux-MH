@@ -1,7 +1,7 @@
 package net.azzy.pulseflux.block.entity.logistic;
 
+import net.azzy.pulseflux.block.entity.PulseCarryingBlock;
 import net.azzy.pulseflux.blockentity.logistic.FailingPulseCarryingEntity;
-import net.azzy.pulseflux.blockentity.logistic.misc.SolenoidSplittingEntity;
 
 import java.util.function.Supplier;
 

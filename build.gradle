@@ -11,10 +11,6 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-	//maven {
-	//	name = "BuildCraft"
-	//	url = "https://mod-buildcraft.com/maven"
-	//}
 	maven {
 		name = "CottonMC"
 		url = "http://server.bbkr.space:8081/artifactory/libs-release"
@@ -35,7 +31,6 @@ repositories {
 		name = "JitPack"
 		url = "https://jitpack.io"
 	}
-
 	maven {
 		name = "AperLambda"
 		url = 'https://aperlambda.github.io/maven'

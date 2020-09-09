@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.block.entity.logistic;
 
+import net.azzy.pulseflux.block.entity.PulseCarryingDirectionalBlock;
 import net.minecraft.block.entity.BlockEntity;
 
 import java.util.function.Supplier;

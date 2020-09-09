@@ -1,14 +1,17 @@
 package net.azzy.pulseflux.blockentity.logistic.misc;
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
-import net.azzy.pulseflux.block.entity.logistic.PulseCarryingBlock;
+import net.azzy.pulseflux.block.entity.PulseCarryingBlock;
 import net.azzy.pulseflux.blockentity.logistic.FailingPulseCarryingEntity;
 import net.azzy.pulseflux.util.energy.IOScans;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
+import net.azzy.pulseflux.util.interaction.ScrewableEntity;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -16,8 +19,9 @@ import net.minecraft.util.math.Direction;
 import java.util.*;
 
 import static net.azzy.pulseflux.registry.BlockEntityRegistry.SOLENOID_SPLITTING_ENTITY;
+import static net.azzy.pulseflux.registry.BlockRegistry.SOLENOID_MERGE;
 
-public class SolenoidSplittingEntity extends FailingPulseCarryingEntity {
+public class SolenoidSplittingEntity extends FailingPulseCarryingEntity implements ScrewableEntity {
 
     private Direction output2;
 
@@ -131,5 +135,19 @@ public class SolenoidSplittingEntity extends FailingPulseCarryingEntity {
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return false;
+    }
+
+    @Override
+    public void onScrewed(PlayerEntity entity) {
+        world.setBlockState(pos, SOLENOID_MERGE.getDefaultState());
+        ((SolenoidMergingEntity) world.getBlockEntity(pos)).forceSetDirs(output, output2, input);
+        entity.sendMessage(new TranslatableText("block.pulseflux.solenoid.mode_change.merge"), true);
+    }
+
+    public void forceSetDirs(Direction out, Direction out2, Direction in){
+        output = out;
+        output2 = out2;
+        input = in;
+        world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(input), true).with(MultiFacingBlock.getFACING().get(output), true).with(PulseCarryingBlock.getFACING().get(output2), true));
     }
 }

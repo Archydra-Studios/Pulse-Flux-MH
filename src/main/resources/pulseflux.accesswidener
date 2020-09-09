@@ -1,6 +1,4 @@
 accessWidener	v1	named
 #Oh boy
 
-accessible  class   net/minecraft/client/sound/SoundEngine$SourceSetImpl
-accessible  class   net/minecraft/client/sound/SoundEngine$SourceSet
-
+accessible field net/minecraft/tag/BlockTags REQUIRED_TAGS Lnet/minecraft/tag/RequiredTagList;

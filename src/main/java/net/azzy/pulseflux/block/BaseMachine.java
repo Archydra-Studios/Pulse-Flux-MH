@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.block;
 
+import net.azzy.pulseflux.util.interaction.MachineBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,7 +14,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class BaseMachine extends HorizontalFacingBlock implements BlockEntityProvider {
+public class BaseMachine extends HorizontalFacingBlock implements BlockEntityProvider, MachineBlock {
 
     protected final VoxelShape bounds;
 

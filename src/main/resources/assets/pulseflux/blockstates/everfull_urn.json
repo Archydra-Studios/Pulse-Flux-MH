@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "pulseflux:block/logistic/pipe/everfull_urn"
+    }
+  }
+}

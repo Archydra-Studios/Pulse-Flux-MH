@@ -11,7 +11,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-public abstract class IOMachineRenderer<T extends BlockEntity & IORenderingEntity & PulseNode>  extends BlockEntityRenderer<T> implements IORenderer<T> {
+public class IOMachineRenderer<T extends BlockEntity & IORenderingEntity & PulseNode>  extends BlockEntityRenderer<T> implements IORenderer<T> {
 
 
     public IOMachineRenderer(BlockEntityRenderDispatcher dispatcher) {

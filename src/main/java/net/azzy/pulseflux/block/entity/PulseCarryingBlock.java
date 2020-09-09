@@ -1,9 +1,10 @@
-package net.azzy.pulseflux.block.entity.logistic;
+package net.azzy.pulseflux.block.entity;
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
 import net.azzy.pulseflux.blockentity.PulseRenderingEntityImpl;
 import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity;
 import net.azzy.pulseflux.blockentity.logistic.DiodeEntity;
+import net.azzy.pulseflux.util.interaction.MachineBlock;
 import net.azzy.pulseflux.util.interaction.MultiFacingRotatableBlock;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -24,13 +25,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PulseCarryingBlock <T extends BlockEntity> extends MultiFacingBlock implements BlockEntityProvider, MultiFacingRotatableBlock {
+public class PulseCarryingBlock <T extends BlockEntity> extends MultiFacingBlock implements BlockEntityProvider, MultiFacingRotatableBlock, MachineBlock {
 
     protected final Supplier<T> blockEntitySupplier;
     private final boolean horizontal;
 
     public PulseCarryingBlock(Settings settings, Supplier<T> blockEntitySupplier, boolean horizontal) {
-        super(settings);
+        super(settings.nonOpaque());
         this.blockEntitySupplier = blockEntitySupplier;
         this.horizontal = horizontal;
     }

@@ -2,9 +2,11 @@ package net.azzy.pulseflux.client.util;
 
 import net.azzy.pulseflux.ClientInit;
 import net.azzy.pulseflux.client.shaders.ShaderManager;
+import net.azzy.pulseflux.util.energy.PulseNode;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.Set;
@@ -22,6 +24,9 @@ public interface PulseRenderer<T extends PulseRenderingEntity> {
 
         for(Direction direction : directions){
             float pulseLength = (float) (entity.getPulseDistance(direction) * 16) - 16;
+            PulseOffsetEntity sender = entity.getSender(direction) instanceof PulseOffsetEntity ? (PulseOffsetEntity) entity.getSender(direction) : null;
+            float offset = entity instanceof PulseOffsetEntity ? -((PulseOffsetEntity) entity).getPixelOffset() / 16f : 0;
+            pulseLength += (offset * -16) + (sender != null ? sender.getPixelOffset() : 0);
             if(pulseLength <= 0)
                 continue;
             switch (entity.getPulsePolarity(direction)){
@@ -60,7 +65,7 @@ public interface PulseRenderer<T extends PulseRenderingEntity> {
                 matrices.translate(-1, 0, 0);
             }
 
-            matrices.translate(1, 6.0/16, 6.0/16);
+            matrices.translate(1 + offset, 6.0/16, 6.0/16);
             RenderHelper.renderScaledOverlayCuboid(matrices, consumers, color.r, color.g, color.b, a, pulseLength, 4, 4, false);
             matrices.translate(0, 1.0/16, 1.0/16);
             RenderHelper.renderScaledOverlayCuboid(matrices, consumers, color.r, color.g, color.b, (int) (a + (entity.getPulseAlpha() * 50)), pulseLength, 2, 2, false);

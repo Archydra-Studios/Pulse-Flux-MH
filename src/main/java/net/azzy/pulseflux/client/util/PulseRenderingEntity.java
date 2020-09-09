@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.client.util;
 
 import net.azzy.pulseflux.util.energy.PulseNode;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.Set;
@@ -14,4 +15,6 @@ public interface PulseRenderingEntity {
     Set<Direction> getPulseDirections();
 
     PulseNode.Polarity getPulsePolarity(Direction direction);
+
+    PulseNode getSender(Direction direction);
 }

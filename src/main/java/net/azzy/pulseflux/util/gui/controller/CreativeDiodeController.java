@@ -47,8 +47,8 @@ public class CreativeDiodeController extends BaseController {
         frequencyField.setText(String.valueOf(extendedDelegate.getDouble(0)));
 
         if(world.isClient()){
-            root.add(inductanceField, 0, 39, 54, 10);
-            root.add(frequencyField, 108, 39, 54, 10);
+            root.add(inductanceField, 0, 21, 160, 10);
+            root.add(frequencyField, 0, 73, 160, 10);
         }
     }
 

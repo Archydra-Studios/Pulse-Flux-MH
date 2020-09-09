@@ -38,7 +38,6 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     protected short progress;
     protected boolean heatInit;
     protected double heat;
-    protected BlockEntity self = this;
 
     public MachineEntity(BlockEntityType<?> type, HeatTransferHelper.HeatMaterial material, Supplier<DefaultedList<ItemStack>> invSupplier) {
         super(type);
@@ -54,7 +53,7 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         }
     }
 
-    public static <T extends MachineEntity & HeatHolder> void simulateSurroundingHeat(BlockPos pos, T bodyA){
+    public static <T extends BlockEntity & HeatHolder> void simulateSurroundingHeat(BlockPos pos, T bodyA){
         BlockPos bodyB;
         World world = bodyA.getWorld();
 
@@ -65,8 +64,8 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
             bodyB = pos.offset(direction);
 
             if((world.getBlockEntity(bodyB) instanceof  HeatHolder)){
-                if(((MachineEntity) world.getBlockEntity(bodyB)).getMaterial() != null)
-                    HeatTransferHelper.simulateHeat(((MachineEntity) world.getBlockEntity(bodyB)).getMaterial(), (HeatHolder) world.getBlockEntity(bodyB), bodyA);
+                if(((HeatHolder) world.getBlockEntity(bodyB)).getMaterial() != null)
+                    HeatTransferHelper.simulateHeat(((HeatHolder) world.getBlockEntity(bodyB)).getMaterial(), (HeatHolder) world.getBlockEntity(bodyB), bodyA);
                 else if(bodyA.getMaterial() != null)
                     HeatTransferHelper.simulateHeat(bodyA.getMaterial(), (HeatHolder) world.getBlockEntity(bodyB), bodyA);
                 else
@@ -77,6 +76,28 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
             }
         }
     }
+
+    public static <T extends BlockEntity & HeatHolder> void simulateSurroundingHeat(BlockPos pos, T bodyA, Direction direction){
+        BlockPos bodyB;
+        World world = bodyA.getWorld();
+
+        if(world == null)
+            return;
+
+        bodyB = pos.offset(direction);
+        if((world.getBlockEntity(bodyB) instanceof  HeatHolder)){
+            if(((HeatHolder) world.getBlockEntity(bodyB)).getMaterial() != null)
+                HeatTransferHelper.simulateHeat(((HeatHolder) world.getBlockEntity(bodyB)).getMaterial(), (HeatHolder) world.getBlockEntity(bodyB), bodyA);
+            else if(bodyA.getMaterial() != null)
+                HeatTransferHelper.simulateHeat(bodyA.getMaterial(), (HeatHolder) world.getBlockEntity(bodyB), bodyA);
+            else
+                HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.AIR, (HeatHolder) world.getBlockEntity(bodyB), bodyA);
+        }
+        else if(HeatTransferHelper.isHeatSource(world.getBlockState(bodyB).getBlock())){
+            HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.AIR, bodyA, world.getBlockState(bodyB).getBlock());
+        }
+    }
+
 
     protected void meltDown(boolean cold, BlockState state){
         if(cold && state != null){
@@ -93,6 +114,11 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
                 ((ServerWorld) world).spawnParticles(ParticleTypes.LARGE_SMOKE, pos.getX()+0.25, pos.up().getY(), pos.getZ()+0.25, 11, 0.25, 0, 0.25, 0);
             }
         }
+    }
+
+    @Override
+    public double getSquaredRenderDistance() {
+        return 256;
     }
 
     @Override

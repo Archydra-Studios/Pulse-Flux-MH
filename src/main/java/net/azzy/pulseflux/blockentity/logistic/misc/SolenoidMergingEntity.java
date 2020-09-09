@@ -1,27 +1,30 @@
 package net.azzy.pulseflux.blockentity.logistic.misc;
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
-import net.azzy.pulseflux.block.entity.logistic.PulseCarryingBlock;
+import net.azzy.pulseflux.block.entity.PulseCarryingBlock;
 import net.azzy.pulseflux.blockentity.logistic.FailingPulseCarryingEntity;
 import net.azzy.pulseflux.util.energy.IOScans;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
+import net.azzy.pulseflux.util.interaction.ScrewableEntity;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 import static net.azzy.pulseflux.registry.BlockEntityRegistry.SOLENOID_MERGING_ENTITY;
+import static net.azzy.pulseflux.registry.BlockRegistry.SOLENOID_SPLIT;
 
-public class SolenoidMergingEntity extends FailingPulseCarryingEntity {
+public class SolenoidMergingEntity extends FailingPulseCarryingEntity implements ScrewableEntity {
 
     private Direction input2;
     private BlockPos cachedInput2;
@@ -217,6 +220,17 @@ public class SolenoidMergingEntity extends FailingPulseCarryingEntity {
     }
 
     @Override
+    public PulseNode getSender(Direction direction) {
+        if(direction == input && cachedInput != null){
+            return (PulseNode) world.getBlockEntity(cachedInput);
+        }
+        else if(direction == input2 && cachedInput2 != null){
+            return (PulseNode) world.getBlockEntity(cachedInput2);
+        }
+        return null;
+    }
+
+    @Override
     public Collection<Direction> getInputs() {
         return Arrays.asList(input, input2);
     }
@@ -249,5 +263,19 @@ public class SolenoidMergingEntity extends FailingPulseCarryingEntity {
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
         return false;
+    }
+
+    @Override
+    public void onScrewed(PlayerEntity entity) {
+        world.setBlockState(pos, SOLENOID_SPLIT.getDefaultState());
+        ((SolenoidSplittingEntity) world.getBlockEntity(pos)).forceSetDirs(input, input2, output);
+        entity.sendMessage(new TranslatableText("block.pulseflux.solenoid.mode_change.split"), true);
+    }
+
+    public void forceSetDirs(Direction in, Direction in2, Direction out){
+        input = in;
+        input2 = in2;
+        output = out;
+        world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(input), true).with(MultiFacingBlock.getFACING().get(output), true).with(PulseCarryingBlock.getFACING().get(input2), true));
     }
 }

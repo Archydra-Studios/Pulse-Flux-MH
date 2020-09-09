@@ -25,10 +25,12 @@ public class ItemRegistry extends Item {
 
     //Tools
     public final static Item THERMOMETER = register("thermometer", new ThermometerItem(TOOL));
+    public static final Item MANOMETER = register("manometer", new ManometerItem(TOOL));
     public final static Item SENSOR = register("sensor", new SensorItem(TOOL));
     public final static Item PROBE = register("probe", new ProbeItem(TOOL));
     public static final Item OSCILLATOR = register("oscillator", new OscillatorItem(TOOL));
     public static final Item SCREWDRIVER = register("screwdriver", new ScrewdriverItem(TOOL));
+    public static final Item WRENCH = register("hammer", new WrenchItem(TOOL));
 
     public static void init(){}
 

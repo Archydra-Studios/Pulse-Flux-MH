@@ -1,6 +1,6 @@
 package net.azzy.pulseflux.blockentity.logistic;
 
-import net.azzy.pulseflux.block.entity.logistic.LinearDiodeBlock;
+import net.azzy.pulseflux.block.entity.logistic.DiodeBlock;
 import net.azzy.pulseflux.blockentity.PulseEntity;
 import net.azzy.pulseflux.client.util.IORenderingEntity;
 import net.azzy.pulseflux.util.gui.ExtendedPropertyDelegate;
@@ -8,6 +8,7 @@ import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.energy.PulseNode;
 import net.azzy.pulseflux.util.networking.Syncable;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
@@ -25,6 +26,7 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     private Direction output;
     private int renderTickTime;
     private boolean renderInit = true;
+    private BlockEntity self = this;
 
     public CreativePulseSourceEntity() {
         super(CREATIVE_PULSE_SOURCE, HeatTransferHelper.HeatMaterial.AIR, () -> DefaultedList.ofSize(0, ItemStack.EMPTY));
@@ -51,7 +53,7 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
         }
         if(output == null){
             for(Direction direction : Direction.values())
-                if(getCachedState().get(LinearDiodeBlock.getFACING().get(direction)))
+                if(getCachedState().get(DiodeBlock.getFACING().get(direction)))
                     output = direction;
         }
     }
@@ -165,7 +167,8 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
 
     @Override
     public CompoundTag toTag(CompoundTag tag) {
-        tag.putString("output", output.name());
+        if(output != null)
+            tag.putString("output", output.name());
         tag.putBoolean("rendertick", renderInit);
         return super.toTag(tag);
     }
@@ -192,7 +195,7 @@ public class CreativePulseSourceEntity extends PulseEntity implements PulseNode,
     }
 
     @Override
-    public void syncrhonize(SyncPacket packet) {
+    public void synchronize(SyncPacket packet) {
         this.inductance = (long) packet.unpack();
         this.frequency = (double) packet.unpack();
     }

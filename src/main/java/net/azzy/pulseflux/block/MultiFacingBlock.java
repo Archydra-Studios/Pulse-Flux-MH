@@ -22,7 +22,7 @@ public abstract class MultiFacingBlock extends Block implements BlockNode {
     protected static final HashMap<Direction, BooleanProperty> FACING = new HashMap<>();
 
     public MultiFacingBlock(Settings settings) {
-        super(settings);
+        super(settings.nonOpaque());
         for(Direction direction : Direction.values())
             this.setDefaultState(getDefaultState().with(FACING.get(direction), false));
     }

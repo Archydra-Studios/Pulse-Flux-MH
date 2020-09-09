@@ -12,7 +12,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
-public abstract class PulseMachineRenderer<T extends BlockEntity & IORenderingEntity & PulseRenderingEntity & PulseNode> extends IOMachineRenderer<T> implements PulseRenderer<T> {
+public class PulseMachineRenderer<T extends BlockEntity & IORenderingEntity & PulseRenderingEntity & PulseNode> extends IOMachineRenderer<T> implements PulseRenderer<T> {
     public PulseMachineRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }

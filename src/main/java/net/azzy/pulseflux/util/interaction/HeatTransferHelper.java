@@ -64,6 +64,7 @@ public class HeatTransferHelper {
     }
 
     public enum HeatMaterial {
+        NULL(0.0),
         AIR(0.026),
         BRICK(0.6),
         STEEL(50.2),
@@ -80,6 +81,14 @@ public class HeatTransferHelper {
 
         HeatMaterial(double transfer) {
             this.transfer = transfer;
+        }
+
+        public static HeatMaterial nullableValueOf(String name){
+            try {
+                return HeatMaterial.valueOf(name);
+            } catch (Exception ignored){
+                return NULL;
+            }
         }
     }
 

@@ -17,6 +17,8 @@ import java.util.Random;
 import java.util.SplittableRandom;
 
 import static net.azzy.pulseflux.registry.BlockRegistry.BLAST_FURNACE_MACHINE;
+import static net.azzy.pulseflux.registry.BlockRegistry.STEEL_DIODE;
+import static net.azzy.pulseflux.registry.ItemRegistry.SCREWDRIVER;
 import static net.azzy.pulseflux.registry.ItemRegistry.STEEL_INGOT;
 
 public class PulseFlux implements ModInitializer {
@@ -27,8 +29,8 @@ public class PulseFlux implements ModInitializer {
 
 	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "material")).icon(() -> new ItemStack(STEEL_INGOT)).build();
 	public static final ItemGroup MACHINES = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "machine")).icon(() -> new ItemStack(BLAST_FURNACE_MACHINE.asItem())).build();
-	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "logistic")).icon(() -> new ItemStack(Items.POTATO)).build();
-	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "tool")).icon(() -> new ItemStack(Items.POTATO)).build();
+	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "logistic")).icon(() -> new ItemStack(STEEL_DIODE)).build();
+	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "tool")).icon(() -> new ItemStack(SCREWDRIVER)).build();
 
 	@Override
 	public void onInitialize() {

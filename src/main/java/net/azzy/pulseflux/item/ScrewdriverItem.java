@@ -22,28 +22,20 @@ public class ScrewdriverItem extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         PlayerEntity player = context.getPlayer();
-        boolean sneaking = player.isSneaking();
         World world = context.getWorld();
         BlockPos blockPos = context.getBlockPos();
-        BlockEntity entity = world.getBlockEntity(blockPos);
         BlockState state = world.getBlockState(blockPos);
-        if(sneaking && entity instanceof ScrewableEntity){
-            ((ScrewableEntity) entity).onScrewed(player);
+        Block block = state.getBlock();
+        if(block instanceof RotatableBlock){
+            ((RotatableBlock) block).rotate(world, blockPos, player);
             return ActionResult.CONSUME;
         }
-        else {
-            Block block = state.getBlock();
-            if(block instanceof RotatableBlock){
-                ((RotatableBlock) block).rotate(world, blockPos, player);
-                return ActionResult.CONSUME;
-            }
-            else if(block instanceof MultiFacingRotatableBlock){
-                if(player.isSneaking())
-                    ((MultiFacingRotatableBlock) block).setInput(world, blockPos, context);
-                else
-                    ((MultiFacingRotatableBlock) block).setOutput(world, blockPos, context);
-                return ActionResult.CONSUME;
-            }
+        else if(block instanceof MultiFacingRotatableBlock){
+            if(player.isSneaking())
+                ((MultiFacingRotatableBlock) block).setInput(world, blockPos, context);
+            else
+                ((MultiFacingRotatableBlock) block).setOutput(world, blockPos, context);
+            return ActionResult.CONSUME;
         }
         return ActionResult.PASS;
     }

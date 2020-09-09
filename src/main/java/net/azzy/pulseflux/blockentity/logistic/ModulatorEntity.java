@@ -4,10 +4,12 @@ import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.interaction.ScrewableEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -34,6 +36,7 @@ public class ModulatorEntity extends FailingPulseCarryingEntity implements Screw
     @Override
     public void onScrewed(PlayerEntity entity) {
         mode = !mode;
+        entity.sendMessage(new TranslatableText("block.pulseflux.modulator.mode_" + mode), true);
     }
 
     @Override
