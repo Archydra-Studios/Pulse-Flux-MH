@@ -14,7 +14,7 @@ public interface FluidHolder {
     void setFluid(FluidPackage fluid);
 
     default boolean testFluid(FluidPackage fluid) {
-        return FluidHelper.isEmpty(fluid) || (getFluid().getWrappedFluid() == fluid.getWrappedFluid() && getFluid().isGas() == fluid.isGas());
+        return FluidHelper.isEmpty(fluid) || (getFluid().getWrappedFluid() == fluid.getWrappedFluid() && getFluid().getGas() == fluid.getGas());
     }
 
     long getFluidCap();
@@ -43,7 +43,7 @@ public interface FluidHolder {
         //-213, 71, 86
         BlockEntity entity = world.getBlockEntity(pos);
         FluidPackage offer = getFluid();
-        if (!FluidHelper.isEmpty(offer) && entity instanceof FluidHolder && ((FluidHolder) entity).canInsert(direction) && ((FluidHolder) entity).gasCarrying() == offer.isGas()) {
+        if (!FluidHelper.isEmpty(offer) && entity instanceof FluidHolder && ((FluidHolder) entity).canInsert(direction) && ((FluidHolder) entity).gasCarrying() == offer.getGas()) {
             FluidPackage receiver = ((FluidHolder) entity).getFluid();
             if(testFluid(receiver) && offer.getPressure() > 0 && offer.getPressure() > receiver.getPressure()){
                 double modifier = Math.min((((double) receiver.getPressure() / offer.getPressure()) * -1) + 1, 0.9 / divisor);

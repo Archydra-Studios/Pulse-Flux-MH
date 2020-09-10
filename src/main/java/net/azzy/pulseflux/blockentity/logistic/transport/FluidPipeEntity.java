@@ -8,7 +8,6 @@ import net.azzy.pulseflux.util.fluid.FluidPackage;
 import net.azzy.pulseflux.util.interaction.HeatHolder;
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.interaction.PressureHolder;
-import net.azzy.pulseflux.util.interaction.WorldPressure;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -20,7 +19,6 @@ import net.minecraft.util.math.Direction;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.azzy.pulseflux.PulseFlux.PFLog;
 import static net.azzy.pulseflux.PulseFlux.PFRandom;
 import static net.azzy.pulseflux.block.entity.logistic.PipeBlock.CENTER;
 import static net.azzy.pulseflux.block.entity.logistic.PipeBlock.DIRECTION;
