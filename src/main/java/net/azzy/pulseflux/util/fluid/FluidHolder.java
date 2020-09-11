@@ -47,7 +47,30 @@ public interface FluidHolder {
             FluidPackage receiver = ((FluidHolder) entity).getFluid();
             if(testFluid(receiver) && offer.getPressure() > 0 && offer.getPressure() > receiver.getPressure()){
                 double modifier = Math.min((((double) receiver.getPressure() / offer.getPressure()) * -1) + 1, 0.9 / divisor);
-                long moved = (long) (modifier * offer.getAmount());
+                long moved = (long) (modifier * Math.max(0, offer.getAmount() - receiver.getAmount()));
+                if(FluidHelper.isEmpty(receiver)){
+                    ((FluidHolder) entity).setFluid(FluidHelper.copyOf(offer, moved));
+                }
+                else
+                    moved -= ((FluidHolder) entity).addFluid(moved);
+                this.extractFluid(moved);
+                ((FluidHolder) entity).recalcPressure();
+                recalcPressure();
+            }
+        }
+    }
+
+    default void forcePush(World world, BlockPos pos, Direction direction, int divisor, int min){
+        if(world.isClient())
+            return;
+        //-213, 71, 86
+        BlockEntity entity = world.getBlockEntity(pos);
+        FluidPackage offer = getFluid();
+        if (!FluidHelper.isEmpty(offer) && entity instanceof FluidHolder && ((FluidHolder) entity).canInsert(direction) && ((FluidHolder) entity).gasCarrying() == offer.getGas()) {
+            FluidPackage receiver = ((FluidHolder) entity).getFluid();
+            if(testFluid(receiver) && offer.getPressure() > 0 && offer.getPressure() > receiver.getPressure()){
+                double modifier = Math.min((((double) receiver.getPressure() / offer.getPressure()) * -1) + 1, 0.9 / divisor);
+                long moved = (long) Math.max(min, (modifier * Math.max(0, offer.getAmount() - receiver.getAmount())));
                 if(FluidHelper.isEmpty(receiver)){
                     ((FluidHolder) entity).setFluid(FluidHelper.copyOf(offer, moved));
                 }

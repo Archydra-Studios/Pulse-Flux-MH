@@ -39,7 +39,7 @@ public class EverfullUrnEntity extends BlockEntity implements BlockEntityClientS
     @Override
     public void tick() {
         for(Direction direction : Direction.values())
-            tryPush(world, pos.offset(direction), direction, 1);
+            forcePush(world, pos.offset(direction), direction, 1, 1000);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EverfullUrnEntity extends BlockEntity implements BlockEntityClientS
         this.pressure = (long) packet.unpack();
         if(!inventory.isEmpty() && inventory.get(0).getItem() instanceof BucketItem){
             Fluid fluid = ((BucketFluidAccessor) inventory.get(0).getItem()).getFluid();
-            tank = fluid == Fluids.EMPTY ? FluidHelper.empty() : new FluidPackage(fluid, HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), pressure, 16000, false);
+            tank = fluid == Fluids.EMPTY ? FluidHelper.empty() : new FluidPackage(fluid, HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), pressure, 256000, false);
         }
         else
             tank = FluidHelper.empty();
