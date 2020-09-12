@@ -32,6 +32,7 @@ import java.util.*
 import java.util.function.Supplier
 
 object BlockRegistry {
+
     @JvmStatic
     fun init() {}
     val DEFAULT_SHAPE: VoxelShape = VoxelShapes.fullCube()
@@ -51,9 +52,9 @@ object BlockRegistry {
 
     //Logistics
     @JvmField
-    val STEEL_DIODE = register("steel_diode", DiodeBlock(FabricBlockSettings.copyOf(Blocks.GRANITE)) { SteelDiodeEntity() }, LOGISTICS)
+    val STEEL_DIODE = register("steel_diode", DiodeBlock(FabricBlockSettings.copyOf(Blocks.GRANITE), ::SteelDiodeEntity), LOGISTICS)
     @JvmField
-    val CREATIVE_PULSE_SOURCE = register("creative_pulse_source", DiodeBlock(FabricBlockSettings.copyOf(Blocks.OBSIDIAN)) { CreativePulseSourceEntity() }, LOGISTICS)
+    val CREATIVE_PULSE_SOURCE = register("creative_pulse_source", DiodeBlock(FabricBlockSettings.copyOf(Blocks.OBSIDIAN), ::CreativePulseSourceEntity), LOGISTICS)
     @JvmField
     val MODULATOR_2 = register("modulator_2x", ModulatorBlock(FabricBlockSettings.copyOf(Blocks.GRANITE)) { Modulator2Entity(1260, 2500.0) }, LOGISTICS)
     @JvmField
@@ -61,9 +62,9 @@ object BlockRegistry {
     @JvmField
     val MODULATOR_8 = register("modulator_8x", ModulatorBlock(FabricBlockSettings.copyOf(MODULATOR_2)) { Modulator8Entity(1260, 2500.0) }, LOGISTICS)
     @JvmField
-    val SOLENOID_SPLIT = register("solenoid_splitting", SolenoidBlock(OBSIDIAN_MELD) { SolenoidSplittingEntity() }, LOGISTICS)
+    val SOLENOID_SPLIT = register("solenoid_splitting", SolenoidBlock(OBSIDIAN_MELD, ::SolenoidSplittingEntity), LOGISTICS)
     @JvmField
-    val SOLENOID_MERGE = register("solenoid_merging", SolenoidBlock(OBSIDIAN_MELD) { SolenoidMergingEntity() }, LOGISTICS)
+    val SOLENOID_MERGE = register("solenoid_merging", SolenoidBlock(OBSIDIAN_MELD, ::SolenoidMergingEntity), LOGISTICS)
 
     //Machines
     @JvmField
@@ -71,13 +72,13 @@ object BlockRegistry {
 
     //Power
     @JvmField
-    val SOLAR_PANEL = register("solar_panel", SolarPanelBlock(FabricBlockSettings.copyOf(Blocks.GRANITE)) { SolarPanelEntity() }, MACHINES)
+    val SOLAR_PANEL = register("solar_panel", SolarPanelBlock(FabricBlockSettings.copyOf(Blocks.GRANITE), ::SolarPanelEntity), MACHINES)
     @JvmField
-    val THERMAL_DYNAMO = register("thermal_dynamo", ThermalDynamoBlock(FabricBlockSettings.copyOf(Blocks.GRANITE)) { ThermalDynamoEntity() }, MACHINES)
+    val THERMAL_DYNAMO = register("thermal_dynamo", ThermalDynamoBlock(FabricBlockSettings.copyOf(Blocks.GRANITE), ::ThermalDynamoEntity), MACHINES)
 
     //Fluid
     @JvmField
-    val BASIC_LIQUID_PIPE = register("liquid_pipe", FluidPipeBlock(FabricBlockSettings.copyOf(STEEL_BLOCK).sounds(BlockSoundGroup.GLASS)) { BasicLiquidPipeEntity() }, LOGISTICS)
+    val BASIC_LIQUID_PIPE = register("liquid_pipe", FluidPipeBlock(FabricBlockSettings.copyOf(STEEL_BLOCK).sounds(BlockSoundGroup.GLASS), ::BasicLiquidPipeEntity), LOGISTICS)
     @JvmField
     val EVERFULL_URN = register("everfull_urn", EverfullUrnBlock(OBSIDIAN_MELD.lightLevel(7)), LOGISTICS)
 
