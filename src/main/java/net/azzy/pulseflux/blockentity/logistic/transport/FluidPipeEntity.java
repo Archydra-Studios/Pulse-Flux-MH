@@ -52,7 +52,7 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
         if(!world.isClient() && (world.getTime() + delay) % 10 == 0){
             for(Direction direction : Direction.values()){
                 BlockEntity entity = world.getBlockEntity(pos.offset(direction));
-                if(entity instanceof FluidHolder && (((FluidHolder) entity).gasCarrying() == gasCarrying)){
+                if(entity instanceof FluidHolder && (((FluidHolder) entity).gasCarrying() == gasCarrying) && canConnect(direction.getOpposite())){
                     if(!getCachedState().get(MultiFacingBlock.getFACING().get(direction)))
                         world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(direction), true));
                     }
@@ -184,16 +184,6 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
     @Override
     public void setFluid(FluidPackage fluid) {
         tank = fluid;
-    }
-
-    @Override
-    public long getFluidCap() {
-        return -1;
-    }
-
-    @Override
-    public boolean isCapped() {
-        return false;
     }
 
     @Override

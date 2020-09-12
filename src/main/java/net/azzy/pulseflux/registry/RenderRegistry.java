@@ -24,6 +24,7 @@ public class RenderRegistry {
         register(SOLENOID_MERGING_ENTITY, PulseMachineRenderer::new);
         register(SOLAR_PANEL_ENTITY, IOMachineRenderer::new);
         register(EVERFULL_URN_ENTITY, EverfullUrnRenderer::new);
+        register(THERMAL_DYNAMO_ENTITY, IOMachineRenderer::new);
     }
 
     private static <T extends BlockEntity> void register(BlockEntityType<T> item, Function<BlockEntityRenderDispatcher, BlockEntityRenderer<T>> rendererProvider){

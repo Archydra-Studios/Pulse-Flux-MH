@@ -30,7 +30,7 @@ object FluidHelper {
 
     fun fromWorld(fluid: Fluid = Fluids.EMPTY, gaseous: Boolean, world: World, pos: BlockPos?): FluidPackage {
         val entity = world.getBlockEntity(pos)
-        return FluidPackage(fluid, if (entity is HeatHolder) (entity as HeatHolder).heat else HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), if (entity is PressureHolder) (entity as PressureHolder).pressure else WorldPressure.getDimPressure(world.dimension, pos), 0, pos, gaseous)
+        return FluidPackage(fluid, if (entity is HeatHolder) (entity as HeatHolder).heat else HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), if (entity is PressureHolder) (entity as PressureHolder).pressure else WorldPressure.getDimPressure(world.getBiome(pos), pos), 0, pos, gaseous)
     }
 
     @JvmStatic

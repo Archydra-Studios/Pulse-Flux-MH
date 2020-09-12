@@ -76,7 +76,7 @@ public class EverfullUrnEntity extends BlockEntity implements BlockEntityClientS
         this.pressure = (long) packet.unpack();
         if(!inventory.isEmpty() && inventory.get(0).getItem() instanceof BucketItem){
             Fluid fluid = ((BucketFluidAccessor) inventory.get(0).getItem()).getFluid();
-            tank = fluid == Fluids.EMPTY ? FluidHelper.empty() : new FluidPackage(fluid, HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), pressure, 256000, false);
+            tank = fluid == Fluids.EMPTY ? FluidHelper.empty() : new FluidPackage(fluid, HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), pressure, 8000, false);
         }
         else
             tank = FluidHelper.empty();
@@ -96,16 +96,6 @@ public class EverfullUrnEntity extends BlockEntity implements BlockEntityClientS
     @Override
     public boolean testFluid(FluidPackage fluid) {
         return true;
-    }
-
-    @Override
-    public long getFluidCap() {
-        return 0;
-    }
-
-    @Override
-    public boolean isCapped() {
-        return false;
     }
 
     @Override

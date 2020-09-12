@@ -17,10 +17,6 @@ public interface FluidHolder {
         return FluidHelper.isEmpty(fluid) || (getFluid().getWrappedFluid() == fluid.getWrappedFluid() && getFluid().getGas() == fluid.getGas());
     }
 
-    long getFluidCap();
-
-    boolean isCapped();
-
     void recalcPressure();
 
     long addFluid(long amount);
@@ -28,6 +24,10 @@ public interface FluidHolder {
     long extractFluid(long amount);
 
     boolean gasCarrying();
+
+    default boolean canConnect(Direction direction){
+        return true;
+    }
 
     default boolean canExtract(Direction direction){
         return true;
