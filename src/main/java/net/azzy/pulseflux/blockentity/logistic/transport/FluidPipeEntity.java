@@ -2,6 +2,7 @@ package net.azzy.pulseflux.blockentity.logistic.transport;
 
 
 import net.azzy.pulseflux.block.MultiFacingBlock;
+import net.azzy.pulseflux.block.entity.logistic.FluidPipeBlock;
 import net.azzy.pulseflux.util.fluid.FluidHelper;
 import net.azzy.pulseflux.util.fluid.FluidHolder;
 import net.azzy.pulseflux.util.fluid.FluidPackage;
@@ -52,7 +53,7 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
         if(!world.isClient() && (world.getTime() + delay) % 10 == 0){
             for(Direction direction : Direction.values()){
                 BlockEntity entity = world.getBlockEntity(pos.offset(direction));
-                if(entity instanceof FluidHolder && (((FluidHolder) entity).gasCarrying() == gasCarrying) && canConnect(direction.getOpposite())){
+                if(entity instanceof FluidHolder && (((FluidHolder) entity).gasCarrying() == gasCarrying) && ((FluidHolder) entity).canConnect(direction)){
                     if(!getCachedState().get(MultiFacingBlock.getFACING().get(direction)))
                         world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(direction), true));
                     }
@@ -74,7 +75,21 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
                     world.setBlockState(pos, tank.getWrappedFluid().getDefaultState().getBlockState());
                 }
             }
+            if(!FluidHelper.isEmpty(tank))
+                recalcHeat();
         }
+    }
+
+    private void recalcHeat(){
+        for(Direction direction : IO){
+            BlockEntity entity = world.getBlockEntity(pos.offset(direction));
+            if(entity instanceof HeatHolder && world.getBlockState(pos).getBlock() instanceof FluidPipeBlock) {
+                for(int i = 0; i < 4; i++)
+                HeatTransferHelper.simulateHeat(material, this, ((HeatHolder) entity));
+            }
+        }
+        for(int i = 0; i < 16; i++)
+            HeatTransferHelper.simulateAmbientHeat(this, world.getBiome(pos));
     }
 
     private void connectionTest(){
@@ -113,7 +128,7 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
 
     @Override
     public double getHeat() {
-        return heat;
+        return tank.getHeat();
     }
 
     @Override
@@ -126,12 +141,12 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
 
     @Override
     public void moveHeat(double change) {
-        heat += change;
+        tank.moveHeat(change);
     }
 
     @Override
     public double getArea() {
-        return 0.0625;
+        return 0.5;
     }
 
     @Override

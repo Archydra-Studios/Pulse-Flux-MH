@@ -108,10 +108,9 @@ public class RenderHelper {
         consumer.vertex(model, 0, 0, 0).color(r, g, b, a).next();
     }
 
-    public static void renderCuboid(MatrixStack matrices, VertexConsumerProvider consumers, int a, int light, float sizeX, float sizeY, float sizeZ, Identifier texture){
+    public static void renderCuboid(MatrixStack matrices, VertexConsumer consumer, int a, int light, float sizeX, float sizeY, float sizeZ, Identifier texture){
 
         Matrix4f model = matrices.peek().getModel();
-        VertexConsumer consumer = consumers.getBuffer(RenderLayer.getSolid());
 
         consumer.vertex(model, 0, 0, 0).color(200, 200, 200, a).texture(0, 0).light(light).next();
         consumer.vertex(model, 0, sizeY, 0).color(200, 200, 200, a).texture(0, 1).light(light).next();

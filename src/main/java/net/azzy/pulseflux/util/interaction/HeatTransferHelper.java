@@ -69,6 +69,7 @@ public class HeatTransferHelper {
         BRICK(0.6),
         STEEL(50.2),
         WATER(0.6),
+        GENERIC_FLUID(0.35),
         DIAMOND(335.2),
         ALUMINIUM(205),
         GRANITE(1.73),

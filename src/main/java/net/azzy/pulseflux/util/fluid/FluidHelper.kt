@@ -11,7 +11,7 @@ import net.minecraft.world.World
 
 object FluidHelper {
     @JvmStatic
-    fun isEmpty(fluid: FluidPackage?): Boolean {
+     fun isEmpty(fluid: FluidPackage?): Boolean {
         if (fluid == null) return true else if (fluid.amount <= 0 || fluid.wrappedFluid === Fluids.EMPTY) {
             fluid.amount = 0
             return true

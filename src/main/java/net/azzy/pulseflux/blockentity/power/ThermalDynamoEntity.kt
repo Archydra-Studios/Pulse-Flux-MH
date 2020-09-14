@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.blockentity.power
 
+import net.azzy.pulseflux.PulseFlux.PFLog
 import net.azzy.pulseflux.block.entity.PulseCarryingDirectionalBlock
 import net.azzy.pulseflux.blockentity.PulseGeneratingEntity
 import net.azzy.pulseflux.registry.BlockEntityRegistry
@@ -22,6 +23,10 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
 
     override fun tick() {
         super.tick()
+        if(!FluidHelper.isEmpty(tank))
+            recalcPressure()
+        else
+            fluid = FluidHelper.empty()
     }
 
     override fun calcHeat() {
@@ -83,7 +88,7 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
     }
 
     override fun canConnect(direction: Direction?): Boolean {
-        return Collections.singleton(cachedState.get(PulseCarryingDirectionalBlock.FACING)) == direction
+        return cachedState.get(PulseCarryingDirectionalBlock.FACING) == direction
     }
 
     override fun gasCarrying(): Boolean {
