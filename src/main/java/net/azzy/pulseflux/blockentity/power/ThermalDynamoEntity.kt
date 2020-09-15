@@ -9,7 +9,10 @@ import net.azzy.pulseflux.util.fluid.FluidHolder
 import net.azzy.pulseflux.util.fluid.FluidPackage
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper
 import net.azzy.pulseflux.util.interaction.PressureHolder
+import net.minecraft.block.BlockState
+import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.Direction
@@ -23,10 +26,18 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
 
     override fun tick() {
         super.tick()
-        if(!FluidHelper.isEmpty(tank))
-            recalcPressure()
-        else
-            fluid = FluidHelper.empty()
+        if(tank.wrappedFluid == Fluids.WATER && getHeat() >= 100) {
+            tank.changeAmount(-5)
+            if(world!!.time % 100 == 0L)
+                moveHeat(-1.0)
+            frequency = 5.0
+            inductance = 50L
+        }
+        else{
+            frequency = 0.0
+            inductance = 0L
+            }
+        recalcPressure()
     }
 
     override fun calcHeat() {
@@ -60,8 +71,36 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
         return tank
     }
 
+    override fun moveHeat(change: Double) {
+        tank.moveHeat(change)
+    }
+
+    override fun getHeat(): Double {
+        return tank.heat
+    }
+
     override fun setFluid(fluid: FluidPackage) {
         tank = fluid;
+    }
+
+    override fun toTag(tag: CompoundTag?): CompoundTag {
+        tag!!.put("tank", tank.toTag())
+        return super.toTag(tag)
+    }
+
+    override fun fromTag(state: BlockState?, tag: CompoundTag?) {
+        tank = FluidPackage.fromTag(tag!!.getCompound("tank"))
+        super.fromTag(state, tag)
+    }
+
+    override fun toClientTag(tag: CompoundTag?): CompoundTag {
+        tag!!.put("tank", tank.toTag())
+        return super.toClientTag(tag)
+    }
+
+    override fun fromClientTag(tag: CompoundTag?) {
+        tank = FluidPackage.fromTag(tag!!.getCompound("tank"))
+        super.fromClientTag(tag)
     }
 
     override fun getRenderInputs(): MutableCollection<Direction> {
@@ -73,6 +112,8 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
     }
 
     override fun recalcPressure() {
+        if(world!!.isClient)
+            return
         val fluid = tank.amount / 1000.0
         tank.pressure = fluid.pow(4.0).toLong()
         markDirty()

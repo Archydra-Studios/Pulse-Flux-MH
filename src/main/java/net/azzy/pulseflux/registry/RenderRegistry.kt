@@ -3,6 +3,7 @@ package net.azzy.pulseflux.registry
 import net.azzy.pulseflux.client.rendering.base.IOMachineRenderer
 import net.azzy.pulseflux.client.rendering.base.PulseMachineRenderer
 import net.azzy.pulseflux.client.rendering.logistics.EverfullUrnRenderer
+import net.azzy.pulseflux.client.rendering.logistics.LiquidPipeRenderer
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -26,5 +27,6 @@ object RenderRegistry {
         register(BlockEntityRegistry.SOLAR_PANEL_ENTITY, ::IOMachineRenderer)
         register(BlockEntityRegistry.EVERFULL_URN_ENTITY, ::EverfullUrnRenderer)
         register(BlockEntityRegistry.THERMAL_DYNAMO_ENTITY, ::IOMachineRenderer)
+        register(BlockEntityRegistry.LIQUID_PIPE_ENTITY, ::LiquidPipeRenderer)
     }
 }

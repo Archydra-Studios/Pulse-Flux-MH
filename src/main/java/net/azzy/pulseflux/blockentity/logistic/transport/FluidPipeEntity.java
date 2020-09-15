@@ -50,15 +50,19 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
     public void tick() {
         if(IO.isEmpty())
             revalidateConnections();
-        if(!world.isClient() && (world.getTime() + delay) % 10 == 0){
+        if((world.getTime() + delay) % 10 == 0){
             for(Direction direction : Direction.values()){
                 BlockEntity entity = world.getBlockEntity(pos.offset(direction));
                 if(entity instanceof FluidHolder && (((FluidHolder) entity).gasCarrying() == gasCarrying) && ((FluidHolder) entity).canConnect(direction)){
-                    if(!getCachedState().get(MultiFacingBlock.getFACING().get(direction)))
+                    if(!getCachedState().get(MultiFacingBlock.getFACING().get(direction))) {
                         world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(direction), true));
+                        IO.add(direction);
                     }
-                else
+                    }
+                else {
                     world.setBlockState(pos, world.getBlockState(pos).with(MultiFacingBlock.getFACING().get(direction), false));
+                    getIO().remove(direction);
+                }
             }
             connectionTest();
             revalidateConnections();
@@ -90,6 +94,14 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
         }
         for(int i = 0; i < 16; i++)
             HeatTransferHelper.simulateAmbientHeat(this, world.getBiome(pos));
+    }
+
+    public boolean isStraight() {
+        return straight;
+    }
+
+    public Set<Direction> getIO() {
+        return IO;
     }
 
     private void connectionTest(){

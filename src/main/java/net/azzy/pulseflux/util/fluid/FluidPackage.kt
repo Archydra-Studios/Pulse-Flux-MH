@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.util.fluid
 
+import net.azzy.pulseflux.client.util.RenderMathHelper
 import net.azzy.pulseflux.util.interaction.HeatHolder
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper
 import net.azzy.pulseflux.util.interaction.PressureHolder
@@ -10,9 +11,9 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 
-data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat: Double, private var pressure: Long, var amount: Long, val source: BlockPos?, val gas: Boolean = false) : HeatHolder, PressureHolder{
+data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat: Double, private var pressure: Long, var amount: Long, val source: RenderMathHelper.RGBAWrapper, val gas: Boolean = false) : HeatHolder, PressureHolder{
 
-    constructor(wrappedFluid: Fluid, heat: Double, pressure: Long, amount: Long, gas: Boolean) : this(wrappedFluid, heat, pressure, amount, null, gas)
+    constructor(wrappedFluid: Fluid, heat: Double, pressure: Long, amount: Long, gas: Boolean) : this(wrappedFluid, heat, pressure, amount, RenderMathHelper.NULL, gas)
 
     fun toTag(): CompoundTag {
         val tag = CompoundTag()
@@ -21,8 +22,7 @@ data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat
             putDouble("heat", heat)
             putLong("pressure", pressure)
             putLong("amount", amount)
-            if(source != null)
-                putLong("source", source.asLong())
+            putInt("source", RenderMathHelper toHex source)
             putBoolean("gaseous", gas)
         }
         return tag
@@ -71,7 +71,7 @@ data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat
                         getDouble("heat"),
                         getLong("pressure"),
                         getLong("amount"),
-                        BlockPos.fromLong(getLong("source")),
+                        RenderMathHelper fromHex getInt("source"),
                         getBoolean("gaseous")
                 )
             }

@@ -1,5 +1,6 @@
 package net.azzy.pulseflux.util.fluid
 
+import net.azzy.pulseflux.client.util.RenderMathHelper
 import net.azzy.pulseflux.util.interaction.HeatHolder
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper
 import net.azzy.pulseflux.util.interaction.PressureHolder
@@ -8,6 +9,7 @@ import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraft.world.biome.Biome
 
 object FluidHelper {
     @JvmStatic
@@ -30,7 +32,7 @@ object FluidHelper {
 
     fun fromWorld(fluid: Fluid = Fluids.EMPTY, gaseous: Boolean, world: World, pos: BlockPos?): FluidPackage {
         val entity = world.getBlockEntity(pos)
-        return FluidPackage(fluid, if (entity is HeatHolder) (entity as HeatHolder).heat else HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), if (entity is PressureHolder) (entity as PressureHolder).pressure else WorldPressure.getDimPressure(world.getBiome(pos), pos), 0, pos, gaseous)
+        return FluidPackage(fluid, if (entity is HeatHolder) (entity as HeatHolder).heat else HeatTransferHelper.translateBiomeHeat(world.getBiome(pos)), if (entity is PressureHolder) (entity as PressureHolder).pressure else WorldPressure.getDimPressure(world.getBiome(pos), pos), 0, if(fluid != Fluids.WATER) RenderMathHelper.NULL else RenderMathHelper fromHex world.getBiome(pos).waterColor, gaseous)
     }
 
     @JvmStatic

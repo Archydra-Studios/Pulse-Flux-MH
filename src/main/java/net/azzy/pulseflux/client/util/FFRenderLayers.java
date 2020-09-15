@@ -43,6 +43,24 @@ public abstract class FFRenderLayers extends RenderLayer {
                     .build(true)
     );
 
+    public static final RenderLayer FLUID_BLOOM = RenderLayer.of(
+            "pulseflux:fluid_bloom",
+            VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
+            GL11.GL_QUADS,
+            256,
+            false,
+            false,
+            MultiPhaseParameters.builder()
+                    .texture(BLOCK_ATLAS_TEXTURE)
+                    .diffuseLighting(DISABLE_DIFFUSE_LIGHTING)
+                    .transparency(TRANSLUCENT_TRANSPARENCY)
+                    .target(OVERLAY_TARGET)
+                    .lightmap(DISABLE_LIGHTMAP)
+                    .fog(NO_FOG)
+                    .layering(RenderPhase.VIEW_OFFSET_Z_LAYERING)
+                    .build(true)
+    );
+
 
     public FFRenderLayers(String name, VertexFormat vertexFormat, int drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
         super(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, startAction, endAction);
