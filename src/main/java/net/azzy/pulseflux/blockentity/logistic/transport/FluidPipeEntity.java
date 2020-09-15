@@ -87,7 +87,7 @@ public class FluidPipeEntity extends BlockEntity implements Tickable, BlockEntit
     private void recalcHeat(){
         for(Direction direction : IO){
             BlockEntity entity = world.getBlockEntity(pos.offset(direction));
-            if(entity instanceof HeatHolder && world.getBlockState(pos).getBlock() instanceof FluidPipeBlock) {
+            if(entity instanceof HeatHolder && world.getBlockState(pos.offset(direction)).getBlock() instanceof FluidPipeBlock) {
                 for(int i = 0; i < 4; i++)
                 HeatTransferHelper.simulateHeat(material, this, ((HeatHolder) entity));
             }

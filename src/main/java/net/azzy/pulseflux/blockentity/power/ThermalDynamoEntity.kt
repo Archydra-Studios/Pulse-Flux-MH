@@ -28,7 +28,7 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
         super.tick()
         if(tank.wrappedFluid == Fluids.WATER && getHeat() >= 100) {
             tank.changeAmount(-5)
-            if(world!!.time % 100 == 0L)
+            if(world!!.time % 20 == 0L)
                 moveHeat(-1.0)
             frequency = 5.0
             inductance = 50L
@@ -134,6 +134,10 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
 
     override fun gasCarrying(): Boolean {
         return false
+    }
+
+    override fun insulated(direction: Direction?): Boolean {
+        return true
     }
 
     override fun getPressure(): Long {

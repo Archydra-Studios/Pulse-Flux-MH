@@ -27,6 +27,10 @@ public interface FluidHolder {
 
     boolean gasCarrying();
 
+    default boolean insulated(Direction direction){
+        return false;
+    }
+
     default boolean canConnect(Direction direction){
         return true;
     }
@@ -55,18 +59,19 @@ public interface FluidHolder {
                 }
                 else
                     moved -= ((FluidHolder) entity).addFluid(moved);
-                if(offer.getWrappedFluid() == Fluids.WATER || offer.getWrappedFluid() == Fluids.LAVA){
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
-                }
-                else{
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
-                    HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
-                }
+                if(!insulated(direction) && !((FluidHolder) entity).insulated(direction))
+                    if(offer.getWrappedFluid() == Fluids.WATER || offer.getWrappedFluid() == Fluids.LAVA){
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.WATER, offer, receiver);
+                    }
+                    else{
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
+                        HeatTransferHelper.simulateHeat(HeatTransferHelper.HeatMaterial.GENERIC_FLUID, offer, receiver);
+                    }
                 this.extractFluid(moved);
                 ((FluidHolder) entity).recalcPressure();
                 recalcPressure();
