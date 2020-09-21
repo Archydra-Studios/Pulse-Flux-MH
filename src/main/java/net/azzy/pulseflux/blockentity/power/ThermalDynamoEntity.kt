@@ -27,7 +27,7 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
     override fun tick() {
         super.tick()
         if(tank.wrappedFluid == Fluids.WATER && getHeat() >= 100) {
-            tank.changeAmount(-5)
+            tank.changeAmount(-2)
             if(world!!.time % 20 == 0L)
                 moveHeat(-1.0)
             frequency = 5.0
@@ -37,6 +37,7 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
             frequency = 0.0
             inductance = 0L
             }
+        if(tank.pressure >= 400000)
         recalcPressure()
     }
 

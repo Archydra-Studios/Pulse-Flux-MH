@@ -11,8 +11,9 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 
-data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat: Double, private var pressure: Long, var amount: Long, val source: RenderMathHelper.RGBAWrapper, val gas: Boolean = false) : HeatHolder, PressureHolder{
+data class FluidPackage(val wrappedFluid: Fluid = Fluids.EMPTY, private var heat: Double, private var pressure: Long, var amount: Long, val source: RenderMathHelper.RGBAWrapper, val gas: Boolean = false, var glowing: Boolean = false) : HeatHolder, PressureHolder{
 
+    constructor(wrappedFluid: Fluid = Fluids.EMPTY, heat: Double, pressure: Long, amount: Long, source: RenderMathHelper.RGBAWrapper, gas: Boolean = false) : this(wrappedFluid, heat, pressure, amount, source, gas, false)
     constructor(wrappedFluid: Fluid, heat: Double, pressure: Long, amount: Long, gas: Boolean) : this(wrappedFluid, heat, pressure, amount, RenderMathHelper.NULL, gas)
 
     fun toTag(): CompoundTag {
