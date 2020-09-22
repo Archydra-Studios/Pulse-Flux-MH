@@ -28,5 +28,6 @@ object RenderRegistry {
         register(BlockEntityRegistry.EVERFULL_URN_ENTITY, ::EverfullUrnRenderer)
         register(BlockEntityRegistry.THERMAL_DYNAMO_ENTITY, ::IOMachineRenderer)
         register(BlockEntityRegistry.LIQUID_PIPE_ENTITY, ::LiquidPipeRenderer)
+        register(BlockEntityRegistry.GRINDER_ENTITY, ::PulseMachineRenderer)
     }
 }

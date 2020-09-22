@@ -5,6 +5,7 @@ import net.azzy.pulseflux.block.entity.logistic.*
 import net.azzy.pulseflux.block.entity.power.SolarPanelBlock
 import net.azzy.pulseflux.block.entity.power.ThermalDynamoBlock
 import net.azzy.pulseflux.block.entity.production.BlastFurnaceMachine
+import net.azzy.pulseflux.block.entity.production.GrinderBlock
 import net.azzy.pulseflux.blockentity.logistic.CreativePulseSourceEntity
 import net.azzy.pulseflux.blockentity.logistic.diodes.SteelDiodeEntity
 import net.azzy.pulseflux.blockentity.logistic.misc.SolenoidMergingEntity
@@ -69,6 +70,7 @@ object BlockRegistry {
     //Machines
     @JvmField
     val BLAST_FURNACE_MACHINE = register("blast_furnace", BlastFurnaceMachine(FabricBlockSettings.of(Material.STONE, MaterialColor.RED).requiresTool().strength(3f, 4f).sounds(BlockSoundGroup.STONE).breakByTool(FabricToolTags.PICKAXES, 2).lightLevel { e: BlockState -> if (e.get(BlastFurnaceMachine.LIT)) 15 else 0 }, DEFAULT_SHAPE), MACHINES)
+    val GRINDER_BLOCK = register("grinder", GrinderBlock(FabricBlockSettings.copyOf(STEEL_BLOCK)), MACHINES)
 
     //Power
     @JvmField

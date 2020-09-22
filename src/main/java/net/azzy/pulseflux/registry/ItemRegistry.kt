@@ -28,6 +28,10 @@ class ItemRegistry private constructor(settings: Settings) : Item(settings) {
         val PROBE = register("probe", ProbeItem(TOOL))
         val OSCILLATOR = register("oscillator", OscillatorItem(TOOL))
 
+        //Ore Processing
+
+        val HEWN_IRON = register("hewn_iron_ore", Item(MATERIAL.fireproof()))
+
         @JvmField
         val SCREWDRIVER = register("screwdriver", ScrewdriverItem(TOOL))
         val WRENCH = register("hammer", WrenchItem(TOOL))

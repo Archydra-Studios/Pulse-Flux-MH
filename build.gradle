@@ -36,6 +36,12 @@ repositories {
 		name = "AperLambda"
 		url = 'https://aperlambda.github.io/maven'
 	}
+	maven {
+		url = "https://dl.bintray.com/orangemonkey68/mods"
+	}
+	maven {
+		url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
+	}
 
 	jcenter()
 }
@@ -53,10 +59,12 @@ dependencies {
 	modApi(include("me.shedaniel.cloth:config-2:${project.clothconfig_version}")){
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+	modImplementation( include(group: 'net.devtech', name: 'arrp', version: '0.2.6'))
 
 	//Testing only, do not JiJ
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+	modImplementation( include("me.orangemonkey68:injectable-recipes:${project.repinject_version}"))
     //modCompile "grondag:canvas-mc116:1.0.+"
 }
 

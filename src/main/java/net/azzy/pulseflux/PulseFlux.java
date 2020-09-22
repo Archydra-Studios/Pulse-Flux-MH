@@ -26,6 +26,7 @@ public class PulseFlux implements ModInitializer {
 
 	public static final Logger PFLog = LogManager.getLogger(MOD_ID);
 	public static final SplittableRandom PFRandom = new SplittableRandom();
+	public RecipeRegistry recipeRegistrar;
 
 	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "material")).icon(() -> new ItemStack(STEEL_INGOT)).build();
 	public static final ItemGroup MACHINES = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "machine")).icon(() -> new ItemStack(BLAST_FURNACE_MACHINE.asItem())).build();
@@ -36,6 +37,7 @@ public class PulseFlux implements ModInitializer {
 	public void onInitialize() {
 		ItemRegistry.init();
 		BlockRegistry.init();
+		recipeRegistrar = new RecipeRegistry();
 		BlockEntityRegistry.init();
 		ContainerRegistry.init();
 		FluidRegistry.init();

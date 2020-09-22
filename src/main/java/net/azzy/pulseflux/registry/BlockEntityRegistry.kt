@@ -14,6 +14,7 @@ import net.azzy.pulseflux.blockentity.logistic.transport.EverfullUrnEntity
 import net.azzy.pulseflux.blockentity.power.SolarPanelEntity
 import net.azzy.pulseflux.blockentity.power.ThermalDynamoEntity
 import net.azzy.pulseflux.blockentity.production.BlastFurnaceMachineEntity
+import net.azzy.pulseflux.blockentity.production.GrinderBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -45,6 +46,8 @@ object BlockEntityRegistry {
     val EVERFULL_URN_ENTITY = register("everfull_urn_entity", ::EverfullUrnEntity, BlockRegistry.EVERFULL_URN)
 
     val THERMAL_DYNAMO_ENTITY = register("thermal_dynamo_entity", ::ThermalDynamoEntity, BlockRegistry.THERMAL_DYNAMO)
+
+    val GRINDER_ENTITY = register("grinder_entity", ::GrinderBlockEntity, BlockRegistry.GRINDER_BLOCK)
 
     @JvmField
     val CREATIVE_PULSE_SOURCE = register("creative_pulse_source", ::CreativePulseSourceEntity, BlockRegistry.CREATIVE_PULSE_SOURCE)

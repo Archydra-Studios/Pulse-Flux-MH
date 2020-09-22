@@ -124,7 +124,7 @@ object RenderHelper {
         //0x00F000F0
         val model = matrices.peek().model
         val matrix = matrices.peek().normal
-        val sprite = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEX).apply(texture)
+        val sprite = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).apply(texture)
         var u = sprite.maxU
         var v = sprite.maxV
         var minU = sprite.minU
@@ -268,7 +268,7 @@ object RenderHelper {
         //0x00F000F0
         val model = matrices.peek().model
         val matrix = matrices.peek().normal
-        val sprite = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEX).apply(texture)
+        val sprite = MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).apply(texture)
         val u = sprite.maxU
         val v = sprite.maxV
         val minU = sprite.minU
