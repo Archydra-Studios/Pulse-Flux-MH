@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "pulseflux:item/ore/hewn_iron_ore"
+    "layer0": "pulseflux:item/silver_ingot"
   }
 }

@@ -42,7 +42,25 @@ repositories {
 	maven {
 		url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
 	}
-
+	maven {
+		url = 'https://maven.blamejared.com'
+	}
+	maven {
+		name = "Wrenchable"
+		url = "https://dl.bintray.com/zundrel/wrenchable"
+	}
+	maven {
+		name = "BuildCraft"
+		url = "https://mod-buildcraft.com/maven"
+	}
+	maven {
+		name = 'Earthcomputer Mods'
+		url = 'https://dl.bintray.com/earthcomputer/mods'
+	}
+	maven {
+		url = "http://maven.fabricmc.net/"
+		name = "Fabric"
+	}
 	jcenter()
 }
 
@@ -60,11 +78,13 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modImplementation( include(group: 'net.devtech', name: 'arrp', version: '0.2.6'))
+	modImplementation( include(group: "net.fabricmc", name: "fabric-language-kotlin", version: "1.4.0+build.1"))
 
 	//Testing only, do not JiJ
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 	modImplementation( include("me.orangemonkey68:injectable-recipes:${project.repinject_version}"))
+	modRuntime 'com.github.Mixinors:Astromine:1.8.1'
     //modCompile "grondag:canvas-mc116:1.0.+"
 }
 

@@ -1,5 +1,6 @@
 package net.azzy.pulseflux
 
+import net.azzy.pulseflux.PulseFlux.PFLog
 import net.azzy.pulseflux.client.shaders.ShaderManager
 import net.azzy.pulseflux.client.util.RenderMathHelper.fromHex
 import net.azzy.pulseflux.registry.*
@@ -15,6 +16,7 @@ import net.minecraft.block.Block
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.fluid.Fluid
 import net.minecraft.util.Identifier
+import kotlin.math.pow
 
 @Environment(EnvType.CLIENT)
 class ClientInit : ClientModInitializer {

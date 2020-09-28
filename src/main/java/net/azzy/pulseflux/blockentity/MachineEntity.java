@@ -35,7 +35,7 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     protected final HeatTransferHelper.HeatMaterial material;
     protected DefaultedList<ItemStack> inventory;
     protected final Supplier<DefaultedList<ItemStack>> invSupplier;
-    protected short progress;
+    protected int progress;
     protected boolean heatInit;
     protected double heat;
 
@@ -158,7 +158,7 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     public CompoundTag toTag(CompoundTag tag) {
         Inventories.toTag(tag, inventory);
         tag.putDouble("heat", heat);
-        tag.putShort("progress", progress);
+        tag.putInt("progress", progress);
         tag.putBoolean("heatinit", heatInit);
         return super.toTag(tag);
     }
@@ -170,21 +170,21 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
         this.inventory = invSupplier.get();
         Inventories.fromTag(tag, inventory);
         heat = tag.getDouble("heat");
-        progress = tag.getShort("progress");
+        progress = tag.getInt("progress");
         heatInit = tag.getBoolean("heatinit");
     }
 
     @Override
     public void fromClientTag(CompoundTag compoundTag) {
         heat = compoundTag.getDouble("heat");
-        progress = compoundTag.getShort("progress");
+        progress = compoundTag.getInt("progress");
         heatInit = compoundTag.getBoolean("heatinit");
     }
 
     @Override
     public CompoundTag toClientTag(CompoundTag compoundTag) {
         compoundTag.putDouble("heat", heat);
-        compoundTag.putShort("progress", progress);
+        compoundTag.putInt("progress", progress);
         compoundTag.putBoolean("heatinit", heatInit);
         return compoundTag;
     }
@@ -192,5 +192,9 @@ public abstract class MachineEntity extends BlockEntity implements Tickable, Inv
     @Override
     public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
         return this;
+    }
+
+    public DefaultedList<ItemStack> getInventory() {
+        return inventory;
     }
 }

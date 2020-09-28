@@ -1,9 +1,13 @@
 package net.azzy.pulseflux.blockentity.production
 
-import net.azzy.pulseflux.PulseFlux.PFLog
+import net.azzy.pulseflux.PulseFlux
+import net.azzy.pulseflux.PulseFlux.PFRandom
 import net.azzy.pulseflux.block.entity.production.GrinderBlock
 import net.azzy.pulseflux.blockentity.PulseDrainingEntity
 import net.azzy.pulseflux.registry.BlockEntityRegistry
+import net.azzy.pulseflux.registry.RecipeRegistry
+import net.azzy.pulseflux.registry.RecipeRegistry.GRINDING
+import net.azzy.pulseflux.registry.recipe.GrinderRecipe
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper
 import net.minecraft.block.Blocks
 import net.minecraft.entity.Entity
@@ -19,25 +23,66 @@ import net.minecraft.screen.PropertyDelegate
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
+import net.minecraft.tag.ItemTags
+import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
 import java.util.function.Supplier
+import kotlin.math.ceil
+import kotlin.math.ln
 
 class GrinderBlockEntity : PulseDrainingEntity(BlockEntityRegistry.GRINDER_ENTITY, HeatTransferHelper.HeatMaterial.STEEL, 9.toShort(), Supplier { DefaultedList.ofSize(2, ItemStack.EMPTY) }) {
 
+    private var cachedRep: GrinderRecipe? = null
+    private var stack = ItemStack.EMPTY
+
     override fun tick() {
         super.tick()
+
+        if(world?.isClient()!!)
+            return
+
+        if(stack.isEmpty || stack?.item != inventory[0].item)
+            stack = inventory[0].copy()
+
         if(!(inductance >= 50 && frequency >= 10) && cachedState.get(GrinderBlock.ACTIVE))
             world?.setBlockState(pos, cachedState.with(GrinderBlock.ACTIVE, false))
         else if((inductance >= 50 && frequency >= 10)) {
             if(!cachedState.get(GrinderBlock.ACTIVE))
                world?.setBlockState(pos, cachedState.with(GrinderBlock.ACTIVE, true))
             fetchDroppedEntities()
-            if(!world?.isClient()!! && !inventory[0].isEmpty){
-                (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, inventory[0]), pos.x + 0.5, pos.y + 13/16.0, pos.z + 0.5, 2, 0.165, 0.1, 0.165, 0.1)
-                (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, inventory[0]), pos.x + 0.5, pos.y + 4/16.0, pos.z + 0.5, 1, 0.22, 0.0, 0.22, 0.0)
-                tryGrind()
+            if(!inventory[0].isEmpty){
+                (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, stack), pos.x + 0.5, pos.y + 13/16.0, pos.z + 0.5, 2, 0.165, 0.1, 0.165, 0.1)
+                (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, stack), pos.x + 0.5, pos.y + 4/16.0, pos.z + 0.5, 1, 0.22, 0.0, 0.22, 0.0)
+            }
+            if(!inventory[1].isEmpty){
+                val item = ItemEntity(world, pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5, ItemStack(inventory[1].item))
+                item.setVelocity(0.0, 0.0, 0.0)
+                world?.spawnEntity(item)
+                inventory[1].decrement(1)
+            }
+            if(!inventory[0].isEmpty && cachedRep == null) {
+                for (recipe in RecipeRegistry.recipeMap[GRINDING]?.values!!) {
+                    if ((recipe as GrinderRecipe).matches(this, world)) {
+                        cachedRep = recipe
+                        break
+                    }
+                }
+                if(cachedRep == null && !inventory[0].isEmpty && PFRandom.nextDouble() < 0.05){
+                    (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, stack), pos.x + 0.5, pos.y + 13/16.0, pos.z + 0.5, 60, 0.17, 0.75, 0.17, 0.1)
+                    world!!.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 3F, 0.8F)
+                    inventory[0].decrement(1)
+                }
+            }
+            else{
+                if(inventory[0].isEmpty || !cachedRep?.matches(this, world)!!){
+                    cachedRep = null
+                    progress = 0
+                    return
+                }
+                if(inventory[1].isEmpty)
+                    tryGrind()
             }
         }
     }
@@ -66,13 +111,12 @@ class GrinderBlockEntity : PulseDrainingEntity(BlockEntityRegistry.GRINDER_ENTIT
     }
 
     private fun tryGrind() {
-        progress++
-        if(progress >= 200){
+        if(progress >= 300){
             progress = 0
-            val item = ItemEntity(world, pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5, ItemStack(Items.DIAMOND))
-            item.setVelocity(0.0, 0.0, 0.0)
-            world?.spawnEntity(item)
-            inventory[0].decrement(1)
+            cachedRep?.craft(this)
+        }
+        else {
+            progress += ceil(ln((frequency - 5) / 5)).toInt()
         }
     }
 

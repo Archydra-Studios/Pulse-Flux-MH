@@ -25,9 +25,6 @@
     ],
     "client": [
       "net.azzy.pulseflux.ClientInit"
-    ],
-    "rrp:pregen": [
-      "net.azzy.pulseflux.ResourceInit"
     ]
   },
   "mixins": [
