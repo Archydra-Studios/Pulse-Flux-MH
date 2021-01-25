@@ -38,7 +38,7 @@ public class SensorItem extends Item {
         }
         else if(context.getPlayer().isCreative() && world.getBlockEntity(pos) instanceof FluidPipeEntity){
             FluidPipeEntity pipe = (FluidPipeEntity) world.getBlockEntity(pos);
-            context.getPlayer().sendMessage(new LiteralText("DEBUG - Fluid amount " + pipe.getFluid().getAmount() + "mb - Fluid type " + Registry.FLUID.getId(pipe.getFluid().getWrappedFluid())), true);
+            context.getPlayer().sendMessage(new LiteralText("DEBUG - Fluid amount " + pipe.getFluidAmount(0) + "mb - Fluid type " + Registry.FLUID.getId(pipe.getFluid())), true);
         }
         return super.useOnBlock(context);
     }

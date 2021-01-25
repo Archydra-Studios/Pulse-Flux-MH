@@ -3,7 +3,6 @@ package net.azzy.pulseflux.client.rendering.logistics
 import net.azzy.pulseflux.blockentity.logistic.transport.EverfullUrnEntity
 import net.azzy.pulseflux.client.util.RenderHelper
 import net.azzy.pulseflux.client.util.RenderMathHelper.fromHex
-import net.azzy.pulseflux.util.fluid.FluidHelper.isEmpty
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
@@ -15,9 +14,9 @@ import net.minecraft.fluid.Fluids
 class EverfullUrnRenderer(dispatcher: BlockEntityRenderDispatcher?) : BlockEntityRenderer<EverfullUrnEntity>(dispatcher) {
     override fun render(entity: EverfullUrnEntity, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
         val fluid = entity.fluid
-        if (!isEmpty(fluid)) {
+        if (fluid != Fluids.EMPTY) {
             matrices.push()
-            val color = if (fluid.wrappedFluid === Fluids.LAVA) fromHex(0xffa841) else fromHex(FluidRenderHandlerRegistry.INSTANCE[fluid.wrappedFluid].getFluidColor(entity.world, entity.pos, null))
+            val color = if (fluid === Fluids.LAVA) fromHex(0xffa841) else fromHex(FluidRenderHandlerRegistry.INSTANCE[fluid].getFluidColor(entity.world, entity.pos, null))
             matrices.translate(0.5, 0.5, 0.5)
             matrices.scale(0.25f, 0.25f, 0.25f)
             matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(entity.world!!.time + tickDelta))

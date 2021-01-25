@@ -31,6 +31,14 @@ object ItemRegistry {
     val COPPER_HEWN = register("hewn_copper_ore", Item(MATERIAL))
     val ALUMINIUM_INGOT = register("aluminum_ingot", Item(MATERIAL))
     val ALUMINIUM_HEWN = register("hewn_aluminum_ore", Item(MATERIAL))
+    val SILVER_INGOT = register("silver_ingot", Item(MATERIAL))
+    val SILVER_HEWN = register("hewn_silver_ore", Item(MATERIAL))
+    val LEAD_INGOT = register("lead_ingot", Item(MATERIAL))
+    val LEAD_HEWN = register("hewn_lead_ore", Item(MATERIAL))
+    val TIN_INGOT = register("tin_ingot", Item(MATERIAL))
+    val TIN_HEWN = register("hewn_tin_ore", Item(MATERIAL))
+    val ZINC_INGOT = register("zinc_ingot", Item(MATERIAL))
+    val ZINC_HEWN = register("hewn_zinc_ore", Item(MATERIAL))
 
     //Ore Processing
     val HEWN_IRON = register("hewn_iron_ore", Item(MATERIAL))

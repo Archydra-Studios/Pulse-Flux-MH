@@ -1,15 +1,15 @@
 package net.azzy.pulseflux.blockentity.power
 
-import net.azzy.pulseflux.PulseFlux.PFLog
+import dev.technici4n.fasttransferlib.api.fluid.FluidIo
 import net.azzy.pulseflux.block.entity.PulseCarryingDirectionalBlock
 import net.azzy.pulseflux.blockentity.PulseGeneratingEntity
 import net.azzy.pulseflux.registry.BlockEntityRegistry
 import net.azzy.pulseflux.util.fluid.FluidHelper
-import net.azzy.pulseflux.util.fluid.FluidHolder
-import net.azzy.pulseflux.util.fluid.FluidPackage
+import net.azzy.pulseflux.util.interaction.HeatHolder
 import net.azzy.pulseflux.util.interaction.HeatTransferHelper
 import net.azzy.pulseflux.util.interaction.PressureHolder
 import net.minecraft.block.BlockState
+import net.minecraft.fluid.Fluid
 import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
@@ -20,14 +20,16 @@ import java.util.*
 import java.util.function.Supplier
 import kotlin.math.pow
 
-class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DYNAMO_ENTITY, HeatTransferHelper.HeatMaterial.STEEL, Supplier { DefaultedList.ofSize(0, ItemStack.EMPTY) }), FluidHolder, PressureHolder {
+class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DYNAMO_ENTITY, HeatTransferHelper.HeatMaterial.STEEL, Supplier { DefaultedList.ofSize(0, ItemStack.EMPTY) }), PressureHolder, FluidIo {
 
-    private var tank = FluidHelper.empty()
+    private var pressure = 0L
+    private var fluid = Fluids.EMPTY
+    private var amount = 0L
 
     override fun tick() {
         super.tick()
-        if(tank.wrappedFluid == Fluids.WATER && getHeat() >= 100) {
-            tank.changeAmount(-2)
+        if(fluid == Fluids.WATER && amount >= 2 && getHeat() >= 100) {
+            amount -= 2
             if(world!!.time % 20 == 0L)
                 moveHeat(-1.0)
             frequency = 5.0
@@ -37,7 +39,6 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
             frequency = 0.0
             inductance = 0L
             }
-        if(tank.pressure >= 400000)
         recalcPressure()
     }
 
@@ -61,46 +62,44 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
     }
 
     override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?): Boolean {
-        return false
+        return true
     }
 
     override fun canExtract(slot: Int, stack: ItemStack, dir: Direction): Boolean {
         return false
     }
 
-    override fun getFluid(): FluidPackage {
-        return tank
-    }
-
-    override fun moveHeat(change: Double) {
-        tank.moveHeat(change)
-    }
-
-    override fun getHeat(): Double {
-        return tank.heat
-    }
-
-    override fun setFluid(fluid: FluidPackage) {
-        tank = fluid;
-    }
-
     override fun toTag(tag: CompoundTag?): CompoundTag {
-        tag!!.put("tank", tank.toTag())
+        if (tag != null) {
+            FluidHelper.tankToTag(tag, fluid, amount)
+            tag.putDouble("heat", heat)
+        }
         return super.toTag(tag)
     }
 
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
-        tank = FluidPackage.fromTag(tag!!.getCompound("tank"))
+        if (tag != null) {
+            val tank = FluidHelper.tankFromTag(tag)
+            fluid = tank.first
+            amount = tank.second
+        }
         super.fromTag(state, tag)
     }
 
     override fun toClientTag(tag: CompoundTag?): CompoundTag {
-        tag!!.put("tank", tank.toTag())
+        if (tag != null) {
+            FluidHelper.tankToTag(tag, fluid, amount)
+            tag.putDouble("heat", heat)
+        }
         return super.toClientTag(tag)
     }
 
     override fun fromClientTag(tag: CompoundTag?) {
-        tank = FluidPackage.fromTag(tag!!.getCompound("tank"))
+        if (tag != null) {
+            val tank = FluidHelper.tankFromTag(tag)
+            fluid = tank.first
+            amount = tank.second
+        }
         super.fromClientTag(tag)
     }
 
@@ -112,40 +111,33 @@ class ThermalDynamoEntity : PulseGeneratingEntity(BlockEntityRegistry.THERMAL_DY
         return Collections.singleton(cachedState.get(PulseCarryingDirectionalBlock.FACING))
     }
 
-    override fun recalcPressure() {
+    private fun recalcPressure() {
         if(world!!.isClient)
             return
-        val fluid = tank.amount / 1000.0
-        tank.pressure = fluid.pow(4.0).toLong()
+        val fluid = amount / 1000.0
+        pressure = fluid.pow(4.0).toLong()
         markDirty()
         sync()
     }
 
-    override fun addFluid(amount: Long): Long {
-        return tank.changeAmount(amount)
-    }
-
-    override fun extractFluid(amount: Long): Long {
-        return tank.changeAmount(-amount)
-    }
-
-    override fun canConnect(direction: Direction?): Boolean {
-        return cachedState.get(PulseCarryingDirectionalBlock.FACING) == direction
-    }
-
-    override fun gasCarrying(): Boolean {
-        return false
-    }
-
-    override fun insulated(direction: Direction?): Boolean {
-        return true
-    }
-
     override fun getPressure(): Long {
-        return tank.pressure
+        return pressure
     }
 
     override fun setPressure(pressure: Long) {
-        tank.pressure = pressure;
+        this.pressure = pressure;
     }
+
+    override fun getFluidSlotCount(): Int {
+        return 1
+    }
+
+    override fun getFluid(slot: Int): Fluid {
+        return fluid
+    }
+
+    override fun getFluidAmount(slot: Int): Long {
+        return amount
+    }
+
 }

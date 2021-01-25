@@ -63,12 +63,7 @@ class GrinderBlockEntity : PulseDrainingEntity(BlockEntityRegistry.GRINDER_ENTIT
                 inventory[1].decrement(1)
             }
             if(!inventory[0].isEmpty && cachedRep == null) {
-                for (recipe in RecipeRegistry.recipeMap[GRINDING]?.values!!) {
-                    if ((recipe as GrinderRecipe).matches(this, world)) {
-                        cachedRep = recipe
-                        break
-                    }
-                }
+                cachedRep = world!!.recipeManager.getFirstMatch(GRINDING, this, world)?.orElse(null)
                 if(cachedRep == null && !inventory[0].isEmpty && PFRandom.nextDouble() < 0.05){
                     (world as ServerWorld).spawnParticles(ItemStackParticleEffect(ParticleTypes.ITEM, stack), pos.x + 0.5, pos.y + 13/16.0, pos.z + 0.5, 60, 0.17, 0.75, 0.17, 0.1)
                     world!!.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 3F, 0.8F)

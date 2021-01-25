@@ -1,5 +1,6 @@
 package net.azzy.pulseflux
 
+import net.azzy.pulseflux.PulseFlux.CANVAS_LOADED
 import net.azzy.pulseflux.PulseFlux.PFLog
 import net.azzy.pulseflux.client.shaders.ShaderManager
 import net.azzy.pulseflux.client.util.RenderMathHelper.fromHex
@@ -12,6 +13,7 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Block
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.fluid.Fluid
@@ -20,6 +22,7 @@ import kotlin.math.pow
 
 @Environment(EnvType.CLIENT)
 class ClientInit : ClientModInitializer {
+
     override fun onInitializeClient() {
         BlockRegistry.initTransparency()
         initTransparency(BlockRegistry.REGISTRY_TRANS)
@@ -45,6 +48,7 @@ class ClientInit : ClientModInitializer {
         val POSITIVE_COLOR = fromHex(0xffd265)
         @JvmField
         val NEUTRAL_COLOR = fromHex(0xef65ff)
+
         fun initTransparency(transparentblocks: List<Block?>) {
             for (item in transparentblocks) BlockRenderLayerMap.INSTANCE.putBlock(item, RenderLayer.getTranslucent())
         }

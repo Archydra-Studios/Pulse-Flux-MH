@@ -1,6 +1,7 @@
 package net.azzy.pulseflux.client.util
 
 import net.azzy.pulseflux.ClientInit
+import net.azzy.pulseflux.PulseFlux
 import net.azzy.pulseflux.client.util.RenderHelper.renderScaledOverlayCuboid
 import net.azzy.pulseflux.client.util.RenderMathHelper.RGBAWrapper
 import net.azzy.pulseflux.util.energy.PulseNode.Polarity

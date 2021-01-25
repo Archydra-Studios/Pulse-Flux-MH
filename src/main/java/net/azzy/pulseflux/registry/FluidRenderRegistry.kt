@@ -44,12 +44,13 @@ object FluidRenderRegistry {
                     }
                 })
         val renderHandler: FluidRenderHandler = object : FluidRenderHandler {
-            override fun getFluidSprites(view: BlockRenderView, pos: BlockPos, state: FluidState): Array<Sprite?> {
-                return sprites
+
+            override fun getFluidColor(view: BlockRenderView?, pos: BlockPos?, state: FluidState?): Int {
+                return color
             }
 
-            override fun getFluidColor(view: BlockRenderView, pos: BlockPos, state: FluidState): Int {
-                return color
+            override fun getFluidSprites(p0: BlockRenderView?, p1: BlockPos?, p2: FluidState?): Array<Sprite?> {
+                return sprites
             }
         }
         FluidRenderHandlerRegistry.INSTANCE.register(still, renderHandler)

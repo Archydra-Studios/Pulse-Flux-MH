@@ -1,0 +1,33 @@
+{
+  "type": "pulseflux:grinding",
+  "input": {
+    "tag": "minecraft:nether_gold_ore"
+  },
+  "outputs": [
+    {
+      "item": "minecraft:gravel",
+      "chance": 0.05,
+      "quantity": 1
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "chance": 0.5,
+      "quantity": 12
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "chance": 0.1,
+      "quantity": 26
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "chance": 0.3,
+      "quantity": 6
+    },
+    {
+      "item": "minecraft:netherrack",
+      "chance": 1,
+      "quantity": 1
+    }
+  ]
+}

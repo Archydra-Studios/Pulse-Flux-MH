@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 }
@@ -37,9 +37,6 @@ repositories {
 		url = 'https://aperlambda.github.io/maven'
 	}
 	maven {
-		url = "https://dl.bintray.com/orangemonkey68/mods"
-	}
-	maven {
 		url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
 	}
 	maven {
@@ -61,6 +58,21 @@ repositories {
 		url = "http://maven.fabricmc.net/"
 		name = "Fabric"
 	}
+	maven {
+		name 'Jitpack for FTL'
+		url 'https://jitpack.io'
+		content {
+			includeGroup "com.github.Technici4n"
+		}
+	}
+	maven {
+		name = "Technici4n"
+		url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
+		content {
+			includeGroup "net.fabricmc.fabric-api" // FTL needs this too
+			includeGroup "dev.technici4n"
+		}
+	}
 	jcenter()
 }
 
@@ -74,18 +86,18 @@ dependencies {
 
 	modImplementation(include("io.github.cottonmc:LibGui:${project.libgui_version}"))
 	modImplementation(include("io.github.ladysnake:Satin:${project.satin_version}"))
+	modApi(include("dev.technici4n:FastTransferLib:${project.ftl_version}"))
 	modApi(include("me.shedaniel.cloth:config-2:${project.clothconfig_version}")){
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modImplementation( include(group: 'net.devtech', name: 'arrp', version: '0.2.6'))
+	//modImplementation( include(group: 'net.devtech', name: 'arrp', version: '0.2.6'))
 	modImplementation( include(group: "net.fabricmc", name: "fabric-language-kotlin", version: "1.4.0+build.1"))
 
 	//Testing only, do not JiJ
 	modImplementation "io.github.prospector:modmenu:1.14.6+build.31"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-	modImplementation( include("me.orangemonkey68:injectable-recipes:${project.repinject_version}"))
-	modRuntime 'com.github.Mixinors:Astromine:1.8.1'
-    //modCompile "grondag:canvas-mc116:1.0.+"
+	//modRuntime 'com.github.Mixinors:Astromine:1.8.1'
+    modCompile "grondag:canvas-mc116:1.0.+"
 }
 
 minecraft {

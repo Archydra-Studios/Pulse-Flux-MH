@@ -25,15 +25,16 @@ class LiquidPipeRenderer<T>(dispatcher: BlockEntityRenderDispatcher) : BlockEnti
 
     override fun render(entity: T, tickDelta: Float, matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
 
-        val fluid = entity.fluid.wrappedFluid
-        if(fluid == Fluids.EMPTY)
+        val fluid = entity.fluid
+        val amount = entity.getFluidAmount(0)
+        if(fluid == null || fluid == Fluids.EMPTY)
             return
 
         val wrapped = entity.fluid
         val identifier = if(fluid == Fluids.LAVA) Identifier("minecraft:block/lava_still") else FluidRenderHandlerRegistry.INSTANCE[fluid].getFluidSprites(entity.world, entity.pos, null)[0].id
-        val color = if(fluid == Fluids.WATER) wrapped.source.cycle().invert() appendAlpha(if(entity.fluid.gas) 80 else 140) else if(fluid == Fluids.LAVA) RenderMathHelper fromHex 0xffffff else (RenderMathHelper fromHex 0xffffff).appendAlpha(if(wrapped.gas) 80 else 140)
-        val consumer = if(fluid == Fluids.LAVA || ((wrapped.heat >= 1000 && entity.fluid.gas))) vertexConsumers.getBuffer(FFRenderLayers.FLUID_BLOOM) else if(wrapped.glowing || wrapped.heat >= 1500) vertexConsumers.getBuffer(FFRenderLayers.TRANSLUCENT_FLUID_BLOOM) else vertexConsumers.getBuffer(RenderLayer.getTranslucent())
-        val scaling = (wrapped.amount / 16000F).coerceAtMost(1F)
+        val color = if(fluid == Fluids.WATER) RenderMathHelper.fromHex(0x6083d5, 140) else if(fluid == Fluids.LAVA) RenderMathHelper fromHex 0xffffff else (RenderMathHelper fromHex 0xffffff).appendAlpha(if(entity.gasCarrying) 80 else 140)
+        val consumer = if(fluid == Fluids.LAVA || ((entity.heat >= 1000 && entity.gasCarrying))) vertexConsumers.getBuffer(FFRenderLayers.FLUID_BLOOM) else if (entity.heat >= 1500) vertexConsumers.getBuffer(FFRenderLayers.TRANSLUCENT_FLUID_BLOOM) else vertexConsumers.getBuffer(RenderLayer.getTranslucent())
+        val scaling = (amount / 16000F).coerceAtMost(1F)
 
         matrices.push()
         if(entity.isStraight) {

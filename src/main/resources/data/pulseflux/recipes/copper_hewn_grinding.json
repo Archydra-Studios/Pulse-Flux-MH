@@ -1,0 +1,23 @@
+{
+  "type": "pulseflux:grinding",
+  "input": {
+    "tag": "c:copper_ores"
+  },
+  "outputs": [
+    {
+      "item": "minecraft:gravel",
+      "chance": 0.1,
+      "quantity": 1
+    },
+    {
+      "item": "pulseflux:hewn_copper_ore",
+      "chance": 0.85,
+      "quantity": 1
+    },
+    {
+      "item": "minecraft:flint",
+      "chance": 1,
+      "quantity": 1
+    }
+  ]
+}

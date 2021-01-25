@@ -5,6 +5,9 @@ import net.azzy.pulseflux.util.interaction.HeatTransferHelper;
 import net.azzy.pulseflux.util.networking.ClientPacketRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -32,12 +35,15 @@ public class PulseFlux implements ModInitializer {
 	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "logistic")).icon(() -> new ItemStack(STEEL_DIODE)).build();
 	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MOD_ID, "tool")).icon(() -> new ItemStack(SCREWDRIVER)).build();
 
+	public static final boolean CANVAS_LOADED = FabricLoader.getInstance().isModLoaded("canvas");
+
 	@Override
 	public void onInitialize() {
 		ItemRegistry.init();
 		BlockRegistry.init();
 		RecipeRegistry.INSTANCE.awaken();
 		BlockEntityRegistry.init();
+		FTLRegistry.init();
 		ContainerRegistry.init();
 		FluidRegistry.init();
 		HeatTransferHelper.init();
