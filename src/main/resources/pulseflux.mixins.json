@@ -1,11 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.azzy.pulseflux.mixin",
+  "package": "azzy.fabric.pulseflux.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BucketFluidAccessor",
-    "ShaderRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

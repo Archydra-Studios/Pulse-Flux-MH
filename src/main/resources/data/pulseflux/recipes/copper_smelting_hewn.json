@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "pulseflux:hewn_copper_ore"
-  },
-  "result": "pulseflux:copper_ingot",
-  "experience": 0.7,
-  "cookingtime": 200
-}

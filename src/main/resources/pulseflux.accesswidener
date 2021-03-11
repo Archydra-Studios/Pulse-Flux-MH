@@ -1,4 +1,0 @@
-accessWidener	v1	named
-#Oh boy
-
-accessible field net/minecraft/tag/BlockTags REQUIRED_TAGS Lnet/minecraft/tag/RequiredTagList;
