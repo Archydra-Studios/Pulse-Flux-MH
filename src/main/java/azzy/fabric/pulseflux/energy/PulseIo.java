@@ -1,6 +1,7 @@
 package azzy.fabric.pulseflux.energy;
 
 import dev.technici4n.fasttransferlib.api.Simulation;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -44,10 +45,11 @@ public interface PulseIo {
      *
      * @param amount     The amount of mechanical energy to insert
      * @param simulation If {@link Simulation#SIMULATE}, do not mutate this object
+     * @param direction The direction the insertion is being attempted from, this is in relation to the receiver
      * @throws IllegalArgumentException If the polarity of the pulses does not match
      * @return the amount of mechanical energy that could not be inserted
      */
-    default PulsePair insert(@NotNull PulseCarrier amount, @NotNull Simulation simulation) {
+    default PulsePair insert(@NotNull PulseCarrier amount, Direction direction, @NotNull Simulation simulation) {
         return PulsePair.of(amount);
     }
 
@@ -58,10 +60,11 @@ public interface PulseIo {
      *
      * @param maxAmount     The maximum amount of mechanical energy to extract
      * @param simulation 	If {@link Simulation#SIMULATE}, do not mutate this object
+     * @param direction The direction the extraction is being attempted from, this is in relation to the provider
      * @throws IllegalArgumentException If the polarity of the pulses does not match
      * @return the amount of mechanical energy that was extracted
      */
-    default PulsePair extract(@NotNull PulseCarrier maxAmount, @NotNull Simulation simulation) {
+    default PulsePair extract(@NotNull PulseCarrier maxAmount, Direction direction, @NotNull Simulation simulation) {
         return PulsePair.EMPTY;
     }
 }

@@ -3,6 +3,7 @@ package azzy.fabric.pulseflux;
 import azzy.fabric.incubus_core.datagen.Metadata;
 import azzy.fabric.pulseflux.block.PulseFluxBlocks;
 import azzy.fabric.pulseflux.item.PulseFluxItems;
+import azzy.fabric.pulseflux.util.PulseFluxRegistries;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.loader.api.FabricLoader;
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.SplittableRandom;
 
+@SuppressWarnings("unused")
 public class PulseFluxCommon implements ModInitializer {
 	public static final String MODID = "pulseflux";
 
@@ -34,6 +36,8 @@ public class PulseFluxCommon implements ModInitializer {
 	public void onInitialize() {
 		PulseFluxBlocks.init();
 		PulseFluxItems.init();
+		PulseFluxRegistries.init();
+		PulseFluxRegistries.init();
 	}
 
 	public static Identifier id(String name) {

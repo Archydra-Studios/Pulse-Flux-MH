@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -20,7 +20,6 @@ repositories {
 		name = "Technici4n"
 		url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
 		content {
-			includeGroup "net.fabricmc.fabric-api" // until fabric-api-lookup-api-v1 is merged
 			includeGroup "dev.technici4n"
 		}
 	}
