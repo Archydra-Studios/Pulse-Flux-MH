@@ -1,9 +1,9 @@
 
     Notes
 
-Hz is, unsurprisingly, Hertz.
+Hz is, unsurprisingly, Hertz. (Note, these be wack since they are per tick rather than per second)
 Fi is Discrete Flux inductance, a measure of the usable energy within a pulse.
-CFm is Constant Flux motive, the average amount of energy moved through a point over a second.
+CFm is Constant Flux motive, the average amount of energy moved through a point over a tick.
 Mu is Motive mutability, a unit used to notate the exchange ratio of modulators and similar devices.
 
             CFm = Fi * Hz

@@ -15,6 +15,21 @@ repositories {
 		url = "http://maven.fabricmc.net/"
 		name = "Fabric"
 	}
+
+	maven {
+		name = "Technici4n"
+		url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
+		content {
+			includeGroup "net.fabricmc.fabric-api" // until fabric-api-lookup-api-v1 is merged
+			includeGroup "dev.technici4n"
+		}
+	}
+
+	maven {
+		name = "BuildCraft"
+		url = "https://mod-buildcraft.com/maven"
+	}
+
 	maven { url "https://jitpack.io" }
 }
 
@@ -25,7 +40,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation( include("com.github.Dragonoidzero:Incubus-Core:${project.incubus_version}"))
+	modImplementation include("com.github.Dragonoidzero:Incubus-Core:${project.incubus_version}")
+
+	modApi include("dev.technici4n:FastTransferLib:${project.ftl_version}")
 }
 
 processResources {
