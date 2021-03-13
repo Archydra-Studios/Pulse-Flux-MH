@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "pulseflux:block/hsla_steel_block"
+    }
+  }
+}
