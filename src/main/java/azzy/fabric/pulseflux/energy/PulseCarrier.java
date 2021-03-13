@@ -14,6 +14,8 @@ import java.util.Arrays;
  */
 public final class PulseCarrier {
 
+    public static final PulseCarrier EMPTY = new PulseCarrier();
+
     private double inductance;
     private double frequency;
 
@@ -42,16 +44,17 @@ public final class PulseCarrier {
      * @param polarity A string to be parsed as a polarity
      * @param traversed A list of blocks already traveled in long form
      */
-    public PulseCarrier(double inductance, double frequency, String polarity, long[] traversed) {
+    public PulseCarrier(double inductance, double frequency, @NotNull String polarity, long[] traversed) {
         this(inductance, frequency, Polarity.valueOf(polarity));
-        Arrays.stream(traversed).forEach(traveledBlocks::add);
+        if(traversed != null)
+            Arrays.stream(traversed).forEach(traveledBlocks::add);
     }
 
     /**
      * Constructs an empty Pulse carrier
      */
     public PulseCarrier() {
-        this(0, 0, Polarity.NEUTRAL);
+        this(0, 0, Polarity.NONE);
     }
 
     /**
@@ -59,7 +62,7 @@ public final class PulseCarrier {
      * @param carrier The Pulse carrier to be added to this
      * @return Whether or not the operation could be performed
      */
-    public boolean add(PulseCarrier carrier) {
+    public boolean add(@NotNull PulseCarrier carrier) {
         if(isCompatible(carrier)) {
             this.inductance += carrier.inductance;
             this.frequency += carrier.frequency;
@@ -74,7 +77,7 @@ public final class PulseCarrier {
      * @param carrier The Pulse carrier to subtract from this with
      * @return Whether or not the operation could be performed
      */
-    public boolean sub(PulseCarrier carrier) {
+    public boolean sub(@NotNull PulseCarrier carrier) {
         if(isCompatible(carrier)) {
             this.inductance -= carrier.inductance;
             this.frequency -= carrier.frequency;
@@ -89,7 +92,7 @@ public final class PulseCarrier {
      * @param carrier The Pulse carrier to compare this with
      * @return A {@link PulsePair} containing the difference between the pulses' inductance and frequency
      */
-    public PulsePair dif(PulseCarrier carrier) {
+    public PulsePair dif(@NotNull PulseCarrier carrier) {
         return new PulsePair(
                 this.inductance - carrier.inductance,
                 this.frequency - carrier.frequency
@@ -99,9 +102,8 @@ public final class PulseCarrier {
     /**
      * Checks whether two Pulse carrier's polarity are equal
      * @param carrier The Pulse carrier who's polarity is to be checked
-     * @return Whether or not the polarities of the pulses match
      */
-    public boolean isCompatible(PulseCarrier carrier) {
+    public boolean isCompatible(@NotNull PulseCarrier carrier) {
         return this.polarity == carrier.polarity;
     }
 
@@ -146,6 +148,10 @@ public final class PulseCarrier {
         tag.putString("polarity", tag.asString());
         tag.putLongArray("traveled", traveledBlocks.toArray(new long[0]));
         return tag;
+    }
+
+    public static boolean isEmpty(@NotNull PulseCarrier carrier) {
+        return carrier == EMPTY || (carrier.inductance <= 0 && carrier.frequency <= 0 && carrier.polarity == Polarity.NONE);
     }
 
     public static PulseCarrier fromTag(@NotNull CompoundTag tag) {

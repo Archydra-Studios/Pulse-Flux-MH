@@ -5,22 +5,28 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An object that can hold and optionally take and provide mechanical energy.
+ * An object that can hold and optionally take and provide motive.
  */
 public interface PulseIo {
-    
+
     /**
      * Get the stored pulse energy.
      */
-    @NotNull PulseCarrier getPulse();
+    @NotNull PulseCarrier getStoredPulse();
 
     /**
-     * Get the maximum amount of mechanical energy that can be stored, or 0 if unsupported or unknown.
+     * Get the maximum amount of motive that can be stored, or empty if unsupported or unknown.
      */
-
     default @NotNull PulsePair getPulseCapacity() {
-        return new PulsePair(0, 0);
+        return PulsePair.EMPTY;
     }
+
+    /**
+     * Returns false if the querying object should not connect to this object. Used primarily for rendering.
+     * @param polarity The polarity of the querying object
+     * @param direction The direction from which the query is being performed in relation to the receiver
+     */
+    default boolean shouldConnect(Polarity polarity, @NotNull Direction direction, @NotNull MutationType type) {return false;}
 
     /**
      * Return false if this object does not support insertion at all, meaning that insertion will always return the passed amount,
@@ -31,7 +37,7 @@ public interface PulseIo {
     }
 
     /**
-     * Return false if this object does not support extraction at all, meaning that extraction will always return 0,
+     * Return false if this object does not support extraction at all, meaning that extraction will always return empty,
      * and extract-only cables should not connect.
      */
     default boolean supportsExtraction() {
@@ -47,7 +53,7 @@ public interface PulseIo {
      * @param simulation If {@link Simulation#SIMULATE}, do not mutate this object
      * @param direction The direction the insertion is being attempted from, this is in relation to the receiver
      * @throws IllegalArgumentException If the polarity of the pulses does not match
-     * @return the amount of mechanical energy that could not be inserted
+     * @return the amount of motive that could not be inserted
      */
     default PulsePair insert(@NotNull PulseCarrier amount, Direction direction, @NotNull Simulation simulation) {
         return PulsePair.of(amount);
@@ -62,7 +68,7 @@ public interface PulseIo {
      * @param simulation 	If {@link Simulation#SIMULATE}, do not mutate this object
      * @param direction The direction the extraction is being attempted from, this is in relation to the provider
      * @throws IllegalArgumentException If the polarity of the pulses does not match
-     * @return the amount of mechanical energy that was extracted
+     * @return the amount of motive that was extracted
      */
     default PulsePair extract(@NotNull PulseCarrier maxAmount, Direction direction, @NotNull Simulation simulation) {
         return PulsePair.EMPTY;

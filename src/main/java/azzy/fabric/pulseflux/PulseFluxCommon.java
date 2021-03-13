@@ -3,6 +3,7 @@ package azzy.fabric.pulseflux;
 import azzy.fabric.incubus_core.datagen.Metadata;
 import azzy.fabric.pulseflux.block.PulseFluxBlocks;
 import azzy.fabric.pulseflux.item.PulseFluxItems;
+import azzy.fabric.pulseflux.util.PulseFluxMaterials;
 import azzy.fabric.pulseflux.util.PulseFluxRegistries;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -30,14 +31,14 @@ public class PulseFluxCommon implements ModInitializer {
 	public static final ItemGroup MACHINES = FabricItemGroupBuilder.create(new Identifier(MODID, "machine")).icon(() -> new ItemStack(Items.COD)).build();
 	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MODID, "logistic")).icon(() -> new ItemStack(Items.COD)).build();
 	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MODID, "tool")).icon(() -> new ItemStack(Items.COD)).build();
-	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MODID, "material")).icon(() -> new ItemStack(Items.COD)).build();
+	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MODID, "material")).icon(() -> new ItemStack(PulseFluxItems.HSLA_STEEL_INGOT)).build();
 
 	@Override
 	public void onInitialize() {
 		PulseFluxBlocks.init();
 		PulseFluxItems.init();
 		PulseFluxRegistries.init();
-		PulseFluxRegistries.init();
+		PulseFluxMaterials.init();
 	}
 
 	public static Identifier id(String name) {

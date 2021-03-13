@@ -1,0 +1,6 @@
+{
+  "parent": "pulseflux:base/diode_base",
+  "textures": {
+    "all": "pulseflux:block/hsla_steel_diode"
+  }
+}

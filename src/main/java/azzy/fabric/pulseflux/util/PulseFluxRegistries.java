@@ -4,7 +4,7 @@ import azzy.fabric.pulseflux.PulseFluxCommon;
 import com.mojang.serialization.Lifecycle;
 import net.minecraft.util.registry.*;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "rawtypes"})
 public final class PulseFluxRegistries {
 
     public static void init() {}

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -27,7 +28,14 @@ public class PulseFluxBlocks {
         return new FabricItemSettings().group(group).rarity(rarity);
     }
 
+
+    //Materials
+    public static final Block HSLA_STEEL_BLOCK = registerGeneratedBlock("hsla_steel_block", new Block(FabricBlockSettings.of(Material.METAL).strength(6.0F, 8.0F)), genericSettings(MACHINE_MATERIALS, Rarity.COMMON), SingletType.BLOCK);
+
     public static final Block OBSIDIAN_AMALGAM = registerGeneratedBlock("obsidian_amalgam", new Block(FabricBlockSettings.copyOf(Blocks.OBSIDIAN)), genericSettings(MACHINE_MATERIALS, Rarity.COMMON), SingletType.BLOCK);
+
+    //Logistics
+    public static final Block HSLA_STEEL_DIODE = registerBlock("hsla_steel_diode", new Block(FabricBlockSettings.copyOf(HSLA_STEEL_BLOCK).nonOpaque()), genericSettings(LOGISTICS, Rarity.COMMON), true);
 
     public static void init() {}
 
