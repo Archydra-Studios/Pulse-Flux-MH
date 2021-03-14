@@ -1,0 +1,6 @@
+{
+  "parent": "pulseflux:base/diode_base",
+  "textures": {
+    "all": "pulseflux:block/creative_pulse_source"
+  }
+}

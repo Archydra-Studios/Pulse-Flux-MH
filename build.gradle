@@ -11,11 +11,13 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	//Fabric
 	maven {
 		url = "http://maven.fabricmc.net/"
 		name = "Fabric"
 	}
 
+	//FTL
 	maven {
 		name = "Technici4n"
 		url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
@@ -23,12 +25,12 @@ repositories {
 			includeGroup "dev.technici4n"
 		}
 	}
-
 	maven {
 		name = "BuildCraft"
 		url = "https://mod-buildcraft.com/maven"
 	}
 
+	//Jitpack
 	maven { url "https://jitpack.io" }
 }
 

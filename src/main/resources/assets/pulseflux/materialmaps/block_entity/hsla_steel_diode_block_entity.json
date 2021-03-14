@@ -1,0 +1,12 @@
+{
+  "map": [
+    {
+      "predicate": {
+        "materialPredicate": {
+          "renderLayerName": "pulseflux:soft_bloom"
+        }
+      },
+      "material": "canvas:emissive_transform"
+    }
+  ]
+}

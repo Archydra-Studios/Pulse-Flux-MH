@@ -29,8 +29,8 @@ public class PulseFluxCommon implements ModInitializer {
 	public static final boolean REGEN_RECIPES = false, REGEN_ITEMS = true, REGEN_BLOCKS = true, REGEN_LOOT = true;
 
 	public static final ItemGroup MACHINES = FabricItemGroupBuilder.create(new Identifier(MODID, "machine")).icon(() -> new ItemStack(Items.COD)).build();
-	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MODID, "logistic")).icon(() -> new ItemStack(Items.COD)).build();
-	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MODID, "tool")).icon(() -> new ItemStack(Items.COD)).build();
+	public static final ItemGroup LOGISTICS = FabricItemGroupBuilder.create(new Identifier(MODID, "logistic")).icon(() -> new ItemStack(PulseFluxBlocks.HSLA_STEEL_DIODE)).build();
+	public static final ItemGroup TOOLS  = FabricItemGroupBuilder.create(new Identifier(MODID, "tool")).icon(() -> new ItemStack(PulseFluxItems.SCREWDRIVER)).build();
 	public static final ItemGroup MACHINE_MATERIALS = FabricItemGroupBuilder.create(new Identifier(MODID, "material")).icon(() -> new ItemStack(PulseFluxItems.HSLA_STEEL_INGOT)).build();
 
 	@Override

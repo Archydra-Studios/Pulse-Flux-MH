@@ -4,6 +4,112 @@
       "apply":{
         "model": "pulseflux:block/hsla_steel_diode"
       }
+    },
+    {
+      "when": {
+        "input": "north"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input"
+      }
+    },
+    {
+      "when": {
+        "input": "south"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "input": "east"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "input": "west"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "input": "up"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "input": "down"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_input",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "output": "north"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output"
+      }
+    },
+    {
+      "when": {
+        "output": "south"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "output": "east"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "output": "west"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "output": "up"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "output": "down"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "x": 90
+      }
     }
   ]
 }

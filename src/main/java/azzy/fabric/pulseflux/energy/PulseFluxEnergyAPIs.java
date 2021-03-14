@@ -1,6 +1,7 @@
 package azzy.fabric.pulseflux.energy;
 
 import azzy.fabric.pulseflux.PulseFluxCommon;
+import azzy.fabric.pulseflux.util.IoProvider;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
@@ -17,4 +18,7 @@ public class PulseFluxEnergyAPIs {
 
     public static final BlockApiLookup<PulseIo, @NotNull Direction> PULSE =
             BlockApiLookup.get(PulseFluxCommon.id("pulse_system"), PulseIo.class, Direction.class);
+
+    public static final BlockApiLookup<IoProvider, @NotNull Direction> IO_LOOKUP =
+            BlockApiLookup.get(PulseFluxCommon.id("io_lookup"), IoProvider.class, Direction.class);
 }

@@ -1,0 +1,62 @@
+{
+  "multipart": [
+    {
+      "apply":{
+        "model": "pulseflux:block/creative_pulse_source"
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output"
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "pulseflux:composite/diode_lens_output",
+        "x": 90
+      }
+    }
+  ]
+}
