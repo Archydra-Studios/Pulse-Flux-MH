@@ -19,7 +19,7 @@ public class CreativePulseSourceRenderer extends BlockEntityRenderer<CreativePul
     public void render(CreativePulseSourceBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if(entity.getWorld() != null) {
             matrices.push();
-            float trans = Math.min(200, (300 + (entity.getLastRenderUpdate() - (entity.getWorld().getTime() + tickDelta)) * 3.5F)) / 255;
+            float trans = Math.min(200, (300 + (entity.getLastUpdateTime() - (entity.getWorld().getTime() + tickDelta)) * 3.5F)) / 255;
             RenderHelper.drawPulseIO(vertexConsumers, matrices, entity, trans);
             matrices.pop();
 
@@ -27,7 +27,7 @@ public class CreativePulseSourceRenderer extends BlockEntityRenderer<CreativePul
 
             if(!PulseCarrier.isEmpty(pulse)) {
                 matrices.push();
-                ActiveIO<?> output = entity.getActiveOutput();
+                ActiveIO<?> output = entity.getActiveOutputs().get(0);
                 if(output != null) {
                     RenderHelper.drawLaser(vertexConsumers, matrices, pulse.polarity.color, 0.5F, output.distance - 1, 0.325F, 0.5F, output.io);
                 }

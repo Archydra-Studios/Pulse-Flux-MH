@@ -145,13 +145,13 @@ public final class PulseCarrier {
         CompoundTag tag = new CompoundTag();
         tag.putDouble("Fi", inductance);
         tag.putDouble("Hz", frequency);
-        tag.putString("polarity", tag.asString());
+        tag.putString("polarity", polarity.name());
         tag.putLongArray("traveled", traveledBlocks.toArray(new long[0]));
         return tag;
     }
 
     public static boolean isEmpty(@NotNull PulseCarrier carrier) {
-        return carrier == EMPTY || (carrier.inductance <= 0 && carrier.frequency <= 0 && carrier.polarity == Polarity.NONE);
+        return carrier == EMPTY || (carrier.frequency <= 0 && carrier.inductance <= 0);
     }
 
     public static PulseCarrier fromTag(@NotNull CompoundTag tag) {

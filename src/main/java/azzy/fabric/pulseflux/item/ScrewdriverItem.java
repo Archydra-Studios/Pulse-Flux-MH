@@ -1,8 +1,8 @@
 package azzy.fabric.pulseflux.item;
 
 import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
-import azzy.fabric.pulseflux.util.IoProvider;
-import azzy.fabric.pulseflux.util.RenderTimeProvider;
+import azzy.fabric.pulseflux.energy.PulseIo;
+import azzy.fabric.pulseflux.util.UpdateTimeProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.ToolItem;
@@ -23,7 +23,7 @@ public class ScrewdriverItem extends ToolItem {
         Direction side = context.getSide();
         World world = context.getWorld();
         BlockPos pos = context.getBlockPos();
-        IoProvider provider = PulseFluxEnergyAPIs.IO_LOOKUP.find(world, pos, side);
+        PulseIo provider = PulseFluxEnergyAPIs.PULSE.find(world, pos, side);
         if(provider != null) {
             if(world instanceof ServerWorld) {
                 PlayerEntity playerEntity = context.getPlayer();
@@ -40,8 +40,8 @@ public class ScrewdriverItem extends ToolItem {
                     }
                 }
             }
-            if(provider instanceof RenderTimeProvider)
-                ((RenderTimeProvider) provider).updateRenderTime(world);
+            if(provider instanceof UpdateTimeProvider)
+                ((UpdateTimeProvider) provider).update(world);
             return ActionResult.success(world.isClient());
         }
         return super.useOnBlock(context);

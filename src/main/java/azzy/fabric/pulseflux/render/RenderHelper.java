@@ -1,14 +1,13 @@
 package azzy.fabric.pulseflux.render;
 
 import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
-import azzy.fabric.pulseflux.util.IoProvider;
+import azzy.fabric.pulseflux.energy.PulseIo;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.util.math.Direction;
 
 import java.util.HashSet;
@@ -23,7 +22,7 @@ public class RenderHelper {
     public static void drawPulseIO(VertexConsumerProvider vertexConsumers, MatrixStack matrices, BlockEntity entity, float trans) {
         if(trans > 0) {
             BlockState state = entity.getCachedState();
-            IoProvider provider = PulseFluxEnergyAPIs.IO_LOOKUP.find(entity.getWorld(), entity.getPos(), Direction.DOWN);
+            PulseIo provider = PulseFluxEnergyAPIs.PULSE.find(entity.getWorld(), entity.getPos(), Direction.DOWN);
 
             if(provider != null) {
 

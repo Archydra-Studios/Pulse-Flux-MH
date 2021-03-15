@@ -10,7 +10,6 @@ import azzy.fabric.pulseflux.blockentity.logistics.CreativePulseSourceBlockEntit
 import azzy.fabric.pulseflux.blockentity.logistics.SteelDiodeBlockEntity;
 import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
 import azzy.fabric.pulseflux.energy.PulseIo;
-import azzy.fabric.pulseflux.util.IoProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -63,8 +62,6 @@ public class PulseFluxBlocks {
     public static final BlockEntityType<CreativePulseSourceBlockEntity> CREATIVE_PULSE_SOURCE_BLOCK_ENTITY = registerBlockEntity("creative_pulse_source_block_entity", CreativePulseSourceBlockEntity::new, CREATIVE_PULSE_SOURCE);
 
     public static void init() {
-        PulseFluxEnergyAPIs.IO_LOOKUP.registerForBlockEntities((provider, direction) -> (IoProvider) provider, HSLA_STEEL_DIODE_BLOCK_ENTITY, CREATIVE_PULSE_SOURCE_BLOCK_ENTITY);
-
         PulseFluxEnergyAPIs.PULSE.registerForBlockEntities((pulse, dir) -> (PulseIo) pulse, HSLA_STEEL_DIODE_BLOCK_ENTITY, CREATIVE_PULSE_SOURCE_BLOCK_ENTITY);
     }
 

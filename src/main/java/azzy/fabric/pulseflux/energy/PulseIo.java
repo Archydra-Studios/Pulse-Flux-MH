@@ -4,6 +4,10 @@ import dev.technici4n.fasttransferlib.api.Simulation;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * An object that can hold and optionally take and provide motive.
  */
@@ -23,10 +27,9 @@ public interface PulseIo {
 
     /**
      * Returns false if the querying object should not connect to this object. Used primarily for rendering.
-     * @param polarity The polarity of the querying object
      * @param direction The direction from which the query is being performed in relation to the receiver
      */
-    default boolean shouldConnect(Polarity polarity, @NotNull Direction direction, @NotNull MutationType type) {return false;}
+    default boolean shouldConnect(PulseCarrier pulse, @NotNull Direction direction, @NotNull MutationType type) {return false;}
 
     ///**
     // * Return false if this object does not support insertion at all, meaning that insertion will always return the passed amount,
@@ -72,4 +75,20 @@ public interface PulseIo {
     //default PulsePair extract(@NotNull PulseCarrier maxAmount, Direction direction, @NotNull Simulation simulation) {
     //    return PulsePair.EMPTY;
     //}
+
+    default Set<Direction> getInputs() {
+        return Collections.emptySet();
+    }
+
+    default Set<Direction> getOutputs() {
+        return Collections.emptySet();
+    }
+
+    default List<ActiveIO<?>> getActiveOutputs() {
+        return Collections.emptyList();
+    }
+
+    default void setPrimaryInput(Direction output) {}
+
+    default void setPrimaryOutput(Direction input) {}
 }

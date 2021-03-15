@@ -1,9 +1,6 @@
 package azzy.fabric.pulseflux.util;
 
-import azzy.fabric.pulseflux.energy.ActiveIO;
-import azzy.fabric.pulseflux.energy.MutationType;
-import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
-import azzy.fabric.pulseflux.energy.PulseIo;
+import azzy.fabric.pulseflux.energy.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
+import static azzy.fabric.pulseflux.block.logistics.DiodeBlock.INPUT;
+
 public class ConnectionHelper {
 
     public static @NotNull Direction getOutputOrElse(BlockPos start, int range, World world, Stream<Direction> testDirs, Direction fallback) {
@@ -21,7 +20,7 @@ public class ConnectionHelper {
                 .filter(direction -> {
                     for (int i = 1; i <= range; i++) {
                         BlockPos test = start.offset(direction, i);
-                        IoProvider ioProvider = PulseFluxEnergyAPIs.IO_LOOKUP.find(world, test, direction.getOpposite());
+                        PulseIo ioProvider = PulseFluxEnergyAPIs.PULSE.find(world, test, direction.getOpposite());
                         if(ioProvider != null && i > 1) {
                             return ioProvider.getOutputs().contains(direction.getOpposite());
                         }
@@ -41,7 +40,7 @@ public class ConnectionHelper {
                 BlockPos test = start.offset(testDir, i);
                 BlockState state = world.getBlockState(test);
                 PulseIo io = PulseFluxEnergyAPIs.PULSE.find(world, test, testDir);
-                if(io != null && io.shouldConnect(seeker.getStoredPulse().polarity, testDir.getOpposite(), MutationType.INSERTION)) {
+                if(io != null && io.shouldConnect(seeker.getStoredPulse(), testDir.getOpposite(), MutationType.INSERTION)) {
                     return new ActiveIO(testDir, (BlockEntity) io, i, test);
                 }
                 else if(checkPathInavlid(state, test, world, testDir)) {
@@ -54,5 +53,12 @@ public class ConnectionHelper {
 
     public static boolean checkPathInavlid(BlockState state, BlockPos pos, World world, Direction axis) {
         return state.isSideSolidFullSquare(world, pos, axis) || state.isSideSolidFullSquare(world, pos, axis.getOpposite());
+    }
+
+    public static boolean standardConnectionCheck(@NotNull PulseIo receiver, @NotNull BlockPos receiverPos, @NotNull PulseCarrier pulse, @NotNull Direction queryDir, Direction input) {
+        return (queryDir == input || input == null) &&
+                !PulseCarrier.isEmpty(pulse) &&
+                pulse.polarity.matches(receiver.getStoredPulse().polarity) &&
+                !pulse.hasPassed(receiverPos);
     }
 }
