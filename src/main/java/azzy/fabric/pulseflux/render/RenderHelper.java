@@ -1,5 +1,7 @@
 package azzy.fabric.pulseflux.render;
 
+import azzy.fabric.pulseflux.energy.ActiveIO;
+import azzy.fabric.pulseflux.energy.PulseCarrier;
 import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
 import azzy.fabric.pulseflux.energy.PulseIo;
 import net.minecraft.block.BlockState;
@@ -20,6 +22,7 @@ public class RenderHelper {
     public static final Vector3f MIXED_IO = new Vector3f(1F, 0.973F, 0.573F);
 
     public static void drawPulseIO(VertexConsumerProvider vertexConsumers, MatrixStack matrices, BlockEntity entity, float trans) {
+        matrices.push();
         if(trans > 0) {
             BlockState state = entity.getCachedState();
             PulseIo provider = PulseFluxEnergyAPIs.PULSE.find(entity.getWorld(), entity.getPos(), Direction.DOWN);
@@ -53,6 +56,22 @@ public class RenderHelper {
                     RenderHelper.directionalMatrixOffset(matrices, mixed, 1);
                 });
             }
+        }
+        matrices.pop();
+    }
+
+    public static void drawPulseLaser(PulseCarrier pulse, ActiveIO<?> output, VertexConsumerProvider vertexConsumers, MatrixStack matrices, long time, float tickDelta) {
+        drawPulseLaser(pulse, output, vertexConsumers, matrices, Math.min(0.8F, 1F - time % 16 / 20F - (tickDelta / 20)));
+    }
+
+    public static void drawPulseLaser(PulseCarrier pulse, ActiveIO<?> output, VertexConsumerProvider vertexConsumers, MatrixStack matrices, float trans) {
+        if(!PulseCarrier.isEmpty(pulse) && output != null) {
+            matrices.push();
+            RenderHelper.drawLaser(vertexConsumers, matrices, pulse.polarity.color, trans * 0.8F, output.distance - 1, 0.325F, 0.5F, output.io);
+            matrices.pop();
+            matrices.push();
+            RenderHelper.drawLaser(vertexConsumers, matrices, pulse.polarity.color, trans, output.distance - 1, 0.15F, 0.5F, output.io);
+            matrices.pop();
         }
     }
 

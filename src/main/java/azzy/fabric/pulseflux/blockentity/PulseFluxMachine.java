@@ -51,4 +51,9 @@ public class PulseFluxMachine extends BlockEntity implements BlockEntityClientSe
     public void fromClientTag(CompoundTag tag) {
         lastUpdateTime = tag.getLong("lastUpdate");
     }
+
+    @Override
+    public double getSquaredRenderDistance() {
+        return 256;
+    }
 }

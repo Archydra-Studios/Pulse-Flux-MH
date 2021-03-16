@@ -43,7 +43,7 @@ public class PulseFluxMonoPulseMachine extends PulseFluxMachine implements Ticka
         pulseTick();
     }
 
-    public void pulseTick() {
+    protected void pulseTick() {
         if(world != null) {
             if(lastUpdateTime == 0)
                 lastUpdateTime = world.getTime();
@@ -63,9 +63,10 @@ public class PulseFluxMonoPulseMachine extends PulseFluxMachine implements Ticka
             }
 
             if(activeOutput != null && !PulseCarrier.isEmpty(pulse) && pulse.getFrequency() <= material.maxFrequency) {
-                pulse.markPassed(pos);
-                activeOutput.connection.set(pulse, activeOutput.io.getOpposite());
-                markDirty();
+                if(preProcessOutputPulse()) {
+                    activeOutput.connection.set(pulse, activeOutput.io.getOpposite());
+                    markDirty();
+                }
             }
 
             if(!ticked && !PulseCarrier.isEmpty(pulse)) {
@@ -78,6 +79,11 @@ public class PulseFluxMonoPulseMachine extends PulseFluxMachine implements Ticka
 
             ticked = false;
         }
+    }
+
+    protected boolean preProcessOutputPulse() {
+        pulse.markPassed(pos);
+        return true;
     }
 
     @Override

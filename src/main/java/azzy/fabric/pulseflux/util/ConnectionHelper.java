@@ -52,7 +52,7 @@ public class ConnectionHelper {
     }
 
     public static boolean checkPathInavlid(BlockState state, BlockPos pos, World world, Direction axis) {
-        return state.isSideSolidFullSquare(world, pos, axis) || state.isSideSolidFullSquare(world, pos, axis.getOpposite());
+        return (state.isSideSolidFullSquare(world, pos, axis) || state.isSideSolidFullSquare(world, pos, axis.getOpposite())) && !state.isTranslucent(world, pos);
     }
 
     public static boolean standardConnectionCheck(@NotNull PulseIo receiver, @NotNull BlockPos receiverPos, @NotNull PulseCarrier pulse, @NotNull Direction queryDir, Direction input) {
