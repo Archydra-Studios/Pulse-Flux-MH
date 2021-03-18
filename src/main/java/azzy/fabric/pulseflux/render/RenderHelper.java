@@ -11,6 +11,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -126,14 +127,8 @@ public class RenderHelper {
     }
 
     public static void directionalMatrixOffset(MatrixStack matrices, Direction direction, float offset) {
-        switch (direction) {
-            case NORTH: matrices.translate(0, 0, -offset); break;
-            case SOUTH: matrices.translate(0, 0, offset); break;
-            case EAST: matrices.translate(offset, 0, 0); break;
-            case WEST: matrices.translate(-offset, 0, 0); break;
-            case UP: matrices.translate(0, offset, 0); break;
-            case DOWN: matrices.translate(0, -offset, 0);
-        }
+        Vec3i vector = direction.getVector();
+        matrices.translate(vector.getX() * offset, vector.getY() * offset, vector.getZ() * offset);
     }
 
     public static void directionalMatrixMultiply(MatrixStack matrices, Direction direction) {

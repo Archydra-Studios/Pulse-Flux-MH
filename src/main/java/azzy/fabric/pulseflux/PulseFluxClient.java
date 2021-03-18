@@ -1,10 +1,11 @@
 package azzy.fabric.pulseflux;
 
-import azzy.fabric.pulseflux.block.PulseFluxBlock;
+
 import azzy.fabric.pulseflux.block.PulseFluxBlocks;
 import azzy.fabric.pulseflux.render.PulseFluxRenderers;
 import net.fabricmc.api.ClientModInitializer;
 
+@SuppressWarnings("unused")
 public class PulseFluxClient implements ClientModInitializer {
 
     @Override
