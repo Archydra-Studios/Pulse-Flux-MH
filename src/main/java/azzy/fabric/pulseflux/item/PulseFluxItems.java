@@ -20,6 +20,9 @@ public class PulseFluxItems {
     //Tools
     public static final Item SCREWDRIVER = registerItem("screwdriver", new ScrewdriverItem(genericSettings(TOOLS, Rarity.COMMON)), true);
     public static final Item POLAR_PROBE = registerItem("polar_probe", new PolarProbeItem(genericSettings(TOOLS, Rarity.COMMON)), true);
+    public static final Item FLUID_GAUGE = registerItem("fluid_gauge", new FluidProbeItem(genericSettings(TOOLS, Rarity.COMMON)), true);
+    public static final Item THERMOMETER = registerItem("thermometer", new HeatProbeItem(genericSettings(TOOLS, Rarity.COMMON)), true);
+    public static final Item PIEZOMETER = registerItem("piezometer", new PressureProbeItem(genericSettings(TOOLS, Rarity.COMMON)), true);
 
     //Materials
     public static final Item HSLA_STEEL_INGOT = registerItem("hsla_steel_ingot", new Item(genericSettings(MACHINE_MATERIALS, Rarity.COMMON)), true);

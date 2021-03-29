@@ -4,12 +4,14 @@ import azzy.fabric.incubus_core.datagen.BSJsonGen;
 import azzy.fabric.incubus_core.datagen.LootGen;
 import azzy.fabric.incubus_core.datagen.ModelJsonGen;
 import azzy.fabric.pulseflux.PulseFluxCommon;
+import azzy.fabric.pulseflux.block.logistics.CreativeFluidSourceBlock;
 import azzy.fabric.pulseflux.block.logistics.CreativePulseSourceBlock;
 import azzy.fabric.pulseflux.block.logistics.DiodeBlock;
-import azzy.fabric.pulseflux.blockentity.logistics.CreativePulseSourceBlockEntity;
-import azzy.fabric.pulseflux.blockentity.logistics.SteelDiodeBlockEntity;
+import azzy.fabric.pulseflux.block.logistics.FluidPipeBlock;
+import azzy.fabric.pulseflux.blockentity.logistics.*;
 import azzy.fabric.pulseflux.energy.PulseFluxEnergyAPIs;
 import azzy.fabric.pulseflux.energy.PulseIo;
+import dev.technici4n.fasttransferlib.api.fluid.FluidApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -50,19 +52,29 @@ public class PulseFluxBlocks {
     public static final Block OBSIDIAN_AMALGAM = registerGeneratedBlock("obsidian_amalgam", new Block(FabricBlockSettings.copyOf(Blocks.OBSIDIAN)), genericSettings(MACHINE_MATERIALS, Rarity.COMMON), SingletType.BLOCK);
 
     //Logistics
+    public static final Block HSLA_STEEL_PIPE = registerBlock("hsla_steel_pipe", new FluidPipeBlock(FabricBlockSettings.copyOf(HSLA_STEEL_BLOCK), SteelFluidPipeBlockEntity::new), genericSettings(LOGISTICS, Rarity.COMMON), true);
+
     public static final Block HSLA_STEEL_DIODE = registerBlock("hsla_steel_diode", new DiodeBlock(FabricBlockSettings.copyOf(HSLA_STEEL_BLOCK).nonOpaque(), SteelDiodeBlockEntity::new), genericSettings(LOGISTICS, Rarity.COMMON), true);
 
     public static final Block CREATIVE_PULSE_SOURCE = registerBlock("creative_pulse_source", new CreativePulseSourceBlock(FabricBlockSettings.copyOf(Blocks.OBSIDIAN).materialColor(MaterialColor.WHITE)), genericSettings(LOGISTICS, Rarity.EPIC), true);
+    public static final Block CREATIVE_FLUID_SOURCE = registerBlock("creative_fluid_source", new CreativeFluidSourceBlock(FabricBlockSettings.copyOf(Blocks.OBSIDIAN).materialColor(MaterialColor.WHITE)), genericSettings(LOGISTICS, Rarity.EPIC), true);
 
     //  BLOCK ENTITIES
 
     //Logistisc
+    public static final BlockEntityType<SteelFluidPipeBlockEntity> STEEL_FLUID_PIPE_BLOCK_ENTITY_BLOCK_ENTITY = registerBlockEntity("steel_fluid_pipe_block_entity", SteelFluidPipeBlockEntity::new, HSLA_STEEL_PIPE);
+
     public static final BlockEntityType<SteelDiodeBlockEntity> HSLA_STEEL_DIODE_BLOCK_ENTITY = registerBlockEntity("hsla_steel_diode_block_entity", SteelDiodeBlockEntity::new, HSLA_STEEL_DIODE);
 
+    public static final BlockEntityType<CreativeFluidSourceBlockEntity> CREATIVE_FLUID_SOURCE_BLOCK_ENTITY = registerBlockEntity("creative_fluid_source_block_enitty", CreativeFluidSourceBlockEntity::new, CREATIVE_FLUID_SOURCE);
     public static final BlockEntityType<CreativePulseSourceBlockEntity> CREATIVE_PULSE_SOURCE_BLOCK_ENTITY = registerBlockEntity("creative_pulse_source_block_entity", CreativePulseSourceBlockEntity::new, CREATIVE_PULSE_SOURCE);
 
     public static void init() {
         PulseFluxEnergyAPIs.PULSE.registerForBlockEntities((pulse, dir) -> (PulseIo) pulse, HSLA_STEEL_DIODE_BLOCK_ENTITY, CREATIVE_PULSE_SOURCE_BLOCK_ENTITY);
+
+        PulseFluxEnergyAPIs.registerThermodynamicBE(STEEL_FLUID_PIPE_BLOCK_ENTITY_BLOCK_ENTITY);
+
+        FluidApi.SIDED.registerSelf(CREATIVE_FLUID_SOURCE_BLOCK_ENTITY);
     }
 
     @Environment(EnvType.CLIENT)

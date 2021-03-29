@@ -20,11 +20,13 @@ public interface PressureIo {
         return 0;
     }
 
+    void requestPressureRecalc();
+
     /**
      * Return false if this object does not support insertion at all, meaning that insertion will always return the passed amount,
      * and insert-only cables should not connect.
      */
-    default boolean supportsInsertion() {
+    default boolean supportsPressurization() {
         return false;
     }
 
@@ -32,7 +34,7 @@ public interface PressureIo {
      * Return false if this object does not support extraction at all, meaning that extraction will always return 0,
      * and extract-only cables should not connect.
      */
-    default boolean supportsExtraction() {
+    default boolean supportsDepressurization() {
         return false;
     }
 
@@ -45,7 +47,7 @@ public interface PressureIo {
      * @param simulation If {@link Simulation#SIMULATE}, do not mutate this object
      * @return the amount of pressure that could not be inserted
      */
-    default double insert(double amount, Simulation simulation) {
+    default double insertPressure(double amount, Simulation simulation) {
         return amount;
     }
 
@@ -58,7 +60,7 @@ public interface PressureIo {
      * @param simulation 	If {@link Simulation#SIMULATE}, do not mutate this object
      * @return the amount of pressure that was extracted
      */
-    default double extract(double maxAmount, Simulation simulation) {
+    default double extractPressure(double maxAmount, Simulation simulation) {
         return 0;
     }
 }
